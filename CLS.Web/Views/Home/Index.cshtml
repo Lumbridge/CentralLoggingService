@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@model CLS.Web.Models.DashboardModel
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+
+        <h1 class="text-white display-2">
+            CLS Dashboard
+        </h1>
+
+        <hr />
+
+        <div class="card-deck">
+            <!-- debug card -->
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Debug</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-bug fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.DebugMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentDebugMessage">@Model.MostRecentDebugMessage</time>
+                    </text>
+                </div>
+            </div>
+            <!-- info card -->
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Info</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-info-circle fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.InfoMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentInfoMessage">@Model.MostRecentInfoMessage</time>
+                    </text>
+                </div>
+            </div>
+            <!-- warning card -->
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Warning</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-exclamation-triangle fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.WarnMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentWarnMessage">@Model.MostRecentWarnMessage</time>
+                    </text>
+                </div>
+            </div>
+            <!-- error card -->
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Error</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-exclamation-circle fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.ErrorMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentErrorMessage">@Model.MostRecentErrorMessage</time>
+                    </text>
+                </div>
+            </div>
+            <!-- fatal card -->
+            <div class="card text-white bg-fatal mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Fatal</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-skull-crossbones fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.FatalMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentFatalMessage">@Model.MostRecentFatalMessage</time>
+                    </text>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="card-deck">
+            <!-- publishing systems count card -->
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Publishing Systems</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fab fa-connectdevelop fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.PublishingSystemCount</h1>
+                    <br />
+                    <text class="text-center">
+                        @Model.PublishingSystemCount Publishing Systems Registered
+                    </text>
+                </div>
+            </div>
+            <!-- subscriber count card -->
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Subscribers</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-users fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.SubscriberCount</h1>
+                    <br />
+                    <text class="text-center">
+                        @Model.SubscriberCount Subscribers Registered
+                    </text>
+                </div>
+            </div>
+            <!-- alert count card -->
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Alerts</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-bell fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.AlertCount</h1>
+                    <br />
+                    <text class="text-center">
+                        @Model.AlertCount Alerts Registered
+                    </text>
+                </div>
+            </div>
+        </div>
+        
+        <hr/>
+
+    </div>
+    <!--/main col-->
+</div>

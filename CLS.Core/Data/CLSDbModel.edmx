@@ -1,0 +1,978 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CLSDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AlertHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LogId" Type="int" Nullable="false" />
+          <Property Name="SubscriberId" Type="int" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AlertTriggerGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubscriberId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AlertTriggerNode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlertTriggerNodeOperatorId" Type="int" />
+          <Property Name="DynamicNodeValue" Type="varchar" MaxLength="255" />
+          <Property Name="DynamicNodeDotNetDataType" Type="varchar" MaxLength="255" />
+          <Property Name="PositionInGroup" Type="int" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AlertTriggerNodeOperator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlertTriggerNodeTypeId" Type="int" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="DotNetProperty" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="AlertTriggerNodeType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AlertType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Code" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DashboardMetadata">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MetadataItemName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="MetadataItemValue" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="MetadataItemDotNetType" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="TimeAdded" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnvironmentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Code" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeverityId" Type="int" Nullable="false" />
+          <Property Name="PublishingSystemId" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="Message" Type="varchar" MaxLength="4000" />
+          <Property Name="Exception" Type="varchar" MaxLength="4000" />
+          <Property Name="StackTrace" Type="varchar" MaxLength="4000" />
+        </EntityType>
+        <EntityType Name="PublishingSystem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EnvironmentTypeId" Type="int" Nullable="false" />
+          <Property Name="PublishingSystemTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PublishingSystemType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Code" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Severity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Code" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subscriber">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" />
+          <Property Name="Email" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Subscription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
+          <Property Name="AlertTypeId" Type="int" Nullable="false" />
+          <Property Name="SubscriberId" Type="int" Nullable="false" />
+          <Property Name="PublishingSystemId" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AlertHistory_AlertTriggerGroup">
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
+          <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertHistory">
+              <PropertyRef Name="AlertTriggerGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertHistory_Log">
+          <End Role="Log" Type="Self.Log" Multiplicity="1" />
+          <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Log">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertHistory">
+              <PropertyRef Name="LogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertHistory_Subscriber">
+          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="1" />
+          <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscriber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertHistory">
+              <PropertyRef Name="SubscriberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerGroup_Subscriber">
+          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="1" />
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscriber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerGroup">
+              <PropertyRef Name="SubscriberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
+          <End Role="AlertTriggerNode" Type="Self.AlertTriggerNode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerNode">
+              <PropertyRef Name="AlertTriggerGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerNode_AlertTriggerNodeStaticOperator">
+          <End Role="AlertTriggerNodeOperator" Type="Self.AlertTriggerNodeOperator" Multiplicity="0..1" />
+          <End Role="AlertTriggerNode" Type="Self.AlertTriggerNode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerNodeOperator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerNode">
+              <PropertyRef Name="AlertTriggerNodeOperatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType">
+          <End Role="AlertTriggerNodeType" Type="Self.AlertTriggerNodeType" Multiplicity="1" />
+          <End Role="AlertTriggerNodeOperator" Type="Self.AlertTriggerNodeOperator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerNodeType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerNodeOperator">
+              <PropertyRef Name="AlertTriggerNodeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscription_AlertTriggerGroup">
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
+          <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="AlertTriggerGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Log_fk0">
+          <End Role="Severity" Type="Self.Severity" Multiplicity="1" />
+          <End Role="Log" Type="Self.Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Severity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="SeverityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Log_fk1">
+          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="1" />
+          <End Role="Log" Type="Self.Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="PublishingSystemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Subscriber_System_fk1">
+          <End Role="AlertType" Type="Self.AlertType" Multiplicity="1" />
+          <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="AlertTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Subscriber_System_fk2">
+          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="1" />
+          <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscriber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="SubscriberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Subscriber_System_fk3">
+          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="1" />
+          <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="PublishingSystemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="System_fk0">
+          <End Role="EnvironmentType" Type="Self.EnvironmentType" Multiplicity="1" />
+          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnvironmentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PublishingSystem">
+              <PropertyRef Name="EnvironmentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="System_fk1">
+          <End Role="PublishingSystemType" Type="Self.PublishingSystemType" Multiplicity="1" />
+          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystemType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PublishingSystem">
+              <PropertyRef Name="PublishingSystemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CLSDbModelStoreContainer">
+          <EntitySet Name="AlertHistory" EntityType="Self.AlertHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlertTriggerGroup" EntityType="Self.AlertTriggerGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlertTriggerNode" EntityType="Self.AlertTriggerNode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlertTriggerNodeOperator" EntityType="Self.AlertTriggerNodeOperator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlertTriggerNodeType" EntityType="Self.AlertTriggerNodeType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlertType" EntityType="Self.AlertType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DashboardMetadata" EntityType="Self.DashboardMetadata" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnvironmentType" EntityType="Self.EnvironmentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PublishingSystem" EntityType="Self.PublishingSystem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PublishingSystemType" EntityType="Self.PublishingSystemType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Severity" EntityType="Self.Severity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscriber" EntityType="Self.Subscriber" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscription" EntityType="Self.Subscription" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AlertHistory_AlertTriggerGroup" Association="Self.FK_AlertHistory_AlertTriggerGroup">
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
+            <End Role="AlertHistory" EntitySet="AlertHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertHistory_Log" Association="Self.FK_AlertHistory_Log">
+            <End Role="Log" EntitySet="Log" />
+            <End Role="AlertHistory" EntitySet="AlertHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertHistory_Subscriber" Association="Self.FK_AlertHistory_Subscriber">
+            <End Role="Subscriber" EntitySet="Subscriber" />
+            <End Role="AlertHistory" EntitySet="AlertHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerGroup_Subscriber" Association="Self.FK_AlertTriggerGroup_Subscriber">
+            <End Role="Subscriber" EntitySet="Subscriber" />
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerGroup" Association="Self.FK_AlertTriggerNode_AlertTriggerGroup">
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
+            <End Role="AlertTriggerNode" EntitySet="AlertTriggerNode" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerNodeStaticOperator" Association="Self.FK_AlertTriggerNode_AlertTriggerNodeStaticOperator">
+            <End Role="AlertTriggerNodeOperator" EntitySet="AlertTriggerNodeOperator" />
+            <End Role="AlertTriggerNode" EntitySet="AlertTriggerNode" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType" Association="Self.FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType">
+            <End Role="AlertTriggerNodeType" EntitySet="AlertTriggerNodeType" />
+            <End Role="AlertTriggerNodeOperator" EntitySet="AlertTriggerNodeOperator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscription_AlertTriggerGroup" Association="Self.FK_Subscription_AlertTriggerGroup">
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
+            <End Role="Subscription" EntitySet="Subscription" />
+          </AssociationSet>
+          <AssociationSet Name="Log_fk0" Association="Self.Log_fk0">
+            <End Role="Severity" EntitySet="Severity" />
+            <End Role="Log" EntitySet="Log" />
+          </AssociationSet>
+          <AssociationSet Name="Log_fk1" Association="Self.Log_fk1">
+            <End Role="PublishingSystem" EntitySet="PublishingSystem" />
+            <End Role="Log" EntitySet="Log" />
+          </AssociationSet>
+          <AssociationSet Name="Subscriber_System_fk1" Association="Self.Subscriber_System_fk1">
+            <End Role="AlertType" EntitySet="AlertType" />
+            <End Role="Subscription" EntitySet="Subscription" />
+          </AssociationSet>
+          <AssociationSet Name="Subscriber_System_fk2" Association="Self.Subscriber_System_fk2">
+            <End Role="Subscriber" EntitySet="Subscriber" />
+            <End Role="Subscription" EntitySet="Subscription" />
+          </AssociationSet>
+          <AssociationSet Name="Subscriber_System_fk3" Association="Self.Subscriber_System_fk3">
+            <End Role="PublishingSystem" EntitySet="PublishingSystem" />
+            <End Role="Subscription" EntitySet="Subscription" />
+          </AssociationSet>
+          <AssociationSet Name="System_fk0" Association="Self.System_fk0">
+            <End Role="EnvironmentType" EntitySet="EnvironmentType" />
+            <End Role="PublishingSystem" EntitySet="PublishingSystem" />
+          </AssociationSet>
+          <AssociationSet Name="System_fk1" Association="Self.System_fk1">
+            <End Role="PublishingSystemType" EntitySet="PublishingSystemType" />
+            <End Role="PublishingSystem" EntitySet="PublishingSystem" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CLSDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CLSDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AlertHistories" EntityType="CLSDbModel.AlertHistory" />
+          <EntitySet Name="AlertTriggerGroups" EntityType="CLSDbModel.AlertTriggerGroup" />
+          <EntitySet Name="AlertTriggerNodes" EntityType="CLSDbModel.AlertTriggerNode" />
+          <EntitySet Name="AlertTriggerNodeOperators" EntityType="CLSDbModel.AlertTriggerNodeOperator" />
+          <EntitySet Name="AlertTriggerNodeTypes" EntityType="CLSDbModel.AlertTriggerNodeType" />
+          <EntitySet Name="AlertTypes" EntityType="CLSDbModel.AlertType" />
+          <EntitySet Name="DashboardMetadatas" EntityType="CLSDbModel.DashboardMetadata" />
+          <EntitySet Name="EnvironmentTypes" EntityType="CLSDbModel.EnvironmentType" />
+          <EntitySet Name="Logs" EntityType="CLSDbModel.Log" />
+          <EntitySet Name="PublishingSystems" EntityType="CLSDbModel.PublishingSystem" />
+          <EntitySet Name="PublishingSystemTypes" EntityType="CLSDbModel.PublishingSystemType" />
+          <EntitySet Name="Severities" EntityType="CLSDbModel.Severity" />
+          <EntitySet Name="Subscribers" EntityType="CLSDbModel.Subscriber" />
+          <EntitySet Name="Subscriptions" EntityType="CLSDbModel.Subscription" />
+          <AssociationSet Name="FK_AlertHistory_AlertTriggerGroup" Association="CLSDbModel.FK_AlertHistory_AlertTriggerGroup">
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
+            <End Role="AlertHistory" EntitySet="AlertHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertHistory_Log" Association="CLSDbModel.FK_AlertHistory_Log">
+            <End Role="Log" EntitySet="Logs" />
+            <End Role="AlertHistory" EntitySet="AlertHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertHistory_Subscriber" Association="CLSDbModel.FK_AlertHistory_Subscriber">
+            <End Role="Subscriber" EntitySet="Subscribers" />
+            <End Role="AlertHistory" EntitySet="AlertHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerGroup_Subscriber" Association="CLSDbModel.FK_AlertTriggerGroup_Subscriber">
+            <End Role="Subscriber" EntitySet="Subscribers" />
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerGroup" Association="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup">
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
+            <End Role="AlertTriggerNode" EntitySet="AlertTriggerNodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscription_AlertTriggerGroup" Association="CLSDbModel.FK_Subscription_AlertTriggerGroup">
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
+            <End Role="Subscription" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerNodeStaticOperator" Association="CLSDbModel.FK_AlertTriggerNode_AlertTriggerNodeStaticOperator">
+            <End Role="AlertTriggerNodeOperator" EntitySet="AlertTriggerNodeOperators" />
+            <End Role="AlertTriggerNode" EntitySet="AlertTriggerNodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType" Association="CLSDbModel.FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType">
+            <End Role="AlertTriggerNodeType" EntitySet="AlertTriggerNodeTypes" />
+            <End Role="AlertTriggerNodeOperator" EntitySet="AlertTriggerNodeOperators" />
+          </AssociationSet>
+          <AssociationSet Name="Subscriber_System_fk1" Association="CLSDbModel.Subscriber_System_fk1">
+            <End Role="AlertType" EntitySet="AlertTypes" />
+            <End Role="Subscription" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="System_fk0" Association="CLSDbModel.System_fk0">
+            <End Role="EnvironmentType" EntitySet="EnvironmentTypes" />
+            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+          </AssociationSet>
+          <AssociationSet Name="Log_fk0" Association="CLSDbModel.Log_fk0">
+            <End Role="Severity" EntitySet="Severities" />
+            <End Role="Log" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="Log_fk1" Association="CLSDbModel.Log_fk1">
+            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+            <End Role="Log" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="Subscriber_System_fk3" Association="CLSDbModel.Subscriber_System_fk3">
+            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+            <End Role="Subscription" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="System_fk1" Association="CLSDbModel.System_fk1">
+            <End Role="PublishingSystemType" EntitySet="PublishingSystemTypes" />
+            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+          </AssociationSet>
+          <AssociationSet Name="Subscriber_System_fk2" Association="CLSDbModel.Subscriber_System_fk2">
+            <End Role="Subscriber" EntitySet="Subscribers" />
+            <End Role="Subscription" EntitySet="Subscriptions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AlertHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogId" Type="Int32" Nullable="false" />
+          <Property Name="SubscriberId" Type="Int32" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertHistory" ToRole="AlertTriggerGroup" />
+          <NavigationProperty Name="Log" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="AlertHistory" ToRole="Log" />
+          <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.FK_AlertHistory_Subscriber" FromRole="AlertHistory" ToRole="Subscriber" />
+        </EntityType>
+        <EntityType Name="AlertTriggerGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriberId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertHistory" />
+          <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.FK_AlertTriggerGroup_Subscriber" FromRole="AlertTriggerGroup" ToRole="Subscriber" />
+          <NavigationProperty Name="AlertTriggerNodes" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertTriggerNode" />
+          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="Subscription" />
+        </EntityType>
+        <EntityType Name="AlertTriggerNode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlertTriggerNodeOperatorId" Type="Int32" />
+          <Property Name="DynamicNodeValue" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DynamicNodeDotNetDataType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PositionInGroup" Type="Int32" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" FromRole="AlertTriggerNode" ToRole="AlertTriggerGroup" />
+          <NavigationProperty Name="AlertTriggerNodeOperator" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerNodeStaticOperator" FromRole="AlertTriggerNode" ToRole="AlertTriggerNodeOperator" />
+        </EntityType>
+        <EntityType Name="AlertTriggerNodeOperator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlertTriggerNodeTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DotNetProperty" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AlertTriggerNodes" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerNodeStaticOperator" FromRole="AlertTriggerNodeOperator" ToRole="AlertTriggerNode" />
+          <NavigationProperty Name="AlertTriggerNodeType" Relationship="CLSDbModel.FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType" FromRole="AlertTriggerNodeOperator" ToRole="AlertTriggerNodeType" />
+        </EntityType>
+        <EntityType Name="AlertTriggerNodeType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AlertTriggerNodeOperators" Relationship="CLSDbModel.FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType" FromRole="AlertTriggerNodeType" ToRole="AlertTriggerNodeOperator" />
+        </EntityType>
+        <EntityType Name="AlertType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="AlertType" ToRole="Subscription" />
+        </EntityType>
+        <EntityType Name="DashboardMetadata">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MetadataItemName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MetadataItemValue" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MetadataItemDotNetType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="TimeAdded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="EnvironmentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="PublishingSystems" Relationship="CLSDbModel.System_fk0" FromRole="EnvironmentType" ToRole="PublishingSystem" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeverityId" Type="Int32" Nullable="false" />
+          <Property Name="PublishingSystemId" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="Exception" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="StackTrace" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="Log" ToRole="AlertHistory" />
+          <NavigationProperty Name="Severity" Relationship="CLSDbModel.Log_fk0" FromRole="Log" ToRole="Severity" />
+          <NavigationProperty Name="PublishingSystem" Relationship="CLSDbModel.Log_fk1" FromRole="Log" ToRole="PublishingSystem" />
+        </EntityType>
+        <EntityType Name="PublishingSystem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EnvironmentTypeId" Type="Int32" Nullable="false" />
+          <Property Name="PublishingSystemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EnvironmentType" Relationship="CLSDbModel.System_fk0" FromRole="PublishingSystem" ToRole="EnvironmentType" />
+          <NavigationProperty Name="Logs" Relationship="CLSDbModel.Log_fk1" FromRole="PublishingSystem" ToRole="Log" />
+          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.Subscriber_System_fk3" FromRole="PublishingSystem" ToRole="Subscription" />
+          <NavigationProperty Name="PublishingSystemType" Relationship="CLSDbModel.System_fk1" FromRole="PublishingSystem" ToRole="PublishingSystemType" />
+        </EntityType>
+        <EntityType Name="PublishingSystemType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="PublishingSystems" Relationship="CLSDbModel.System_fk1" FromRole="PublishingSystemType" ToRole="PublishingSystem" />
+        </EntityType>
+        <EntityType Name="Severity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Logs" Relationship="CLSDbModel.Log_fk0" FromRole="Severity" ToRole="Log" />
+        </EntityType>
+        <EntityType Name="Subscriber">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_Subscriber" FromRole="Subscriber" ToRole="AlertHistory" />
+          <NavigationProperty Name="AlertTriggerGroups" Relationship="CLSDbModel.FK_AlertTriggerGroup_Subscriber" FromRole="Subscriber" ToRole="AlertTriggerGroup" />
+          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.Subscriber_System_fk2" FromRole="Subscriber" ToRole="Subscription" />
+        </EntityType>
+        <EntityType Name="Subscription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
+          <Property Name="AlertTypeId" Type="Int32" Nullable="false" />
+          <Property Name="SubscriberId" Type="Int32" Nullable="false" />
+          <Property Name="PublishingSystemId" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="Subscription" ToRole="AlertTriggerGroup" />
+          <NavigationProperty Name="AlertType" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="Subscription" ToRole="AlertType" />
+          <NavigationProperty Name="PublishingSystem" Relationship="CLSDbModel.Subscriber_System_fk3" FromRole="Subscription" ToRole="PublishingSystem" />
+          <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.Subscriber_System_fk2" FromRole="Subscription" ToRole="Subscriber" />
+        </EntityType>
+        <Association Name="FK_AlertHistory_AlertTriggerGroup">
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertHistory">
+              <PropertyRef Name="AlertTriggerGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertHistory_Log">
+          <End Type="CLSDbModel.Log" Role="Log" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Log">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertHistory">
+              <PropertyRef Name="LogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertHistory_Subscriber">
+          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscriber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertHistory">
+              <PropertyRef Name="SubscriberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerGroup_Subscriber">
+          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscriber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerGroup">
+              <PropertyRef Name="SubscriberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertTriggerNode" Role="AlertTriggerNode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerNode">
+              <PropertyRef Name="AlertTriggerGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscription_AlertTriggerGroup">
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
+          <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="AlertTriggerGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerNode_AlertTriggerNodeStaticOperator">
+          <End Type="CLSDbModel.AlertTriggerNodeOperator" Role="AlertTriggerNodeOperator" Multiplicity="0..1" />
+          <End Type="CLSDbModel.AlertTriggerNode" Role="AlertTriggerNode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerNodeOperator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerNode">
+              <PropertyRef Name="AlertTriggerNodeOperatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType">
+          <End Type="CLSDbModel.AlertTriggerNodeType" Role="AlertTriggerNodeType" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertTriggerNodeOperator" Role="AlertTriggerNodeOperator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertTriggerNodeType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerNodeOperator">
+              <PropertyRef Name="AlertTriggerNodeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Subscriber_System_fk1">
+          <End Type="CLSDbModel.AlertType" Role="AlertType" Multiplicity="1" />
+          <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AlertType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="AlertTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="System_fk0">
+          <End Type="CLSDbModel.EnvironmentType" Role="EnvironmentType" Multiplicity="1" />
+          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnvironmentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PublishingSystem">
+              <PropertyRef Name="EnvironmentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Log_fk0">
+          <End Type="CLSDbModel.Severity" Role="Severity" Multiplicity="1" />
+          <End Type="CLSDbModel.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Severity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="SeverityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Log_fk1">
+          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="1" />
+          <End Type="CLSDbModel.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="PublishingSystemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Subscriber_System_fk3">
+          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="1" />
+          <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="PublishingSystemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="System_fk1">
+          <End Type="CLSDbModel.PublishingSystemType" Role="PublishingSystemType" Multiplicity="1" />
+          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystemType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PublishingSystem">
+              <PropertyRef Name="PublishingSystemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Subscriber_System_fk2">
+          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="1" />
+          <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscriber">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="SubscriberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CLSDbModelStoreContainer" CdmEntityContainer="CLSDbEntities">
+          <EntitySetMapping Name="AlertHistories">
+            <EntityTypeMapping TypeName="CLSDbModel.AlertHistory">
+              <MappingFragment StoreEntitySet="AlertHistory">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
+                <ScalarProperty Name="SubscriberId" ColumnName="SubscriberId" />
+                <ScalarProperty Name="LogId" ColumnName="LogId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlertTriggerGroups">
+            <EntityTypeMapping TypeName="CLSDbModel.AlertTriggerGroup">
+              <MappingFragment StoreEntitySet="AlertTriggerGroup">
+                <ScalarProperty Name="SubscriberId" ColumnName="SubscriberId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlertTriggerNodes">
+            <EntityTypeMapping TypeName="CLSDbModel.AlertTriggerNode">
+              <MappingFragment StoreEntitySet="AlertTriggerNode">
+                <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
+                <ScalarProperty Name="PositionInGroup" ColumnName="PositionInGroup" />
+                <ScalarProperty Name="DynamicNodeDotNetDataType" ColumnName="DynamicNodeDotNetDataType" />
+                <ScalarProperty Name="DynamicNodeValue" ColumnName="DynamicNodeValue" />
+                <ScalarProperty Name="AlertTriggerNodeOperatorId" ColumnName="AlertTriggerNodeOperatorId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlertTriggerNodeOperators">
+            <EntityTypeMapping TypeName="CLSDbModel.AlertTriggerNodeOperator">
+              <MappingFragment StoreEntitySet="AlertTriggerNodeOperator">
+                <ScalarProperty Name="DotNetProperty" ColumnName="DotNetProperty" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="AlertTriggerNodeTypeId" ColumnName="AlertTriggerNodeTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlertTriggerNodeTypes">
+            <EntityTypeMapping TypeName="CLSDbModel.AlertTriggerNodeType">
+              <MappingFragment StoreEntitySet="AlertTriggerNodeType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlertTypes">
+            <EntityTypeMapping TypeName="CLSDbModel.AlertType">
+              <MappingFragment StoreEntitySet="AlertType">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DashboardMetadatas">
+            <EntityTypeMapping TypeName="CLSDbModel.DashboardMetadata">
+              <MappingFragment StoreEntitySet="DashboardMetadata">
+                <ScalarProperty Name="TimeAdded" ColumnName="TimeAdded" />
+                <ScalarProperty Name="MetadataItemDotNetType" ColumnName="MetadataItemDotNetType" />
+                <ScalarProperty Name="MetadataItemValue" ColumnName="MetadataItemValue" />
+                <ScalarProperty Name="MetadataItemName" ColumnName="MetadataItemName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnvironmentTypes">
+            <EntityTypeMapping TypeName="CLSDbModel.EnvironmentType">
+              <MappingFragment StoreEntitySet="EnvironmentType">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logs">
+            <EntityTypeMapping TypeName="CLSDbModel.Log">
+              <MappingFragment StoreEntitySet="Log">
+                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="PublishingSystemId" ColumnName="PublishingSystemId" />
+                <ScalarProperty Name="SeverityId" ColumnName="SeverityId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PublishingSystems">
+            <EntityTypeMapping TypeName="CLSDbModel.PublishingSystem">
+              <MappingFragment StoreEntitySet="PublishingSystem">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PublishingSystemTypeId" ColumnName="PublishingSystemTypeId" />
+                <ScalarProperty Name="EnvironmentTypeId" ColumnName="EnvironmentTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PublishingSystemTypes">
+            <EntityTypeMapping TypeName="CLSDbModel.PublishingSystemType">
+              <MappingFragment StoreEntitySet="PublishingSystemType">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Severities">
+            <EntityTypeMapping TypeName="CLSDbModel.Severity">
+              <MappingFragment StoreEntitySet="Severity">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscribers">
+            <EntityTypeMapping TypeName="CLSDbModel.Subscriber">
+              <MappingFragment StoreEntitySet="Subscriber">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscriptions">
+            <EntityTypeMapping TypeName="CLSDbModel.Subscription">
+              <MappingFragment StoreEntitySet="Subscription">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PublishingSystemId" ColumnName="PublishingSystemId" />
+                <ScalarProperty Name="SubscriberId" ColumnName="SubscriberId" />
+                <ScalarProperty Name="AlertTypeId" ColumnName="AlertTypeId" />
+                <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

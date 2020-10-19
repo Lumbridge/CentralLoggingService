@@ -1,0 +1,18 @@
+﻿
+@{
+    var logLevel = ViewData["logLevel"].ToString();
+    ViewBag.Title = logLevel + " logs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using System.Globalization
+@model List<CLS.Core.Data.Log>
+
+<h2>@logLevel logs</h2>
+
+<ul>
+@foreach (var log in Model)
+{
+    <li>[@log.Timestamp.ToString(CultureInfo.InvariantCulture)] (<time class="timeago" datetime="@log.Timestamp.ToString(CultureInfo.InvariantCulture)">@log.Timestamp.ToString(CultureInfo.InvariantCulture)</time>) @log.Message @log.Exception</li>
+}
+</ul>
