@@ -28,36 +28,6 @@ namespace CLS.WindowsService.Classes
                 // 2. Build chained expressions from node group nodes
                 foreach (var alertTriggerGroup in alertTriggerGroups)
                 {
-                    var nodes = alertTriggerGroup.AlertTriggerNodes.OrderBy(x => x.PositionInGroup).ToList();
-                    var expression = new StringBuilder();
-                    foreach (var node in nodes)
-                    {
-                        switch (node.AlertTriggerNodeOperator?.AlertTriggerNodeType.Name)
-                        {
-                            case "VariableName":
-                                {
-                                    expression.Append(node.AlertTriggerNodeOperator.DotNetProperty);
-                                    break;
-                                }
-                            case "ComparisonOperator":
-                            case "LogicalOperator":
-                                {
-                                    expression.Append(node.AlertTriggerNodeOperator.Value);
-                                    break;
-                                }
-                            case "DynamicVariable":
-                                {
-                                    expression.Append(node.DynamicNodeValue);
-                                    break;
-                                }
-                            default:
-                                {
-                                    expression.Append("\"" + node.DynamicNodeValue + "\"");
-                                    break;
-                                }
-                        }
-                    }
-
                     // 3. Run the expression against the log table to see if we should send an alert
                     var logs = uow.Repository<Log>().GetAll();
                     var alertHistories = uow.Repository<AlertHistory>().GetAll();
@@ -66,7 +36,7 @@ namespace CLS.WindowsService.Classes
                     logs = logs.Where(x =>
                             !alertHistories.Any(
                                 y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
-                        .Where(expression.ToString());
+                        .Where(alertTriggerGroup.ExpressionString);
 
                     // 5. determine if we should send an alert to the user by checking to see if any of the filtered logs match the trigger group
                     if (logs.Any())
@@ -79,7 +49,7 @@ namespace CLS.WindowsService.Classes
                             $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystem.Name}\n" +
                             $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystem.EnvironmentType.Name}\n" +
                             $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
-                            $"Criteria met: {expression}\n" +
+                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
                             $"Number of log messages that met criteria: {logCount}\n\n" +
                             $"You can review the log messages at https://localhost:44356/Logs/.");
 
@@ -136,37 +106,7 @@ namespace CLS.WindowsService.Classes
                 {
                     ConsoleHelper.LogMessageToConsole($"Currently processing trigger group #{alertTriggerGroup.Id} with {alertTriggerGroup.AlertTriggerNodes.Count} nodes.");
 
-                    var nodes = alertTriggerGroup.AlertTriggerNodes.OrderBy(x => x.PositionInGroup).ToList();
-                    var expression = new StringBuilder();
-                    foreach (var node in nodes)
-                    {
-                        switch (node.AlertTriggerNodeOperator?.AlertTriggerNodeType.Name)
-                        {
-                            case "VariableName":
-                                {
-                                    expression.Append(node.AlertTriggerNodeOperator.DotNetProperty);
-                                    break;
-                                }
-                            case "ComparisonOperator":
-                            case "LogicalOperator":
-                                {
-                                    expression.Append(node.AlertTriggerNodeOperator.Value);
-                                    break;
-                                }
-                            case "DynamicVariable":
-                                {
-                                    expression.Append(node.DynamicNodeValue);
-                                    break;
-                                }
-                            default:
-                                {
-                                    expression.Append("\"" + node.DynamicNodeValue + "\"");
-                                    break;
-                                }
-                        }
-                    }
-
-                    ConsoleHelper.LogMessageToConsole($"Built expression from node group: {expression}.");
+                    ConsoleHelper.LogMessageToConsole($"Built expression from node group: {alertTriggerGroup.ExpressionString}.");
 
                     // 3. Run the expression against the log table to see if we should send an alert
                     var logs = uow.Repository<Log>().GetAll();
@@ -176,7 +116,7 @@ namespace CLS.WindowsService.Classes
                     logs = logs.Where(x =>
                             !alertHistories.Any(
                                 y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
-                        .Where(expression.ToString());
+                        .Where(alertTriggerGroup.ExpressionString);
 
                     // 5. determine if we should send an alert to the user by checking to see if any of the filtered logs match the trigger group
                     if (logs.Any())
@@ -193,7 +133,7 @@ namespace CLS.WindowsService.Classes
                             $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystem.Name}\n" +
                             $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystem.EnvironmentType.Name}\n" +
                             $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x=>x.Timestamp).First().Timestamp}\n" +
-                            $"Criteria met: {expression}\n" +
+                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
                             $"Number of log messages that met criteria: {logCount}\n\n" +
                             $"You can review the log messages at https://localhost:44356/Logs/.");
 

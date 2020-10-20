@@ -163,6 +163,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\pepeflower.png" />
     <Content Include="Scripts\Application\AjaxUtils.js" />
+    <Content Include="Scripts\Application\Alerts.js" />
     <Content Include="Scripts\Application\Home.js" />
     <Content Include="Scripts\Application\Logs.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.bundle.min.js" />
@@ -210,6 +211,8 @@
     <Content Include="Scripts\Bootstrap\bootstrap.bundle.min.js.map" />
     <Content Include="Views\Logs\Index.cshtml" />
     <Content Include="Views\Alerts\Index.cshtml" />
+    <Content Include="Views\Shared\_CreateUpdateSubscription.cshtml" />
+    <Content Include="Views\Shared\_SubscriptionRow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLS.Core\CLS.Core.csproj">

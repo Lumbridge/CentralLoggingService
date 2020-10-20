@@ -1,0 +1,16 @@
+﻿
+@model CLS.Core.Data.Subscription
+
+<div id="nodeGroupContainer" class="container">
+    @Html.Partial("_SubscriptionRow", Model)
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <input class="form-control expressionTextBox" type="text" readonly>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <button type="button" class="btn btn-outline-danger saveAlertButton"><i class="fas fa-times"></i> Save</button>
+    </div>
+</div>

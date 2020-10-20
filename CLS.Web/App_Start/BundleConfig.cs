@@ -29,7 +29,7 @@ namespace CLS.Web
                 "~/Content/Dashboard.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/application").Include(
-                "~/Scripts/Libraries/AjaxUtils.js",
+                "~/Scripts/Application/AjaxUtils.js",
                 "~/Scripts/Libraries/jquery.timeago.js",
                 "~/Scripts/Libraries/tether.min.js",
                 "~/Scripts/Libraries/bootbox.all.min.js",

@@ -10,9 +10,75 @@
 
 <h2>@logLevel logs</h2>
 
-<ul>
-@foreach (var log in Model)
-{
-    <li>[@log.Timestamp.ToString(CultureInfo.InvariantCulture)] (<time class="timeago" datetime="@log.Timestamp.ToString(CultureInfo.InvariantCulture)">@log.Timestamp.ToString(CultureInfo.InvariantCulture)</time>) @log.Message @log.Exception</li>
-}
-</ul>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th>Publishing System</th>
+                        <th>Environment</th>
+                        <th>Timestamp</th>
+                        <th>Message</th>
+                        <th>Exception</th>
+                        <th>Stack Trace</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var truncLen = 40;
+                        var maxTooltipLength = 200;
+
+                        var messageLength = item.Message?.Length;
+                        var exceptionLength = item.Exception?.Length;
+                        var stackTraceLength = item.StackTrace?.Length;
+
+                        var messageString = Html.Raw($"{item.Message}");
+                        var exceptionString = Html.Raw($"{item.Exception}");
+                        var stackTraceString = Html.Raw($"{item.StackTrace}");
+
+                        if (messageLength > truncLen)
+                        {
+                            messageString = Html.Raw(messageLength <= maxTooltipLength
+                            ? $"{item.Message.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.Message)}'>[...]</span>"
+                            : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.Message)}'>{item.Message.Substring(0, truncLen)}</span>");
+                        }
+
+                        if (exceptionLength > truncLen)
+                        {
+                            exceptionString = Html.Raw(exceptionLength <= maxTooltipLength
+                            ? $"{item.Exception.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.Exception)}'>[...]</span>"
+                            : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.Exception)}'>{item.Exception.Substring(0, truncLen)}</span>");
+                        }
+
+                        if (stackTraceLength > truncLen)
+                        {
+                            stackTraceString = Html.Raw(stackTraceLength <= maxTooltipLength
+                            ? $"{item.StackTrace.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.StackTrace)}'>[...]</span>"
+                            : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.StackTrace)}'>{item.StackTrace.Substring(0, truncLen)}</span>");
+                        }
+
+                        <tr data-id=@item.Id>
+                            <td>@item.PublishingSystem.Name</td>
+                            <td>@item.PublishingSystem.EnvironmentType.Name</td>
+                            <td>@item.Timestamp (<time class="timeago" datetime="@item.Timestamp.ToString(CultureInfo.InvariantCulture)">@item.Timestamp.ToString(CultureInfo.InvariantCulture)</time>)</td>
+                            <td>@messageString</td>
+                            <td>@exceptionString</td>
+                            <td>@stackTraceString</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('table').on('draw.dt', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    });
+</script>

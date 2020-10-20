@@ -1,1 +1,23 @@
-﻿
+﻿.truncateTooltip {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modalLink {
+    font-style: italic;
+    font-weight: bold;
+    cursor: pointer;
+    -webkit-text-decoration: white solid underline;
+    text-decoration: white solid underline;
+    -webkit-text-underline-position: under;
+    text-underline-position: under;
+}
+
+.modal-content {
+    background-color: #343a40 !important;
+}
+
+.bootbox-close-button {
+    color: white !important;
+    text-shadow: 0 1px 0 #000 !important;
+}

@@ -1,13 +1,5 @@
-﻿using CLS.Core.Data;
-using CLS.Infrastructure.Interfaces;
-using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using CLS.Infrastructure.Interfaces;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
 
 namespace CLS.Web.Controllers
@@ -21,6 +13,23 @@ namespace CLS.Web.Controllers
         public BaseController(IUnitOfWork uow)
         {
             _uow = uow;
+        }
+
+        // renders a partial view to a html string
+        protected string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+
+            ViewData.Model = model;
+
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                return sw.GetStringBuilder().ToString();
+            }
         }
     }
 }

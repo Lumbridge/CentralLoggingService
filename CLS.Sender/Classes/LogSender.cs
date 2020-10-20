@@ -11,7 +11,7 @@ namespace CLS.Sender.Classes
 {
     public class LogSender
     {
-        public bool LogDebugToDb(PublishingSystem pSystem, Exception exception, string extraInfo = null)
+        public bool LogDebugToDb(PublishingSystem pSystem, Exception exception = null, string extraInfo = null)
         {
             var uow = new UnitOfWork(new DBEntities());
 
@@ -21,8 +21,8 @@ namespace CLS.Sender.Classes
 
             uow.Repository<Log>().Put(new Log
             {
-                Exception = exception.GetExceptionMessages(),
-                StackTrace = exception.StackTrace,
+                Exception = exception?.GetExceptionMessages(),
+                StackTrace = exception?.StackTrace,
                 Message = extraInfo,
                 PublishingSystem = pSystem,
                 Timestamp = DateTime.Now,
@@ -51,7 +51,7 @@ namespace CLS.Sender.Classes
             return TryCommit(uow);
         }
 
-        public bool LogWarningToDb(PublishingSystem pSystem, Exception exception, string extraInfo = null)
+        public bool LogWarningToDb(PublishingSystem pSystem, Exception exception = null, string extraInfo = null)
         {
             var uow = new UnitOfWork(new DBEntities());
 
@@ -61,8 +61,8 @@ namespace CLS.Sender.Classes
 
             uow.Repository<Log>().Put(new Log
             {
-                Exception = exception.GetExceptionMessages(),
-                StackTrace = exception.StackTrace,
+                Exception = exception?.GetExceptionMessages(),
+                StackTrace = exception?.StackTrace,
                 Message = extraInfo,
                 PublishingSystem = pSystem,
                 Timestamp = DateTime.Now,
