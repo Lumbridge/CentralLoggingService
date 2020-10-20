@@ -23,6 +23,8 @@ namespace CLS.Web
                 "~/Scripts/Bootstrap/bootstrap.bundle.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                "~/Content/DataTables/jquery.dataTables.min.css",
+                "~/Content/DataTables/dataTables.bootstrap4.min.css",
                 "~/Content/FontAwesome/all.min.css",
                 "~/Content/Bootstrap/bootstrap.min.css", 
                 "~/Content/site.css",
@@ -30,6 +32,8 @@ namespace CLS.Web
 
             bundles.Add(new ScriptBundle("~/bundles/application").Include(
                 "~/Scripts/Application/AjaxUtils.js",
+                "~/Scripts/DataTables/jquery.dataTables.min.js",
+                "~/Scripts/DataTables/dataTables.bootstrap4.min.js",
                 "~/Scripts/Libraries/jquery.timeago.js",
                 "~/Scripts/Libraries/tether.min.js",
                 "~/Scripts/Libraries/bootbox.all.min.js",

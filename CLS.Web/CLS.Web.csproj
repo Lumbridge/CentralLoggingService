@@ -155,6 +155,9 @@
   <ItemGroup>
     <Content Include="Content\Bootstrap\bootstrap.min.css" />
     <Content Include="Content\Dashboard.css" />
+    <Content Include="Content\DataTables\dataTables.bootstrap4.min.css" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap4.min.js" />
+    <Content Include="Content\DataTables\jquery.dataTables.min.css" />
     <Content Include="Content\FontAwesome\all.min.css" />
     <Content Include="Content\webfonts\fa-brands-400.svg" />
     <Content Include="Content\webfonts\fa-regular-400.svg" />
@@ -169,6 +172,7 @@
     <Content Include="Scripts\Application\Logs.js" />
     <Content Include="Scripts\Application\Subscribers.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
     <Content Include="Scripts\JQuery\jquery-3.5.1.min.js" />
     <Content Include="Scripts\JQueryValidate\additional-methods.min.js" />
     <Content Include="Scripts\JQueryValidate\jquery.validate.min.js" />

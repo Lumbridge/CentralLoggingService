@@ -36,3 +36,25 @@
 #content-wrap {
     padding-bottom: 212px; 
 }
+
+.even {
+    background-color: rgba(255,255,255,.05) !important;
+}
+
+.custom-select,
+.form-control,
+.dataTables_filter,
+.dataTables_info,
+.dataTables_length {
+    color: white !important;
+}
+
+.paginate_button {
+    margin-left: 0 !important;
+    padding: 0 !important;
+    margin-bottom: 2rem;
+}
+
+table.table-bordered.dataTable th, table.table-bordered.dataTable td {
+    border-left-width: 1px !important;
+}
