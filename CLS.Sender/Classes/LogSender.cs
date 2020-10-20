@@ -6,25 +6,43 @@ using CLS.Infrastructure.Interfaces;
 using CLS.Sender.Data;
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace CLS.Sender.Classes
 {
     public class LogSender
     {
-        public bool LogDebugToDb(PublishingSystem pSystem, Exception exception = null, string extraInfo = null)
+        public LogSender(PublishingSystem publishingSystem)
+        {
+            PublishingSystem = publishingSystem;
+        }
+
+        public LogSender(string publishingSystemName, StaticData.EnvironmentType environmentType, StaticData.SystemType systemType)
+        {
+            PublishingSystem = GetPublishingSystem(publishingSystemName, environmentType, systemType);
+        }
+
+        public LogSender(StaticData.EnvironmentType environmentType, StaticData.SystemType systemType)
+        {
+            PublishingSystem = GetPublishingSystem(Assembly.GetCallingAssembly().FullName, environmentType, systemType);
+        }
+
+        public PublishingSystem PublishingSystem { get; set; }
+        
+        public bool LogDebugToDb(Exception exception = null, string info = null)
         {
             var uow = new UnitOfWork(new DBEntities());
 
-            pSystem = uow.Repository<PublishingSystem>()
-                          .FirstOrDefault(x => x.Name == pSystem.Name
-                                               && x.EnvironmentType.Code == pSystem.EnvironmentType.Code) ?? pSystem;
+            PublishingSystem = uow.Repository<PublishingSystem>()
+                          .FirstOrDefault(x => x.Name == PublishingSystem.Name
+                                               && x.EnvironmentType.Code == PublishingSystem.EnvironmentType.Code) ?? PublishingSystem;
 
             uow.Repository<Log>().Put(new Log
             {
                 Exception = exception?.GetExceptionMessages(),
                 StackTrace = exception?.StackTrace,
-                Message = extraInfo,
-                PublishingSystem = pSystem,
+                Message = info,
+                PublishingSystem = PublishingSystem,
                 Timestamp = DateTime.Now,
                 Severity = uow.Repository<Severity>().First(x=> x.Code == "D")
             });
@@ -32,18 +50,20 @@ namespace CLS.Sender.Classes
             return TryCommit(uow);
         }
         
-        public bool LogInfoToDb(PublishingSystem pSystem, string info)
+        public bool LogInfoToDb(Exception exception = null, string info = null)
         {
             var uow = new UnitOfWork(new DBEntities());
 
-            pSystem = uow.Repository<PublishingSystem>()
-                          .FirstOrDefault(x => x.Name == pSystem.Name
-                                               && x.EnvironmentType.Code == pSystem.EnvironmentType.Code) ?? pSystem;
+            PublishingSystem = uow.Repository<PublishingSystem>()
+                          .FirstOrDefault(x => x.Name == PublishingSystem.Name
+                                               && x.EnvironmentType.Code == PublishingSystem.EnvironmentType.Code) ?? PublishingSystem;
 
             uow.Repository<Log>().Put(new Log
             {
+                Exception = exception?.GetExceptionMessages(),
+                StackTrace = exception?.StackTrace,
                 Message = info,
-                PublishingSystem = pSystem,
+                PublishingSystem = PublishingSystem,
                 Timestamp = DateTime.Now,
                 Severity = uow.Repository<Severity>().First(x => x.Code == "I")
             });
@@ -51,20 +71,20 @@ namespace CLS.Sender.Classes
             return TryCommit(uow);
         }
 
-        public bool LogWarningToDb(PublishingSystem pSystem, Exception exception = null, string extraInfo = null)
+        public bool LogWarningToDb(Exception exception = null, string info = null)
         {
             var uow = new UnitOfWork(new DBEntities());
 
-            pSystem = uow.Repository<PublishingSystem>()
-                          .FirstOrDefault(x => x.Name == pSystem.Name
-                                               && x.EnvironmentType.Code == pSystem.EnvironmentType.Code) ?? pSystem;
+            PublishingSystem = uow.Repository<PublishingSystem>()
+                          .FirstOrDefault(x => x.Name == PublishingSystem.Name
+                                               && x.EnvironmentType.Code == PublishingSystem.EnvironmentType.Code) ?? PublishingSystem;
 
             uow.Repository<Log>().Put(new Log
             {
                 Exception = exception?.GetExceptionMessages(),
                 StackTrace = exception?.StackTrace,
-                Message = extraInfo,
-                PublishingSystem = pSystem,
+                Message = info,
+                PublishingSystem = PublishingSystem,
                 Timestamp = DateTime.Now,
                 Severity = uow.Repository<Severity>().First(x => x.Code == "W")
             });
@@ -72,19 +92,20 @@ namespace CLS.Sender.Classes
             return TryCommit(uow);
         }
 
-        public bool LogErrorToDb(PublishingSystem pSystem, Exception exception)
+        public bool LogErrorToDb(Exception exception = null, string info = null)
         {
             var uow = new UnitOfWork(new DBEntities());
 
-            pSystem = uow.Repository<PublishingSystem>()
-                          .FirstOrDefault(x => x.Name == pSystem.Name
-                                               && x.EnvironmentType.Code == pSystem.EnvironmentType.Code) ?? pSystem;
+            PublishingSystem = uow.Repository<PublishingSystem>()
+                          .FirstOrDefault(x => x.Name == PublishingSystem.Name
+                                               && x.EnvironmentType.Code == PublishingSystem.EnvironmentType.Code) ?? PublishingSystem;
 
             uow.Repository<Log>().Put(new Log
             {
-                Exception = exception.GetExceptionMessages(),
-                StackTrace = exception.StackTrace,
-                PublishingSystem = pSystem,
+                Exception = exception?.GetExceptionMessages(),
+                StackTrace = exception?.StackTrace,
+                Message = info,
+                PublishingSystem = PublishingSystem,
                 Timestamp = DateTime.Now,
                 Severity = uow.Repository<Severity>().First(x => x.Code == "E")
             });
@@ -92,20 +113,20 @@ namespace CLS.Sender.Classes
             return TryCommit(uow);
         }
 
-        public bool LogFatalToDb(PublishingSystem pSystem, Exception exception, string extraInfo = null)
+        public bool LogFatalToDb(Exception exception = null, string info = null)
         {
             var uow = new UnitOfWork(new DBEntities());
 
-            pSystem = uow.Repository<PublishingSystem>()
-                          .FirstOrDefault(x => x.Name == pSystem.Name
-                                               && x.EnvironmentType.Code == pSystem.EnvironmentType.Code) ?? pSystem;
+            PublishingSystem = uow.Repository<PublishingSystem>()
+                          .FirstOrDefault(x => x.Name == PublishingSystem.Name
+                                               && x.EnvironmentType.Code == PublishingSystem.EnvironmentType.Code) ?? PublishingSystem;
 
             uow.Repository<Log>().Put(new Log
             {
-                Exception = exception.GetExceptionMessages(),
-                StackTrace = exception.StackTrace,
-                Message = extraInfo,
-                PublishingSystem = pSystem,
+                Exception = exception?.GetExceptionMessages(),
+                StackTrace = exception?.StackTrace,
+                Message = info,
+                PublishingSystem = PublishingSystem,
                 Timestamp = DateTime.Now,
                 Severity = uow.Repository<Severity>().First(x => x.Code == "F")
             });

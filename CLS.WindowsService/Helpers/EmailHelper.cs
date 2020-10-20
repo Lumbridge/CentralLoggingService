@@ -35,9 +35,7 @@ namespace CLS.WindowsService.Helpers
             }
             catch (Exception ex)
             {
-                var ls = new LogSender();
-                var sys = ls.GetPublishingSystem("CLS Windows Service", StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication);
-                ls.LogErrorToDb(sys, ex);
+                var ls = new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication).LogErrorToDb(ex);
             }
         }
     }

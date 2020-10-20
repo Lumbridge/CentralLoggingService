@@ -95,6 +95,7 @@
       <DependentUpon>CLSDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Partials\AlertTriggerGroup.cs" />
+    <Compile Include="Data\Partials\Subscription.cs" />
     <Compile Include="Data\PublishingSystem.cs">
       <DependentUpon>CLSDbModel.tt</DependentUpon>
     </Compile>

@@ -58,6 +58,15 @@ namespace CLS.Infrastructure.Classes
         }
 
         /// <summary>
+        /// Deletes an entity and all it's children.
+        /// </summary>
+        /// <param name="entity">The entity to delete.</param>
+        public void CascadingDelete(T entity)
+        {
+            _db.Set<T>().Remove(entity);
+        }
+
+        /// <summary>
         /// Returns an IQueryable matching the search criteria passed in.
         /// </summary>
         /// <param name="predicate">Expression used to search for matching entities.</param>

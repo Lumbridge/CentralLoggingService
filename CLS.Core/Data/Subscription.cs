@@ -15,10 +15,10 @@ namespace CLS.Core.Data
     public partial class Subscription
     {
         public int Id { get; set; }
-        public int AlertTriggerGroupId { get; set; }
+        public Nullable<int> AlertTriggerGroupId { get; set; }
         public int AlertTypeId { get; set; }
         public int SubscriberId { get; set; }
-        public int PublishingSystemId { get; set; }
+        public Nullable<int> PublishingSystemId { get; set; }
         public bool IsActive { get; set; }
     
         public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }

@@ -15,6 +15,7 @@ namespace CLS.Infrastructure.Interfaces
         List<dynamic> SqlQuery(string sql);
         void Delete(T entity);
         void DeleteMany(List<T> entities);
+        void CascadingDelete(T entity);
     }
 
     public interface IRepository { }

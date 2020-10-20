@@ -17,7 +17,7 @@ namespace CLS.Core.Data
         public int Id { get; set; }
         public int LogId { get; set; }
         public int SubscriberId { get; set; }
-        public int AlertTriggerGroupId { get; set; }
+        public Nullable<int> AlertTriggerGroupId { get; set; }
         public System.DateTime Timestamp { get; set; }
     
         public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }

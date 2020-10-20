@@ -69,30 +69,98 @@
             }
         });
 
-    function UpdateExpressionPreview() {
-        var expression = "";
-        $(".node").each(function (index) {
-            expression += $(this).find("option:selected").val();
-        });
-        var endChars = expression.slice(expression.length - 2);
-        if (endChars == "&&" || endChars == "||")
-            expression = expression.substr(0, expression.length - 2);
-        $(".expressionTextBox").val(expression);
-    }
-
     $(document).on("change",
         "input, select",
         function () {
             UpdateExpressionPreview();
         });
 
+    $(document).on("click",
+        ".saveAlertButton",
+        function() {
+            AjaxGet("~/Alerts/SaveAlert?expression=" +
+                encodeURIComponent(GetFinalExpression()) +
+                "&subscriberId=" +
+                $("#Subscribers").find("option:selected").val() +
+                "&alertTypeId=" +
+                $("#AlertTypes").find("option:selected").val(),
+                function (data) {
+                    if (data.success) {
+                        $("#SubscriptionTableContainer").html(data.view);
+                        bootbox.hideAll();
+                    } else {
+                        alert("error");
+                    }
+                },
+                false);
+        });
+
+    $(document).on("click",
+        ".deleteAlertButton",
+        function (event) {
+            var $target = $(event.target).closest("button");
+            var subscriptionId = $target.data("subscriptionid");
+            AjaxGet("~/Alerts/DeleteAlert?subscriptionId=" + subscriptionId,
+                function (data) {
+                    if (data.success) {
+                        $("#SubscriptionTableContainer").html(data.view);
+                        $("tr[data-id=" + subscriptionId + "]").remove();
+                    } else {
+                        alert("error");
+                    }
+                },
+                false);
+        });
+
+    function UpdateExpressionPreview() {
+        var expression = "";
+        $(".node").each(function (index) {
+            var value = $(this).find("option:selected").val();
+            if (value == undefined) {
+                value = "\"" + $(this).val() + "\"";
+            }
+            expression += value;
+        });
+        var endChars = expression.slice(expression.length - 2);
+        if (endChars == "&&" || endChars == "||")
+            expression = expression.substr(0, expression.length - 2);
+        if (!expression.includes("PublishingSystem.Name"))
+            $("#NoPublishingSystemWarning").removeClass("d-none");
+        else
+            $("#NoPublishingSystemWarning").addClass("d-none");
+        if (expression.includes("NumberOfMessages") && !expression.includes("TimeWindowMinutes") ||
+            !expression.includes("NumberOfMessages") && expression.includes("TimeWindowMinutes")) {
+            $("#MessagesTimeframeWarning").removeClass("d-none");
+        } else {
+            $("#MessagesTimeframeWarning").addClass("d-none");
+        }
+
+
+        $(".expressionTextBox").val(expression);
+    }
+
+    function GetFinalExpression() {
+        var expression = "";
+        $(".node").each(function (index) {
+            var value = $(this).find("option:selected").val();
+            if (value == undefined) {
+                value = $(this).val();
+            }
+            expression += value + " ";
+        });
+        var endChars = expression.slice(expression.length - 4);
+        if (endChars == " && " || endChars == " || ")
+            expression = expression.substr(0, expression.length - 4);
+        return expression;
+    }
+    
     function UpdateDynamicSelect(target, options) {
         $(target).html("<select class='form-control dynamicInput node'></select>");
         var dynamicInput = $(target).find(".dynamicInput");
         $.each(options,
             function (index, value) {
                 $(dynamicInput).append($('<option/>', {
-                    value: "\"" + value + "\"",
+                    value: value,
                     text: value
                 }));
             });

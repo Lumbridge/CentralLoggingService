@@ -62,7 +62,7 @@ namespace CLS.WindowsService.Classes
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
-                                SubscriberId = alertTriggerGroup.SubscriberId,
+                                SubscriberId = alertTriggerGroup.SubscriberId.Value,
                                 Subscriber = alertTriggerGroup.Subscriber,
                                 Timestamp = DateTime.Now
                             });
@@ -75,10 +75,7 @@ namespace CLS.WindowsService.Classes
                         }
                         catch (Exception ex)
                         {
-                            var ls = new LogSender();
-                            var pSystem = ls.GetPublishingSystem("CLS Windows Service", StaticData.EnvironmentType.DEV,
-                                StaticData.SystemType.WindowsService);
-                            ls.LogErrorToDb(pSystem, ex);
+                            new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).LogErrorToDb(ex);
                         }
                     }
                 }
@@ -126,12 +123,12 @@ namespace CLS.WindowsService.Classes
                         ConsoleHelper.LogMessageToConsole(
                             $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for subscriber {alertTriggerGroup.Subscriber.Name} with " +
                             $"email address {alertTriggerGroup.Subscriber.Email}.");
-                        
+
                         // 6. Send an alert to the subscriber for this trigger group
                         EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
                             $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
-                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystem.Name}\n" +
-                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystem.EnvironmentType.Name}\n" +
+                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
+                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
                             $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x=>x.Timestamp).First().Timestamp}\n" +
                             $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
                             $"Number of log messages that met criteria: {logCount}\n\n" +
@@ -146,7 +143,7 @@ namespace CLS.WindowsService.Classes
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
-                                SubscriberId = alertTriggerGroup.SubscriberId,
+                                SubscriberId = alertTriggerGroup.SubscriberId.Value,
                                 Subscriber = alertTriggerGroup.Subscriber,
                                 Timestamp = DateTime.Now
                             });
@@ -161,10 +158,7 @@ namespace CLS.WindowsService.Classes
                         catch (Exception ex)
                         {
                             ConsoleHelper.LogMessageToConsole(exception: ex);
-                            var ls = new LogSender();
-                            var pSystem = ls.GetPublishingSystem("CLS Windows Service", StaticData.EnvironmentType.DEV,
-                                StaticData.SystemType.WindowsService);
-                            ls.LogErrorToDb(pSystem, ex);
+                            var ls = new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).LogErrorToDb(ex);
                         }
                     }
                     else

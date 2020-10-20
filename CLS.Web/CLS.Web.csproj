@@ -213,6 +213,7 @@
     <Content Include="Views\Alerts\Index.cshtml" />
     <Content Include="Views\Shared\_CreateUpdateSubscription.cshtml" />
     <Content Include="Views\Shared\_SubscriptionRow.cshtml" />
+    <Content Include="Views\Shared\_SubscriptionTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLS.Core\CLS.Core.csproj">
@@ -222,6 +223,10 @@
     <ProjectReference Include="..\CLS.Infrastructure\CLS.Infrastructure.csproj">
       <Project>{38518097-d7a8-49d9-9a33-72a656d5daa6}</Project>
       <Name>CLS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CLS.Sender\CLS.Sender.csproj">
+      <Project>{19cc5b82-e469-4c17-bbae-caece60d1251}</Project>
+      <Name>CLS.Sender</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

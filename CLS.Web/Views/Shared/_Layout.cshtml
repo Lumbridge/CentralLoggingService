@@ -27,7 +27,7 @@
             <!-- navbar -->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3 border-bottom">
                 <div class="flex-row d-flex">
-                    <a class="navbar-brand mb-1" href="/Home">CLS</a>
+                    <a class="navbar-brand mb-1" href="/Home">CLS Admin</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -65,77 +65,76 @@
             <div class="container-fluid body-content" id="main">
                 @RenderBody()
             </div>
-
-            <!-- render footer -->
-            <footer id="footer" class="pt-4">
-                <!-- Footer Links -->
-                <div id="footerContainer" class="footer-body container-fluid text-center text-md-left">
-                    <!-- Grid row -->
-                    <div class="row">
-                        <div class="col-md-3 mt-md-0 mt-3 text-center">
-                            <img src="~/Images/pepeflower.png" style="margin-bottom: 15px; width: 25%;" alt="Footer Logo"/>
-                        </div>
-                        <!-- Grid column -->
-                        <div class="col-md-3 mt-md-0 mt-3">
-                            <!-- Content -->
-                            <h5 class="text-uppercase text-white"><b>Central Logging Service</b></h5>
-                            <p class="text-white">
-                                Welcome to the CLS Dashboard.
-                            </p>
-                        </div>
-                        <!-- Grid column -->
-                        <hr class="clearfix w-100 d-md-none pb-3">
-                        <!-- Grid column -->
-                        <div class="col-md-3 mb-md-0 mb-3">
-                            <!-- Footer links left -->
-                            <h5 class="text-uppercase text-white"><b>Footer links left</b></h5>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <a href="#">footer link left 1</a>
-                                </li>
-                                <li>
-                                    <a href="#">footer link left 2</a>
-                                </li>
-                                <li>
-                                    <a href="#">footer link left 3</a>
-                                </li>
-                                <li>
-                                    <a href="#">footer link left 4</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Grid column -->
-                        <div class="col-md-3 mb-md-0 mb-3">
-                            <!-- Footer links right -->
-                            <h5 class="text-uppercase text-white"><b>Footer links right</b></h5>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <a href="#">footer link right 1</a>
-                                </li>
-                                <li>
-                                    <a href="#">footer link right 2</a>
-                                </li>
-                                <li>
-                                    <a href="#">footer link right 3</a>
-                                </li>
-                                <li>
-                                    <a href="#">footer link right 4</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Grid column -->
-                    </div>
-                    <!-- Grid row -->
-                </div>
-                <!-- Footer Links -->
-                <!-- Copyright -->
-                <div class="footer-footer text-center text-white py-3">
-                    Central Logging Service © @DateTime.Now.Year Copyright:
-                    <a href="https://github.com/lumbridge"> Github/Lumbridge</a>
-                </div>
-                <!-- Copyright -->
-            </footer>
         </div>
+        <!-- render footer -->
+        <footer id="footer" class="pt-4">
+            <!-- Footer Links -->
+            <div id="footerContainer" class="footer-body container-fluid text-center text-md-left">
+                <!-- Grid row -->
+                <div class="row">
+                    <div class="col-md-3 mt-md-0 mt-3 text-center">
+                        <img src="~/Images/pepeflower.png" style="margin-bottom: 15px; width: 25%;" alt="Footer Logo" />
+                    </div>
+                    <!-- Grid column -->
+                    <div class="col-md-3 mt-md-0 mt-3">
+                        <!-- Content -->
+                        <h5 class="text-uppercase text-white"><b>Central Logging Service</b></h5>
+                        <p class="text-white">
+                            Welcome to the CLS Dashboard.
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <hr class="clearfix w-100 d-md-none pb-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 mb-md-0 mb-3">
+                        <!-- Footer links left -->
+                        <h5 class="text-uppercase text-white"><b>Footer links left</b></h5>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="#">footer link left 1</a>
+                            </li>
+                            <li>
+                                <a href="#">footer link left 2</a>
+                            </li>
+                            <li>
+                                <a href="#">footer link left 3</a>
+                            </li>
+                            <li>
+                                <a href="#">footer link left 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+                    <div class="col-md-3 mb-md-0 mb-3">
+                        <!-- Footer links right -->
+                        <h5 class="text-uppercase text-white"><b>Footer links right</b></h5>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="#">footer link right 1</a>
+                            </li>
+                            <li>
+                                <a href="#">footer link right 2</a>
+                            </li>
+                            <li>
+                                <a href="#">footer link right 3</a>
+                            </li>
+                            <li>
+                                <a href="#">footer link right 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+            <!-- Footer Links -->
+            <!-- Copyright -->
+            <div class="footer-footer text-center text-white py-3">
+                Central Logging Service © @DateTime.Now.Year Copyright:
+                <a href="https://github.com/lumbridge"> Github/Lumbridge</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
     </div>
 
     <!-- Modal -->

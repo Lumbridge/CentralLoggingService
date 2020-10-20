@@ -12,7 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LogId" Type="int" Nullable="false" />
           <Property Name="SubscriberId" Type="int" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="AlertTriggerGroup">
@@ -20,7 +20,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubscriberId" Type="int" Nullable="false" />
+          <Property Name="SubscriberId" Type="int" />
         </EntityType>
         <EntityType Name="AlertTriggerNode">
           <Key>
@@ -28,10 +28,10 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AlertTriggerNodeOperatorId" Type="int" />
+          <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="DynamicNodeValue" Type="varchar" MaxLength="255" />
           <Property Name="DynamicNodeDotNetDataType" Type="varchar" MaxLength="255" />
           <Property Name="PositionInGroup" Type="int" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="AlertTriggerNodeOperator">
           <Key>
@@ -126,14 +126,16 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="AlertTypeId" Type="int" Nullable="false" />
           <Property Name="SubscriberId" Type="int" Nullable="false" />
-          <Property Name="PublishingSystemId" Type="int" Nullable="false" />
+          <Property Name="PublishingSystemId" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -169,7 +171,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerGroup_Subscriber">
-          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="1" />
+          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="0..1" />
           <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Subscriber">
@@ -181,7 +183,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="AlertTriggerNode" Type="Self.AlertTriggerNode" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -217,7 +221,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -277,7 +283,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Subscriber_System_fk3">
-          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="1" />
+          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="0..1" />
           <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PublishingSystem">
@@ -475,7 +481,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LogId" Type="Int32" Nullable="false" />
           <Property Name="SubscriberId" Type="Int32" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertHistory" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="Log" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="AlertHistory" ToRole="Log" />
@@ -486,7 +492,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubscriberId" Type="Int32" Nullable="false" />
+          <Property Name="SubscriberId" Type="Int32" />
           <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertHistory" />
           <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.FK_AlertTriggerGroup_Subscriber" FromRole="AlertTriggerGroup" ToRole="Subscriber" />
           <NavigationProperty Name="AlertTriggerNodes" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertTriggerNode" />
@@ -498,10 +504,10 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AlertTriggerNodeOperatorId" Type="Int32" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="DynamicNodeValue" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="DynamicNodeDotNetDataType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="PositionInGroup" Type="Int32" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" FromRole="AlertTriggerNode" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AlertTriggerNodeOperator" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerNodeStaticOperator" FromRole="AlertTriggerNode" ToRole="AlertTriggerNodeOperator" />
         </EntityType>
@@ -615,10 +621,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="AlertTypeId" Type="Int32" Nullable="false" />
           <Property Name="SubscriberId" Type="Int32" Nullable="false" />
-          <Property Name="PublishingSystemId" Type="Int32" Nullable="false" />
+          <Property Name="PublishingSystemId" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="Subscription" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AlertType" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="Subscription" ToRole="AlertType" />
@@ -626,7 +632,9 @@
           <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.Subscriber_System_fk2" FromRole="Subscription" ToRole="Subscriber" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -662,7 +670,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerGroup_Subscriber">
-          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="1" />
+          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="0..1" />
           <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Subscriber">
@@ -674,7 +682,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="CLSDbModel.AlertTriggerNode" Role="AlertTriggerNode" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -686,7 +696,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -770,7 +782,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Subscriber_System_fk3">
-          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="1" />
+          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="0..1" />
           <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PublishingSystem">
@@ -833,10 +845,10 @@
           <EntitySetMapping Name="AlertTriggerNodes">
             <EntityTypeMapping TypeName="CLSDbModel.AlertTriggerNode">
               <MappingFragment StoreEntitySet="AlertTriggerNode">
-                <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
                 <ScalarProperty Name="PositionInGroup" ColumnName="PositionInGroup" />
                 <ScalarProperty Name="DynamicNodeDotNetDataType" ColumnName="DynamicNodeDotNetDataType" />
                 <ScalarProperty Name="DynamicNodeValue" ColumnName="DynamicNodeValue" />
+                <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
                 <ScalarProperty Name="AlertTriggerNodeOperatorId" ColumnName="AlertTriggerNodeOperatorId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

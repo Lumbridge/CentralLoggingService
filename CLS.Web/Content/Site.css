@@ -21,3 +21,18 @@
     color: white !important;
     text-shadow: 0 1px 0 #000 !important;
 }
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#content-wrap {
+    padding-bottom: 212px; 
+}
