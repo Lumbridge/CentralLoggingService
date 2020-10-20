@@ -1,0 +1,27 @@
+﻿
+@model List<CLS.Core.Data.Subscriber>
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered table-striped table-dark">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Number of Subscriptions</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id=@item.Id>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.Subscriptions.Count</td>
+                    <td><button data-subscriberId="@item.Id" type="button" class="btn btn-outline-danger deleteSubscriberButton"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<button id="newSubscriberButton" type="button" class="btn btn-secondary">+ New Subscriber</button>

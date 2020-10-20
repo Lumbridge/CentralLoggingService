@@ -9,7 +9,6 @@ using System;
 using System.Configuration;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Text;
 using System.Threading;
 
 namespace CLS.WindowsService.Classes
@@ -46,8 +45,8 @@ namespace CLS.WindowsService.Classes
                         // 6. Send an alert to the subscriber for this trigger group
                         EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
                             $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
-                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystem.Name}\n" +
-                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystem.EnvironmentType.Name}\n" +
+                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
+                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
                             $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
                             $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
                             $"Number of log messages that met criteria: {logCount}\n\n" +
@@ -89,7 +88,7 @@ namespace CLS.WindowsService.Classes
         {
             var uow = new UnitOfWork(new DBEntities());
 
-            ConsoleHelper.LogMessageToConsole("Started Trigger Processor.");
+            ConsoleHelper.LogMessageToConsole("Started Trigger Processor.\n");
 
             while (true)
             {
@@ -120,7 +119,7 @@ namespace CLS.WindowsService.Classes
                     {
                         var logCount = logs.Count();
 
-                        ConsoleHelper.LogMessageToConsole(
+                        ConsoleHelper.LogColouredMessageToConsole(ConsoleColor.Green,
                             $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for subscriber {alertTriggerGroup.Subscriber.Name} with " +
                             $"email address {alertTriggerGroup.Subscriber.Email}.");
 
@@ -158,17 +157,17 @@ namespace CLS.WindowsService.Classes
                         catch (Exception ex)
                         {
                             ConsoleHelper.LogMessageToConsole(exception: ex);
-                            var ls = new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).LogErrorToDb(ex);
+                            new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).LogErrorToDb(ex);
                         }
                     }
                     else
                     {
-                        ConsoleHelper.LogMessageToConsole($"The criteria for trigger group #{alertTriggerGroup.Id} were not met, continuing.");
+                        ConsoleHelper.LogMessageToConsole($"The criteria for trigger group #{alertTriggerGroup.Id} were not met, continuing.\n");
                     }
                 }
 
                 var sleepTime = int.Parse(ConfigurationManager.AppSettings["PollTimeMinutes"]) * 60000;
-                ConsoleHelper.LogMessageToConsole($"Sleeping for {sleepTime}ms ({ConfigurationManager.AppSettings["PollTimeMinutes"]} minute(s))");
+                ConsoleHelper.LogMessageToConsole($"Sleeping for {sleepTime}ms ({ConfigurationManager.AppSettings["PollTimeMinutes"]} minute(s))\n");
                 Thread.Sleep(sleepTime);
             }
         }

@@ -3,23 +3,23 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h3>Subscriber</h3>
+        <h4>Subscriber</h4>
         @Html.DropDownList("Subscribers", (List<SelectListItem>)ViewData["Subscribers"], new { @class = "form-control" })
     </div>
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <h3>Alert Type</h3>
+        <h4>Alert Type</h4>
         @Html.DropDownList("AlertTypes", (List<SelectListItem>)ViewData["AlertTypes"], new { @class = "form-control" })
     </div>
 </div>
-<h3>Rules</h3>
+<h4>Rules</h4>
 <div id="nodeGroupContainer" class="container">
     @Html.Partial("_SubscriptionRow", Model)
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <h3>Expression</h3>
+        <h4>Expression</h4>
         <input class="form-control expressionTextBox" type="text" readonly>
     </div>
 </div>

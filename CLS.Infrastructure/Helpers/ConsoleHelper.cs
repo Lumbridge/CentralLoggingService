@@ -15,5 +15,12 @@ namespace CLS.Infrastructure.Helpers
                 Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}]" + exception.GetExceptionMessages());
             }
         }
+
+        public static void LogColouredMessageToConsole(ConsoleColor colour, string message = null, Exception exception = null)
+        {
+            Console.ForegroundColor = colour;
+            LogMessageToConsole(message, exception);
+            Console.ResetColor();
+        }
     }
 }

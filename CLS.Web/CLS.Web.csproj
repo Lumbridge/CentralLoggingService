@@ -144,6 +144,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
+    <Compile Include="Controllers\SubscribersController.cs" />
     <Compile Include="Data\DBEntities.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -166,6 +167,7 @@
     <Content Include="Scripts\Application\Alerts.js" />
     <Content Include="Scripts\Application\Home.js" />
     <Content Include="Scripts\Application\Logs.js" />
+    <Content Include="Scripts\Application\Subscribers.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.bundle.min.js" />
     <Content Include="Scripts\JQuery\jquery-3.5.1.min.js" />
     <Content Include="Scripts\JQueryValidate\additional-methods.min.js" />
@@ -214,6 +216,9 @@
     <Content Include="Views\Shared\_CreateUpdateSubscription.cshtml" />
     <Content Include="Views\Shared\_SubscriptionRow.cshtml" />
     <Content Include="Views\Shared\_SubscriptionTable.cshtml" />
+    <Content Include="Views\Subscribers\Index.cshtml" />
+    <Content Include="Views\Shared\_SubscriberTable.cshtml" />
+    <Content Include="Views\Shared\_CreateUpdateSubscriber.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLS.Core\CLS.Core.csproj">

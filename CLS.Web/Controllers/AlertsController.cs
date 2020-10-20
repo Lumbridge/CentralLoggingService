@@ -83,7 +83,7 @@ namespace CLS.Web.Controllers
             }
             catch (Exception ex)
             {
-                new LogSender("CLS.Web", StaticData.EnvironmentType.DEV, StaticData.SystemType.Website).LogErrorToDb(ex);
+                _ls.LogErrorToDb(ex);
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 
@@ -107,7 +107,7 @@ namespace CLS.Web.Controllers
             }
             catch (Exception ex)
             {
-                new LogSender("CLS.Web", StaticData.EnvironmentType.DEV, StaticData.SystemType.Website).LogErrorToDb(ex);
+                _ls.LogErrorToDb(ex);
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 

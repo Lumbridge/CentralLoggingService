@@ -1,6 +1,8 @@
 ﻿using CLS.Infrastructure.Interfaces;
 using System.IO;
 using System.Web.Mvc;
+using CLS.Core.StaticData;
+using CLS.Sender.Classes;
 
 namespace CLS.Web.Controllers
 {
@@ -8,11 +10,14 @@ namespace CLS.Web.Controllers
     {
         protected IUnitOfWork _uow;
 
+        protected LogSender _ls;
+
         public IUnitOfWork UnitOfWork { get => _uow; set => _uow = value; }
 
         public BaseController(IUnitOfWork uow)
         {
             _uow = uow;
+            _ls = new LogSender("CLS.Web", StaticData.EnvironmentType.DEV, StaticData.SystemType.Website);
         }
 
         // renders a partial view to a html string
