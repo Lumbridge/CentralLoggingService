@@ -1,5 +1,4 @@
 ﻿$(function() {
-
     $(document).on("click",
         "#newSubscriberButton",
         function() {

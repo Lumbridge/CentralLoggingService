@@ -1,9 +1,9 @@
 ﻿using CLS.Core.Data;
 using CLS.Core.StaticData;
 using CLS.Infrastructure.Classes;
+using CLS.Infrastructure.Data;
 using CLS.Infrastructure.Helpers;
 using CLS.Sender.Classes;
-using CLS.Sender.Data;
 using CLS.WindowsService.Helpers;
 using System;
 using System.Configuration;
@@ -32,9 +32,10 @@ namespace CLS.WindowsService.Classes
                     var alertHistories = uow.Repository<AlertHistory>().GetAll();
 
                     // 4. filter down the logs to ones which haven't been alerted for this subscriber before
-                    logs = logs.Where(x =>
-                            !alertHistories.Any(
-                                y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
+                    logs = logs
+                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
+                        .ToList()
+                        .AsQueryable()
                         .Where(alertTriggerGroup.ExpressionString);
 
                     // 5. determine if we should send an alert to the user by checking to see if any of the filtered logs match the trigger group
@@ -109,9 +110,10 @@ namespace CLS.WindowsService.Classes
                     var alertHistories = uow.Repository<AlertHistory>().GetAll();
 
                     // 4. filter down the logs to ones which haven't been alerted for this subscriber before
-                    logs = logs.Where(x =>
-                            !alertHistories.Any(
-                                y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
+                    logs = logs
+                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
+                        .ToList()
+                        .AsQueryable()
                         .Where(alertTriggerGroup.ExpressionString);
 
                     // 5. determine if we should send an alert to the user by checking to see if any of the filtered logs match the trigger group
@@ -152,7 +154,7 @@ namespace CLS.WindowsService.Classes
                         try
                         {
                             uow.Commit();
-                            ConsoleHelper.LogMessageToConsole($"Successfully stored {logCount} records in the Alert History table.");
+                            ConsoleHelper.LogMessageToConsole($"Successfully stored {logCount} records in the Alert History table.\n");
                         }
                         catch (Exception ex)
                         {

@@ -1,8 +1,7 @@
-using System;
 using CLS.Infrastructure.Classes;
-using CLS.Core.Data;
+using CLS.Infrastructure.Data;
 using CLS.Infrastructure.Interfaces;
-using CLS.Web.Data;
+using System;
 using Unity;
 
 namespace CLS.Web

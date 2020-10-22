@@ -42,7 +42,7 @@
 }
 
 .custom-select,
-.form-control,
+.form-control-sm,
 .dataTables_filter,
 .dataTables_info,
 .dataTables_length {
@@ -55,6 +55,7 @@
     margin-bottom: 2rem;
 }
 
-table.table-bordered.dataTable th, table.table-bordered.dataTable td {
+table.table-bordered.dataTable th, 
+table.table-bordered.dataTable td {
     border-left-width: 1px !important;
 }

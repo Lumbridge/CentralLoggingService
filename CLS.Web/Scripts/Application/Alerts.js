@@ -47,6 +47,7 @@
                 case "MessageSeverity":
                 case "PublishingSystemName":
                 case "EnvironmentType":
+                case "DayOfWeek":
                     {
                         AjaxGet("~/Alerts/GetDynamicSelectList?variableName=" + selected,
                             function (data) {

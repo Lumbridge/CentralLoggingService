@@ -33,6 +33,18 @@ namespace CLS.Core.Data
                         }
                         default:
                         {
+                            var nodePosition = node.PositionInGroup;
+                            if (nodePosition >= 2)
+                            {
+                                var variableNode = nodes.First(x =>
+                                    x.PositionInGroup == nodePosition - 2 &&
+                                    x.AlertTriggerGroupId == node.AlertTriggerGroupId);
+                                if (variableNode.AlertTriggerNodeOperator.Value == "TimeOfDay")
+                                {
+                                    expression.Append($"TimeSpan.Parse(\"{node.DynamicNodeValue}\")");
+                                    break;
+                                }
+                            }
                             expression.Append("\"" + node.DynamicNodeValue + "\"");
                             break;
                         }

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Classes\Repository.cs" />
     <Compile Include="Classes\UnitOfWork.cs" />
+    <Compile Include="Data\DBEntities.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Helpers\ExceptionHelper.cs" />
     <Compile Include="Interfaces\IEntities.cs" />

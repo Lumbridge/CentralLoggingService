@@ -3,7 +3,7 @@ using CLS.Core.StaticData;
 using CLS.Infrastructure.Classes;
 using CLS.Infrastructure.Helpers;
 using CLS.Infrastructure.Interfaces;
-using CLS.Sender.Data;
+using CLS.Infrastructure.Data;
 using System;
 using System.Linq;
 using System.Reflection;

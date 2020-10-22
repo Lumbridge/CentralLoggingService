@@ -1,11 +1,9 @@
-﻿using System;
-using CLS.Core.Data;
+﻿using CLS.Core.Data;
 using CLS.Infrastructure.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using CLS.Core.StaticData;
-using CLS.Sender.Classes;
 
 namespace CLS.Web.Controllers
 {
@@ -137,6 +135,11 @@ namespace CLS.Web.Controllers
                 case "EnvironmentType":
                 {
                     options = _uow.Repository<EnvironmentType>().Select(x => x.Name).ToList();
+                    break;
+                }
+                case "DayOfWeek":
+                {
+                    options = new List<string> {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
                     break;
                 }
             }

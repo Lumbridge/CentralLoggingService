@@ -1,6 +1,6 @@
 ﻿using CLS.Infrastructure.Classes;
+using CLS.Infrastructure.Data;
 using CLS.Web.Controllers;
-using CLS.Web.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
 
