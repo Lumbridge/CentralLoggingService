@@ -80,7 +80,7 @@ namespace CLS.WindowsService.Classes
                     }
                 }
 
-                var sleepTime = int.Parse(ConfigurationManager.AppSettings["PollTimeMinutes"]) * 60000;
+                var sleepTime = int.Parse(ConfigurationManager.AppSettings["PollTimeSeconds"]) * 1000;
                 Thread.Sleep(sleepTime);
             }
         }
@@ -168,8 +168,8 @@ namespace CLS.WindowsService.Classes
                     }
                 }
 
-                var sleepTime = int.Parse(ConfigurationManager.AppSettings["PollTimeMinutes"]) * 60000;
-                ConsoleHelper.LogMessageToConsole($"Sleeping for {sleepTime}ms ({ConfigurationManager.AppSettings["PollTimeMinutes"]} minute(s))\n");
+                var sleepTime = int.Parse(ConfigurationManager.AppSettings["PollTimeSeconds"]) * 1000;
+                ConsoleHelper.LogMessageToConsole($"Sleeping for {sleepTime}ms ({ConfigurationManager.AppSettings["PollTimeSeconds"]} seconds)\n");
                 Thread.Sleep(sleepTime);
             }
         }
