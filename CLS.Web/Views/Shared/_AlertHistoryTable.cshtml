@@ -1,0 +1,38 @@
+﻿
+@model  List<CLS.Core.Data.AlertHistory>
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered table-striped table-dark">
+        <thead>
+            <tr>
+                <th>Time of Alert</th>
+                <th>User Alerted</th>
+                <th>Email Alerted</th>
+                <th>Log Message Count</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var subscriberName = item.Subscriber?.Name ?? "Unknown";
+                var subscriberEmail = item.Subscriber?.Email ?? "Unknown";
+                <tr data-id=@item.Id>
+                    <td>@item.Timestamp</td>
+                    <td>@subscriberName</td>
+                    <td>@subscriberEmail</td>
+                    <td>@item.SiblingCount</td>
+                    <td><a role="button" class="btn btn-outline-info" href="/AlertHistory/@item.AlertHistoryGroupId"><i class="fas fa-chevron-right"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        $("table").DataTable({
+            "order": [[0, "desc"]]
+        });
+    });
+</script>

@@ -15,10 +15,12 @@ namespace CLS.Core.Data
     public partial class AlertHistory
     {
         public int Id { get; set; }
+        public int AlertHistoryGroupId { get; set; }
         public int LogId { get; set; }
         public int SubscriberId { get; set; }
         public Nullable<int> AlertTriggerGroupId { get; set; }
         public System.DateTime Timestamp { get; set; }
+        public int SiblingCount { get; set; }
     
         public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }
         public virtual Log Log { get; set; }

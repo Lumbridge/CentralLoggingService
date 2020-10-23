@@ -1,10 +1,9 @@
-﻿using System;
+﻿using CLS.Core.Data;
+using CLS.Infrastructure.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using CLS.Core.Data;
-using CLS.Infrastructure.Interfaces;
 
 namespace CLS.Web.Controllers
 {
@@ -15,7 +14,7 @@ namespace CLS.Web.Controllers
         }
 
         // GET: Logs
-        [Route("logs/{logLevel?}")]
+        [Route("Logs/{logLevel?}")]
         public ActionResult Index(string logLevel = "all")
         {
             var validLevels = _uow.Repository<Severity>().Select(x => x.Name.ToLowerInvariant()).ToList();

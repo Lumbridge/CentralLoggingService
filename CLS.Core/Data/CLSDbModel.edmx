@@ -10,10 +10,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlertHistoryGroupId" Type="int" Nullable="false" />
           <Property Name="LogId" Type="int" Nullable="false" />
           <Property Name="SubscriberId" Type="int" Nullable="false" />
           <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="SiblingCount" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="AlertTriggerGroup">
           <Key>
@@ -133,9 +135,7 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1" />
           <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -479,10 +479,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlertHistoryGroupId" Type="Int32" Nullable="false" />
           <Property Name="LogId" Type="Int32" Nullable="false" />
           <Property Name="SubscriberId" Type="Int32" Nullable="false" />
           <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SiblingCount" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertHistory" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="Log" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="AlertHistory" ToRole="Log" />
           <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.FK_AlertHistory_Subscriber" FromRole="AlertHistory" ToRole="Subscriber" />
@@ -632,9 +634,7 @@
           <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.Subscriber_System_fk2" FromRole="Subscription" ToRole="Subscriber" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1" />
           <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -826,10 +826,12 @@
           <EntitySetMapping Name="AlertHistories">
             <EntityTypeMapping TypeName="CLSDbModel.AlertHistory">
               <MappingFragment StoreEntitySet="AlertHistory">
+                <ScalarProperty Name="SiblingCount" ColumnName="SiblingCount" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
                 <ScalarProperty Name="SubscriberId" ColumnName="SubscriberId" />
                 <ScalarProperty Name="LogId" ColumnName="LogId" />
+                <ScalarProperty Name="AlertHistoryGroupId" ColumnName="AlertHistoryGroupId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

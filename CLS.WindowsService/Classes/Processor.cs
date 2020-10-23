@@ -43,22 +43,20 @@ namespace CLS.WindowsService.Classes
                     {
                         var logCount = logs.Count();
 
-                        // 6. Send an alert to the subscriber for this trigger group
-                        EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
-                            $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
-                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
-                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
-                            $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
-                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
-                            $"Number of log messages that met criteria: {logCount}\n\n" +
-                            $"You can review the log messages at https://localhost:44356/Logs/.");
+                        // this id will allow us to find all the messages which were logged under this alert instance
+                        var alertHistoryGroupId = 1;
+                        if (alertHistories.Any()) {
+                            alertHistoryGroupId = alertHistories.OrderByDescending(x => x.AlertHistoryGroupId).First().AlertHistoryGroupId + 1;
+                        }
 
-                        // 7. Add a record to the Alert History table for each of the log messages flagged by this alert
+                        // 6. Add a record to the Alert History table for each of the log messages flagged by this alert
                         foreach (var log in logs)
                         {
                             uow.Repository<AlertHistory>().Put(new AlertHistory
                             {
                                 AlertTriggerGroup = alertTriggerGroup,
+                                AlertHistoryGroupId = alertHistoryGroupId,
+                                SiblingCount = logCount,
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
@@ -68,7 +66,7 @@ namespace CLS.WindowsService.Classes
                             });
                         }
 
-                        // 8. Commit changes to the Alert History table
+                        // 7. Commit changes to the Alert History table
                         try
                         {
                             uow.Commit();
@@ -77,6 +75,16 @@ namespace CLS.WindowsService.Classes
                         {
                             new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).LogErrorToDb(ex);
                         }
+
+                        // 8. Send an alert to the subscriber for this trigger group
+                        EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
+                            $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
+                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
+                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
+                            $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
+                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
+                            $"Number of log messages that met criteria: {logCount}\n\n" +
+                            $"You can review the log messages at https://localhost:44356/AlertHistory/{alertHistoryGroupId}.");
                     }
                 }
 
@@ -121,26 +129,24 @@ namespace CLS.WindowsService.Classes
                     {
                         var logCount = logs.Count();
 
+                        // this id will allow us to find all the messages which were logged under this alert instance
+                        var alertHistoryGroupId = 1;
+                        if (alertHistories.Any()) {
+                            alertHistoryGroupId = alertHistories.OrderByDescending(x => x.AlertHistoryGroupId).First().AlertHistoryGroupId + 1;
+                        }
+
                         ConsoleHelper.LogColouredMessageToConsole(ConsoleColor.Green,
                             $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for subscriber {alertTriggerGroup.Subscriber.Name} with " +
                             $"email address {alertTriggerGroup.Subscriber.Email}.");
 
-                        // 6. Send an alert to the subscriber for this trigger group
-                        EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
-                            $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
-                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
-                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
-                            $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x=>x.Timestamp).First().Timestamp}\n" +
-                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
-                            $"Number of log messages that met criteria: {logCount}\n\n" +
-                            $"You can review the log messages at https://localhost:44356/Logs/.");
-
-                        // 7. Add a record to the Alert History table for each of the log messages flagged by this alert
+                        // 6. Add a record to the Alert History table for each of the log messages flagged by this alert
                         foreach (var log in logs)
                         {
                             uow.Repository<AlertHistory>().Put(new AlertHistory
                             {
                                 AlertTriggerGroup = alertTriggerGroup,
+                                AlertHistoryGroupId = alertHistoryGroupId,
+                                SiblingCount = logCount,
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
@@ -150,7 +156,7 @@ namespace CLS.WindowsService.Classes
                             });
                         }
 
-                        // 8. Commit changes to the Alert History table
+                        // 7. Commit changes to the Alert History table
                         try
                         {
                             uow.Commit();
@@ -161,6 +167,16 @@ namespace CLS.WindowsService.Classes
                             ConsoleHelper.LogMessageToConsole(exception: ex);
                             new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).LogErrorToDb(ex);
                         }
+
+                        // 8. Send an alert to the subscriber for this trigger group
+                        EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
+                            $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
+                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
+                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
+                            $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
+                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
+                            $"Number of log messages that met criteria: {logCount}\n\n" +
+                            $"You can review the log messages at https://localhost:44356/AlertHistory/{alertHistoryGroupId}.");
                     }
                     else
                     {

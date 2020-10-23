@@ -140,6 +140,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="Controllers\AlertHistoryController.cs" />
     <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -222,6 +223,9 @@
     <Content Include="Views\Subscribers\Index.cshtml" />
     <Content Include="Views\Shared\_SubscriberTable.cshtml" />
     <Content Include="Views\Shared\_CreateUpdateSubscriber.cshtml" />
+    <Content Include="Views\AlertHistory\Index.cshtml" />
+    <Content Include="Views\Shared\_AlertHistoryTable.cshtml" />
+    <Content Include="Views\Shared\_LogMessageTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLS.Core\CLS.Core.csproj">
