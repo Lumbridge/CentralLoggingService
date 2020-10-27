@@ -15,6 +15,16 @@ Navigate to the alerts page then click `+ New Alert` and you'll be presented wit
 
 ![create alert form](https://i.imgur.com/6rMS6i1.png)
 
+#### 3. Receiving an Alert
+You'll receive an email whenever the criteria of the alert are met and it'll look something like this:
+
+![Alert Email Image](https://i.imgur.com/4x3UuRS.png)
+
+#### 4. Alert History
+You'll notice that on the email you receive there is a link at the bottom which will take you to a page where you can view a breakdown of the alert that happened.
+
+![Alert History Page](https://i.imgur.com/yx6jsSy.png)
+
 #### Alert Options Breakdown
 | Alert Type Name | Description |
 | --------------- | ----------- |
