@@ -5,6 +5,8 @@ The central logging service is an all in one solution for storing log messages i
 ![CLS Admin Dashboard Image](https://i.imgur.com/C6tYYh2.png)
 
 ## User Alerts
+Users can setup alerts via the front end, these alerts are completely customisable using the alert query builder shown in the `Setting up an Alert` section. An usage example here is that a certain user may want to be notified whenever a particular service logs an error, this can be extended to whenever a particular service logs an error at a certain time, certain day of the week, in a certain staging environment etc etc. For a full list of options see the `Alert Options Breakdown` section.
+
 ### Setting up an Alert
 #### 1. Register a subscriber
 Navigate to the subscribers page then click `+ New Subscriber` and you'll be presented with the following form to complete: 
@@ -52,10 +54,22 @@ You'll notice that on the email you receive there is a link at the bottom which 
 3. Right click the solution & click "Restore NuGet Packages" then Press F6 to build the solution,
 4. Right click CLS.DatabaseGenerator & click "Set as Startup Project",
 5. Navigate to the App.config in the CLS.DatabaseGenerator project and edit the connection string to point at the database you created in step 1,
-6. Run the database manager and it will create the tables & metadata in your target database,
-7. Right click the solution and click properties and set the startup projects as shown:
+6. Run the database manager and it will create the tables & metadata in your target database,  
+7a. Navigate to the `CLS.Core` project and open the App.config file and edit the following:
+```
+<connectionStrings>
+    <add name="CLSDbEntities" connectionString="metadata=res://*/Data.CLSDbModel.csdl|res://*/Data.CLSDbModel.ssdl|res://*/Data.CLSDbModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(LocalDb)\CentralLoggingService;initial catalog=CentralLoggingService;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+</connectionStrings>
+```
+7b. Particularly this part:
+```
+connection string=&quot;data source=(LocalDb)\CentralLoggingService;initial catalog=CentralLoggingService;integrated security=True;
+```
+7c. Keeping the formatting, edit it to point at the database you created in step 1,  
+8. Right click the solution and click properties and set the startup projects as shown:
 ![project setup example](https://i.imgur.com/6jaNTJf.png?1)
-8. Run the projects with 'F5'.
+9. Edit the App.config in the projects which will run at start up (seen in screenshot above)
+10. Run the projects with 'F5'.
 
 ## Solution Breakdown (Development)
 | Concept                | Solution Project            |
@@ -63,6 +77,7 @@ You'll notice that on the email you receive there is a link at the bottom which 
 | Database Creation      | `CLS.DatabaseGenerator`     |
 | Log Message Dispatcher | `CLS.SenderConsole`         |
 | Alerts Engine          | `CLS.WindowsServiceConsole` |
+| Web Front End          | `CLS.Web`                   |
 
 #### Database Creation
 The `CLS.DatabaseGenerator` will allow you to quickly get up and running with the solution, it must be run before anything else to create the required objects & static data in the database.
@@ -72,3 +87,6 @@ The `CLS.SenderConsole` will periodically send randomised log messages into the 
 
 #### Alerts Engine
 The `CLS.WindowsServiceConsole` will run as a background process, periodically scanning the messages which have been sent into the database to see if any subscribed users should be alerted.
+
+#### Web Front End
+The `CLS.Web` project is the front end for both development & production and can be published as such.
