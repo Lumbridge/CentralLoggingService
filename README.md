@@ -54,7 +54,7 @@ You'll notice that on the email you receive there is a link at the bottom which 
 3. Right click the solution & click "Restore NuGet Packages" then Press F6 to build the solution,
 4. Right click CLS.DatabaseGenerator & click "Set as Startup Project",
 5. Navigate to the App.config in the CLS.DatabaseGenerator project and edit the connection string to point at the database you created in step 1,
-6. Run the database manager and it will create the tables & metadata in your target database,  
+6. Run the database manager and it will create the tables & metadata in your target database,
 7a. Navigate to the `CLS.Core` project and open the App.config file and edit the following:
 ```
 <connectionStrings>
