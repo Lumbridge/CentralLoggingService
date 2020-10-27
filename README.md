@@ -71,7 +71,6 @@ connection string=&quot;data source=(LocalDb)\CentralLoggingService;initial cata
 ![project setup example](https://i.imgur.com/6jaNTJf.png?1)
 
 9. Edit the App.config in the projects which will run at start up (seen in screenshot above)
-
 10. Run the projects with 'F5'.
 
 ## Solution Breakdown (Development)
