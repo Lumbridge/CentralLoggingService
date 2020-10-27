@@ -1,6 +1,8 @@
 # Central Logging Service * *these docs are not complete* *
 ## What is this?
-The central logging service is an all in one solution for storing log messages in a standard format in one location from distributed .NET systems. The system also includes a windows service which monitors the log message database and sends alerts to users as defined by dynamic rules setup via a built-in front-end.
+The central logging service is an all in one solution for storing log messages in a standard format in one location from distributed .NET systems known here as `Publishing Systems`. The system also includes a windows service which monitors the log message database and sends alerts to users as defined by dynamic rules setup via a built-in front-end.
+
+![CLS Admin Dashboard Image](https://i.imgur.com/C6tYYh2.png)
 
 ## User Alerts
 ### Setting up an Alert
