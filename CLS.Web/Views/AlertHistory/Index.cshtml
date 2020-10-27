@@ -24,7 +24,7 @@ else
     var historyRecord = (AlertHistory)ViewData["AlertHistoryRecord"];
     var subscriberName = historyRecord.Subscriber.Name ?? "Unknown";
     var subscriberEmail = historyRecord.Subscriber.Email ?? "Unknown";
-    var alertCriteria = historyRecord.AlertTriggerGroup.ExpressionString ?? "Unknown";
+    var alertCriteria = historyRecord.AlertTriggerGroup?.ExpressionString ?? "Unknown";
 
     <div class="row">
         <div class="col-lg-12">
