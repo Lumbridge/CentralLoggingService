@@ -69,7 +69,9 @@ connection string=&quot;data source=(LocalDb)\CentralLoggingService;initial cata
 7c. Keeping the formatting, edit it to point at the database you created in step 1,  
 8. Right click the solution and click properties and set the startup projects as shown:
 ![project setup example](https://i.imgur.com/6jaNTJf.png?1)
+
 9. Edit the App.config in the projects which will run at start up (seen in screenshot above)
+
 10. Run the projects with 'F5'.
 
 ## Solution Breakdown (Development)
