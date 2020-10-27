@@ -70,7 +70,7 @@ connection string=&quot;data source=(LocalDb)\CentralLoggingService;initial cata
 8. Right click the solution and click properties and set the startup projects as shown:
 ![project setup example](https://i.imgur.com/6jaNTJf.png?1)
 
-9. Edit the App.config in the projects which will run at start up (seen in screenshot above)
+9. Copy & paste the `<ConnectionStrings>` section you configured from the `CLS.Core` project and replace the existing `<ConnectionStrings>` sections in the App/Web.config files in the projects which will run at start up (seen in screenshot above),
 10. Run the projects with 'F5'.
 
 ## Solution Breakdown (Development)
