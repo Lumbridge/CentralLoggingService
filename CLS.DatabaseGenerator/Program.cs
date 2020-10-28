@@ -12,7 +12,7 @@ namespace CLS.DatabaseGenerator
     {
         static void Main(string[] args)
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["cls"].ToString();
+            var connectionString = ConfigurationManager.ConnectionStrings["DatabaseGeneratorConnection"].ToString();
             RunSqlScript(connectionString, "./Scripts/CreateCLSTables.sql");
             RunSqlScript(connectionString, "./Scripts/PopulateStaticCLSData.sql");
             Console.WriteLine("Done running scripts...");
