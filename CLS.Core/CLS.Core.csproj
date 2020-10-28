@@ -120,12 +120,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CLSDbModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App_Data\CLSSettings.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="App_Data\Connections.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Data\CLSDbModel.edmx.diagram">
       <DependentUpon>CLSDbModel.edmx</DependentUpon>
     </None>
