@@ -102,6 +102,7 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Data\Connections.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +119,7 @@
       <Name>CLS.Web</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

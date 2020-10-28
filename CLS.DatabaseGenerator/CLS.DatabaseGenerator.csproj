@@ -52,9 +52,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CLS.Infrastructure\CLS.Infrastructure.csproj">
       <Project>{38518097-d7a8-49d9-9a33-72a656d5daa6}</Project>
       <Name>CLS.Infrastructure</Name>
@@ -67,6 +64,11 @@
     <Content Include="Scripts\PopulateStaticCLSData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CLS.Core\App.config">
+      <Link>App.config</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
