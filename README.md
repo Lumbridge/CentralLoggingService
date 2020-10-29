@@ -2,7 +2,7 @@
 ## What is this?
 The central logging service is an all in one solution for storing log messages in a standard format in one location from distributed .NET systems known here as `Publishing Systems`. The system also includes a windows service which monitors the log message database and sends alerts to users as defined by dynamic rules setup via a built-in front-end.
 
-![CLS Admin Dashboard Image](https://i.imgur.com/C6tYYh2.png)
+![CLS Admin Dashboard Image](https://i.imgur.com/knigR2i.png)
 
 ## User Alerts
 Users can setup alerts via the front end, these alerts are completely customisable using the alert query builder shown in the `Setting up an Alert` section. An usage example here is that a certain user may want to be notified whenever a particular service logs an error, this can be extended to whenever a particular service logs an error at a certain time, certain day of the week, in a certain staging environment etc etc. For a full list of options see the `Alert Options Breakdown` section.
