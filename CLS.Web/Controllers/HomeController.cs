@@ -22,9 +22,33 @@ namespace CLS.Web.Controllers
                 PublishingSystemCount = _uow.Repository<PublishingSystem>().Count(),
                 SubscriberCount = _uow.Repository<Subscriber>().Count(),
                 AlertCount = _uow.Repository<Subscription>().Count(),
+                AlertHistoryCount = _uow.Repository<AlertHistory>().Count(),
                 MetaData = GetDashboardMetadata()
             };
+            SetChartData();
             return View(model);
+        }
+
+        public void SetChartData()
+        {
+            var labels = new List<string>();
+            var day = DateTime.Today.AddDays(-6);
+            for (var i = 0; i < 7; i++)
+            {
+                labels.Add(day.DayOfWeek.ToString());
+                day = day.AddDays(1);
+            }
+            ViewData["chartLabels"] = System.Web.Helpers.Json.Encode(labels.ToArray());
+            
+            day = DateTime.Today.AddDays(-6);
+            var messages = _uow.Repository<Log>().Where(x => x.Timestamp.Date >= day.Date).ToList();
+            var values = new List<int>();
+            for (var i = 0; i < 7; i++)
+            {
+                values.Add(messages.Count(x => x.Timestamp.Date == day.Date));
+                day = day.AddDays(1);
+            }
+            ViewData["chartValues"] = System.Web.Helpers.Json.Encode(values.ToArray());
         }
 
         public List<DashboardMetadata> GetDashboardMetadata()

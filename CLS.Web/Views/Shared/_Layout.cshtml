@@ -27,7 +27,7 @@
             <!-- navbar -->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3 border-bottom">
                 <div class="flex-row d-flex">
-                    <a class="navbar-brand mb-1" href="/Home">CLS Admin</a>
+                    <a class="navbar-brand mb-1" href="@Url.Action("Index", "Home")">CLS Admin</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -35,28 +35,31 @@
                 <div class="navbar-collapse collapse" id="collapsingNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="/Home">Home</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">Home</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                                 Logs
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/Logs/Debug">Debug</a>
-                                <a class="dropdown-item" href="/Logs/Info">Info</a>
-                                <a class="dropdown-item" href="/Logs/Warn">Warn</a>
-                                <a class="dropdown-item" href="/Logs/Error">Error</a>
-                                <a class="dropdown-item" href="/Logs/Fatal">Fatal</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Logs", new { logLevel = "Debug" })">Debug</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Logs", new { logLevel = "Info" })">Info</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Logs", new { logLevel = "Warn" })">Warn</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Logs", new { logLevel = "Error" })">Error</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Logs", new { logLevel = "Fatal" })">Fatal</a>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Alerts">Alerts</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Alerts")">Alerts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Subscribers">Subscribers</a>
+                            <a class="nav-link" href="@Url.Action("Index", "Subscribers")">Subscribers</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="/AlertHistory">Alert History</a>
+                            <a class="nav-link" href="@Url.Action("Index", "AlertHistory")">Alert History</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "PublishingSystems")">Publishing Systems</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
@@ -99,19 +102,19 @@
                         </h5>
                         <ul class="list-unstyled">
                             <li>
-                                <a class="text-white-50" href="/Logs/Debug">Debug</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Logs", new { logLevel = "Debug" })">Debug</a>
                             </li>
                             <li>
-                                <a class="text-white-50" href="/Logs/Info">Info</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Logs", new { logLevel = "Info" })">Info</a>
                             </li>
                             <li>
-                                <a class="text-white-50" href="/Logs/Warn">Warning</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Logs", new { logLevel = "Warn" })">Warning</a>
                             </li>
                             <li>
-                                <a class="text-white-50" href="/Logs/Error">Error</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Logs", new { logLevel = "Error" })">Error</a>
                             </li>
                             <li>
-                                <a class="text-white-50" href="/Logs/Fatal">Fatal</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Logs", new { logLevel = "Fatal" })">Fatal</a>
                             </li>
                         </ul>
                     </div>
@@ -123,16 +126,19 @@
                         </h5>
                         <ul class="list-unstyled">
                             <li>
-                                <a class="text-white-50" href="/Home">Home</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Home")">Home</a>
                             </li>
                             <li>
-                                <a class="text-white-50" href="/Alerts">Alerts</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Alerts")">Alerts</a>
                             </li>
                             <li>
-                                <a class="text-white-50" href="/Subscribers">Subscribers</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "Subscribers")">Subscribers</a>
                             </li>
                             <li>
-                                <a class="text-white-50" href="/AlertHistory">Alert History</a>
+                                <a class="text-white-50" href="@Url.Action("Index", "AlertHistory")">Alert History</a>
+                            </li>
+                            <li>
+                                <a class="text-white-50" href="@Url.Action("Index", "PublishingSystems")">Publishing Systems</a>
                             </li>
                         </ul>
                     </div>

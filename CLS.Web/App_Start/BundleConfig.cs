@@ -28,7 +28,8 @@ namespace CLS.Web
                 "~/Content/FontAwesome/all.min.css",
                 "~/Content/Bootstrap/bootstrap.min.css", 
                 "~/Content/site.css",
-                "~/Content/Dashboard.css"));
+                "~/Content/Dashboard.css",
+                "~/Content/ChartJS/Chart.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/application").Include(
                 "~/Scripts/Application/AjaxUtils.js",
@@ -38,8 +39,8 @@ namespace CLS.Web
                 "~/Scripts/Libraries/tether.min.js",
                 "~/Scripts/Libraries/bootbox.all.min.js",
                 "~/Scripts/Libraries/bootstrap-notify.min.js",
-                "~/Scripts/Libraries/moment.js"
-            ));
+                "~/Scripts/Libraries/moment.js",
+                "~/Scripts/ChartJS/Chart.min.js"));
         }
     }
 }

@@ -13,6 +13,7 @@ namespace CLS.Web.Models
         public int PublishingSystemCount { get; set; }
         public int SubscriberCount { get; set; }
         public int AlertCount { get; set; }
+        public int AlertHistoryCount { get; set; }
 
         public int DebugMessageCount => int.Parse(MetaData.FirstOrDefault(x=>x.MetadataItemName == "DebugMessageCount")?.MetadataItemValue ?? "0");
         public int InfoMessageCount => int.Parse(MetaData.FirstOrDefault(x => x.MetadataItemName == "InfoMessageCount")?.MetadataItemValue ?? "0");

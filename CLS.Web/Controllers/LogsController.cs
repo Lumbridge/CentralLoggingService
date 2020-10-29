@@ -14,19 +14,34 @@ namespace CLS.Web.Controllers
         }
 
         // GET: Logs
-        [Route("Logs/{logLevel?}")]
-        public ActionResult Index(string logLevel = "all")
+        [Route("Logs/{logLevel?}/{publishingSystemId?}/{environmentTypeId?}")]
+        public ActionResult Index(string logLevel = "All", int publishingSystemId = 0, int environmentTypeId = 0)
         {
             var validLevels = _uow.Repository<Severity>().Select(x => x.Name.ToLowerInvariant()).ToList();
-            validLevels.Add("all");
+            validLevels.Add("All");
             if (!validLevels.Contains(logLevel.ToLowerInvariant())) {
-                logLevel = "all";
+                logLevel = "All";
             }
             ViewData["logLevel"] = logLevel;
             var logs = new List<Log>();
-            logs = logLevel == "all"
+            logs = logLevel == "All"
                 ? _uow.Repository<Log>().OrderByDescending(x => x.Timestamp).ToList()
                 : _uow.Repository<Log>().Where(x => string.Equals(x.Severity.Name, logLevel, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Timestamp).ToList();
+
+            if (publishingSystemId != 0)
+            {
+                var publishingSystemName = _uow.Repository<PublishingSystem>().Get(publishingSystemId).Name;
+                ViewData["publishingSystemName"] = publishingSystemName;
+                logs = logs.Where(x => string.Equals(x.PublishingSystem.Name, publishingSystemName,
+                    StringComparison.InvariantCultureIgnoreCase)).ToList();
+            }
+
+            if (environmentTypeId != 0)
+            {
+                ViewData["environmentTypeName"] = _uow.Repository<EnvironmentType>().Get(environmentTypeId).Name;
+                logs = logs.Where(x => x.PublishingSystem.EnvironmentTypeId == environmentTypeId).ToList();
+            }
+
             return View(logs);
         }
     }

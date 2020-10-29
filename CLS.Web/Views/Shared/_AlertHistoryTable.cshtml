@@ -22,7 +22,7 @@
                     <td>@subscriberName</td>
                     <td>@subscriberEmail</td>
                     <td>@item.SiblingCount</td>
-                    <td><a role="button" class="btn btn-outline-info" href="/AlertHistory/@item.AlertHistoryGroupId"><i class="fas fa-chevron-right"></i></a></td>
+                    <td><a role="button" class="btn btn-outline-info" href="@Url.Action("Index", "AlertHistory", new { alertHistoryGroupId = item.AlertHistoryGroupId})"><i class="fas fa-chevron-right"></i></a></td>
                 </tr>
             }
         </tbody>

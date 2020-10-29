@@ -9,6 +9,10 @@
                 <th>Publishing System</th>
                 <th>Environment</th>
                 <th>Timestamp</th>
+                @if (ViewData["logLevel"] == null || ViewData["logLevel"]?.ToString() == "All")
+                {
+                    <th>Severity</th>
+                }
                 <th>Message</th>
                 <th>Exception</th>
                 <th>Stack Trace</th>
@@ -50,9 +54,13 @@
                 }
 
                 <tr data-id=@item.Id>
-                    <td>@item.PublishingSystem.Name</td>
+                    <td><a href="@Url.Action("Index", "Logs", new { publishingSystemId = item.PublishingSystemId })" class="text-white-50">@item.PublishingSystem.Name</a> </td>
                     <td>@item.PublishingSystem.EnvironmentType.Name</td>
                     <td>@item.Timestamp (<time class="timeago" datetime="@item.Timestamp.ToString(CultureInfo.InvariantCulture)">@item.Timestamp.ToString(CultureInfo.InvariantCulture)</time>)</td>
+                    @if (ViewData["logLevel"] == null || ViewData["logLevel"]?.ToString() == "All")
+                    {
+                        <td>@item.Severity.Name</td>
+                    }
                     <td>@messageString</td>
                     <td>@exceptionString</td>
                     <td>@stackTraceString</td>
