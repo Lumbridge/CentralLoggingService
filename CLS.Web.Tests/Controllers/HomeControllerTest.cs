@@ -3,6 +3,8 @@ using CLS.Infrastructure.Data;
 using CLS.Web.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Mvc;
+using CLS.Core.Data;
+using CLS.Infrastructure.Helpers;
 
 namespace CLS.Web.Tests.Controllers
 {
@@ -22,5 +24,30 @@ namespace CLS.Web.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
+        [TestMethod]
+        public void ShouldVerifyLogin()
+        {
+            // Arrange
+            var hashedPassword = EncryptionHelper.GetHashPassword("password123");
+            
+            // Act
+            var result = EncryptionHelper.IsValidPassword("password123", hashedPassword);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ShouldDenyLogin()
+        {
+            // Arrange
+            var hashedPassword = EncryptionHelper.GetHashPassword("password123");
+
+            // Act
+            var result = EncryptionHelper.IsValidPassword("Password123", hashedPassword);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
     }
 }

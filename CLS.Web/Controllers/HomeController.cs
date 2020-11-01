@@ -20,7 +20,7 @@ namespace CLS.Web.Controllers
             var model = new DashboardModel
             {
                 PublishingSystemCount = _uow.Repository<PublishingSystem>().Count(),
-                SubscriberCount = _uow.Repository<Subscriber>().Count(),
+                SubscriberCount = _uow.Repository<User>().Count(),
                 AlertCount = _uow.Repository<Subscription>().Count(),
                 AlertHistoryCount = _uow.Repository<AlertHistory>().Count(),
                 MetaData = GetDashboardMetadata()

@@ -33,7 +33,7 @@ namespace CLS.WindowsService.Classes
 
                     // 4. filter down the logs to ones which haven't been alerted for this subscriber before
                     logs = logs
-                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
+                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.UserId == alertTriggerGroup.UserId))
                         .ToList()
                         .AsQueryable()
                         .Where(alertTriggerGroup.ExpressionString);
@@ -60,8 +60,8 @@ namespace CLS.WindowsService.Classes
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
-                                SubscriberId = alertTriggerGroup.SubscriberId.Value,
-                                Subscriber = alertTriggerGroup.Subscriber,
+                                UserId = alertTriggerGroup.UserId.Value,
+                                User = alertTriggerGroup.User,
                                 Timestamp = DateTime.Now
                             });
                         }
@@ -77,7 +77,7 @@ namespace CLS.WindowsService.Classes
                         }
 
                         // 8. Send an alert to the subscriber for this trigger group
-                        EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
+                        EmailHelper.SendEmail(alertTriggerGroup.User.Email, "CLS Alert",
                             $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
                             $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
                             $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
@@ -119,7 +119,7 @@ namespace CLS.WindowsService.Classes
 
                     // 4. filter down the logs to ones which haven't been alerted for this subscriber before
                     logs = logs
-                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.SubscriberId == alertTriggerGroup.SubscriberId))
+                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.UserId == alertTriggerGroup.UserId))
                         .ToList()
                         .AsQueryable()
                         .Where(alertTriggerGroup.ExpressionString);
@@ -136,8 +136,8 @@ namespace CLS.WindowsService.Classes
                         }
 
                         ConsoleHelper.LogColouredMessageToConsole(ConsoleColor.Green,
-                            $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for subscriber {alertTriggerGroup.Subscriber.Name} with " +
-                            $"email address {alertTriggerGroup.Subscriber.Email}.");
+                            $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for subscriber {alertTriggerGroup.User.Username} with " +
+                            $"email address {alertTriggerGroup.User.Email}.");
 
                         // 6. Add a record to the Alert History table for each of the log messages flagged by this alert
                         foreach (var log in logs)
@@ -150,8 +150,8 @@ namespace CLS.WindowsService.Classes
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
-                                SubscriberId = alertTriggerGroup.SubscriberId.Value,
-                                Subscriber = alertTriggerGroup.Subscriber,
+                                UserId = alertTriggerGroup.UserId.Value,
+                                User = alertTriggerGroup.User,
                                 Timestamp = DateTime.Now
                             });
                         }
@@ -169,7 +169,7 @@ namespace CLS.WindowsService.Classes
                         }
 
                         // 8. Send an alert to the subscriber for this trigger group
-                        EmailHelper.SendEmail(alertTriggerGroup.Subscriber.Email, "CLS Alert",
+                        EmailHelper.SendEmail(alertTriggerGroup.User.Email, "CLS Alert",
                             $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
                             $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
                             $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +

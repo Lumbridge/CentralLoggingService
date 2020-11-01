@@ -15,7 +15,7 @@ namespace CLS.Web.Models
         public int AlertCount { get; set; }
         public int AlertHistoryCount { get; set; }
 
-        public int DebugMessageCount => int.Parse(MetaData.FirstOrDefault(x=>x.MetadataItemName == "DebugMessageCount")?.MetadataItemValue ?? "0");
+        public int DebugMessageCount => int.Parse(MetaData.FirstOrDefault(x => x.MetadataItemName == "DebugMessageCount")?.MetadataItemValue ?? "0");
         public int InfoMessageCount => int.Parse(MetaData.FirstOrDefault(x => x.MetadataItemName == "InfoMessageCount")?.MetadataItemValue ?? "0");
         public int WarnMessageCount => int.Parse(MetaData.FirstOrDefault(x => x.MetadataItemName == "WarnMessageCount")?.MetadataItemValue ?? "0");
         public int ErrorMessageCount => int.Parse(MetaData.FirstOrDefault(x => x.MetadataItemName == "ErrorMessageCount")?.MetadataItemValue ?? "0");

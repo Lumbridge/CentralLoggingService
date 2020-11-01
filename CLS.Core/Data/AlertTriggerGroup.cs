@@ -23,14 +23,14 @@ namespace CLS.Core.Data
         }
     
         public int Id { get; set; }
-        public Nullable<int> SubscriberId { get; set; }
+        public Nullable<int> UserId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertHistory> AlertHistories { get; set; }
-        public virtual Subscriber Subscriber { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertTriggerNode> AlertTriggerNodes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Subscription> Subscriptions { get; set; }
+        public virtual User User { get; set; }
     }
 }

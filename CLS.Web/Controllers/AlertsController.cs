@@ -47,10 +47,10 @@ namespace CLS.Web.Controllers
                     var nameValueNode = nodeList[nodeList.IndexOf(publishingSystemNode) + 2];
                     _uow.Repository<Subscription>().Put(new Subscription
                     {
-                        SubscriberId = subscriberId,
+                        UserId = subscriberId,
                         AlertTriggerGroup = new AlertTriggerGroup
                         {
-                            SubscriberId = subscriberId,
+                            UserId = subscriberId,
                             AlertTriggerNodes = nodeList
                         },
                         AlertTypeId = alertTypeId,
@@ -64,10 +64,10 @@ namespace CLS.Web.Controllers
             {
                 _uow.Repository<Subscription>().Put(new Subscription
                 {
-                    SubscriberId = subscriberId,
+                    UserId = subscriberId,
                     AlertTriggerGroup = new AlertTriggerGroup
                     {
-                        SubscriberId = subscriberId,
+                        UserId = subscriberId,
                         AlertTriggerNodes = nodeList
                     },
                     AlertTypeId = alertTypeId,
@@ -172,8 +172,8 @@ namespace CLS.Web.Controllers
             ViewData["AlertTypes"] = _uow.Repository<AlertType>()
                 .Select(o => new SelectListItem { Text = o.Name, Value = o.Id.ToString() }).ToList();
 
-            ViewData["Subscribers"] = _uow.Repository<Subscriber>()
-                .Select(o => new SelectListItem {Text = o.Name, Value = o.Id.ToString()}).ToList();
+            ViewData["Subscribers"] = _uow.Repository<User>()
+                .Select(o => new SelectListItem {Text = o.Username, Value = o.Id.ToString()}).ToList();
             
             ViewData["LogicalOperators"] = _uow.Repository<AlertTriggerNodeOperator>()
                 .Where(x => x.AlertTriggerNodeType.Name == "LogicalOperator")

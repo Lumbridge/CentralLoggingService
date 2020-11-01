@@ -12,7 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AlertHistoryGroupId" Type="int" Nullable="false" />
           <Property Name="LogId" Type="int" Nullable="false" />
-          <Property Name="SubscriberId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="SiblingCount" Type="int" Nullable="false" />
@@ -22,7 +22,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubscriberId" Type="int" />
+          <Property Name="UserId" Type="int" />
         </EntityType>
         <EntityType Name="AlertTriggerNode">
           <Key>
@@ -115,14 +115,6 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Code" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
-        <EntityType Name="Subscriber">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="255" />
-          <Property Name="Email" Type="varchar" MaxLength="255" />
-        </EntityType>
         <EntityType Name="Subscription">
           <Key>
             <PropertyRef Name="Id" />
@@ -130,9 +122,20 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="AlertTypeId" Type="int" Nullable="false" />
-          <Property Name="SubscriberId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="PublishingSystemId" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar(max)" Nullable="false" />
+          <Property Name="PasswordSalt" Type="varbinary" MaxLength="8000" Nullable="false" />
+          <Property Name="HashedPassword" Type="varchar(max)" Nullable="false" />
+          <Property Name="Email" Type="varchar(max)" Nullable="false" />
+          <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
           <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1" />
@@ -158,27 +161,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AlertHistory_Subscriber">
-          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="1" />
+        <Association Name="FK_AlertHistory_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Subscriber">
+            <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AlertHistory">
-              <PropertyRef Name="SubscriberId" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AlertTriggerGroup_Subscriber">
-          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="0..1" />
+        <Association Name="FK_AlertTriggerGroup_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Subscriber">
+            <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AlertTriggerGroup">
-              <PropertyRef Name="SubscriberId" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -234,6 +237,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Subscription_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Subscription">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Log_fk0">
           <End Role="Severity" Type="Self.Severity" Multiplicity="1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
@@ -267,18 +282,6 @@
             </Principal>
             <Dependent Role="Subscription">
               <PropertyRef Name="AlertTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Subscriber_System_fk2">
-          <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="1" />
-          <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subscriber">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subscription">
-              <PropertyRef Name="SubscriberId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -331,8 +334,8 @@
           <EntitySet Name="PublishingSystem" EntityType="Self.PublishingSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublishingSystemType" EntityType="Self.PublishingSystemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Severity" EntityType="Self.Severity" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Subscriber" EntityType="Self.Subscriber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subscription" EntityType="Self.Subscription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AlertHistory_AlertTriggerGroup" Association="Self.FK_AlertHistory_AlertTriggerGroup">
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
             <End Role="AlertHistory" EntitySet="AlertHistory" />
@@ -341,12 +344,12 @@
             <End Role="Log" EntitySet="Log" />
             <End Role="AlertHistory" EntitySet="AlertHistory" />
           </AssociationSet>
-          <AssociationSet Name="FK_AlertHistory_Subscriber" Association="Self.FK_AlertHistory_Subscriber">
-            <End Role="Subscriber" EntitySet="Subscriber" />
+          <AssociationSet Name="FK_AlertHistory_User" Association="Self.FK_AlertHistory_User">
+            <End Role="User" EntitySet="User" />
             <End Role="AlertHistory" EntitySet="AlertHistory" />
           </AssociationSet>
-          <AssociationSet Name="FK_AlertTriggerGroup_Subscriber" Association="Self.FK_AlertTriggerGroup_Subscriber">
-            <End Role="Subscriber" EntitySet="Subscriber" />
+          <AssociationSet Name="FK_AlertTriggerGroup_User" Association="Self.FK_AlertTriggerGroup_User">
+            <End Role="User" EntitySet="User" />
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerGroup" Association="Self.FK_AlertTriggerNode_AlertTriggerGroup">
@@ -365,6 +368,10 @@
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
             <End Role="Subscription" EntitySet="Subscription" />
           </AssociationSet>
+          <AssociationSet Name="FK_Subscription_User" Association="Self.FK_Subscription_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Subscription" EntitySet="Subscription" />
+          </AssociationSet>
           <AssociationSet Name="Log_fk0" Association="Self.Log_fk0">
             <End Role="Severity" EntitySet="Severity" />
             <End Role="Log" EntitySet="Log" />
@@ -375,10 +382,6 @@
           </AssociationSet>
           <AssociationSet Name="Subscriber_System_fk1" Association="Self.Subscriber_System_fk1">
             <End Role="AlertType" EntitySet="AlertType" />
-            <End Role="Subscription" EntitySet="Subscription" />
-          </AssociationSet>
-          <AssociationSet Name="Subscriber_System_fk2" Association="Self.Subscriber_System_fk2">
-            <End Role="Subscriber" EntitySet="Subscriber" />
             <End Role="Subscription" EntitySet="Subscription" />
           </AssociationSet>
           <AssociationSet Name="Subscriber_System_fk3" Association="Self.Subscriber_System_fk3">
@@ -411,7 +414,6 @@
           <EntitySet Name="PublishingSystems" EntityType="CLSDbModel.PublishingSystem" />
           <EntitySet Name="PublishingSystemTypes" EntityType="CLSDbModel.PublishingSystemType" />
           <EntitySet Name="Severities" EntityType="CLSDbModel.Severity" />
-          <EntitySet Name="Subscribers" EntityType="CLSDbModel.Subscriber" />
           <EntitySet Name="Subscriptions" EntityType="CLSDbModel.Subscription" />
           <AssociationSet Name="FK_AlertHistory_AlertTriggerGroup" Association="CLSDbModel.FK_AlertHistory_AlertTriggerGroup">
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
@@ -420,14 +422,6 @@
           <AssociationSet Name="FK_AlertHistory_Log" Association="CLSDbModel.FK_AlertHistory_Log">
             <End Role="Log" EntitySet="Logs" />
             <End Role="AlertHistory" EntitySet="AlertHistories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AlertHistory_Subscriber" Association="CLSDbModel.FK_AlertHistory_Subscriber">
-            <End Role="Subscriber" EntitySet="Subscribers" />
-            <End Role="AlertHistory" EntitySet="AlertHistories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AlertTriggerGroup_Subscriber" Association="CLSDbModel.FK_AlertTriggerGroup_Subscriber">
-            <End Role="Subscriber" EntitySet="Subscribers" />
-            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerGroup" Association="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup">
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
@@ -469,8 +463,17 @@
             <End Role="PublishingSystemType" EntitySet="PublishingSystemTypes" />
             <End Role="PublishingSystem" EntitySet="PublishingSystems" />
           </AssociationSet>
-          <AssociationSet Name="Subscriber_System_fk2" Association="CLSDbModel.Subscriber_System_fk2">
-            <End Role="Subscriber" EntitySet="Subscribers" />
+          <EntitySet Name="Users" EntityType="CLSDbModel.User" />
+          <AssociationSet Name="FK_AlertHistory_User" Association="CLSDbModel.FK_AlertHistory_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AlertHistory" EntitySet="AlertHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerGroup_User" Association="CLSDbModel.FK_AlertTriggerGroup_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscription_User" Association="CLSDbModel.FK_Subscription_User">
+            <End Role="User" EntitySet="Users" />
             <End Role="Subscription" EntitySet="Subscriptions" />
           </AssociationSet>
         </EntityContainer>
@@ -481,24 +484,24 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AlertHistoryGroupId" Type="Int32" Nullable="false" />
           <Property Name="LogId" Type="Int32" Nullable="false" />
-          <Property Name="SubscriberId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="SiblingCount" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertHistory" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="Log" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="AlertHistory" ToRole="Log" />
-          <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.FK_AlertHistory_Subscriber" FromRole="AlertHistory" ToRole="Subscriber" />
+          <NavigationProperty Name="User" Relationship="CLSDbModel.FK_AlertHistory_User" FromRole="AlertHistory" ToRole="User" />
         </EntityType>
         <EntityType Name="AlertTriggerGroup">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubscriberId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
           <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertHistory" />
-          <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.FK_AlertTriggerGroup_Subscriber" FromRole="AlertTriggerGroup" ToRole="Subscriber" />
           <NavigationProperty Name="AlertTriggerNodes" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertTriggerNode" />
           <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="Subscription" />
+          <NavigationProperty Name="User" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="AlertTriggerGroup" ToRole="User" />
         </EntityType>
         <EntityType Name="AlertTriggerNode">
           <Key>
@@ -607,17 +610,6 @@
           <Property Name="Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Logs" Relationship="CLSDbModel.Log_fk0" FromRole="Severity" ToRole="Log" />
         </EntityType>
-        <EntityType Name="Subscriber">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_Subscriber" FromRole="Subscriber" ToRole="AlertHistory" />
-          <NavigationProperty Name="AlertTriggerGroups" Relationship="CLSDbModel.FK_AlertTriggerGroup_Subscriber" FromRole="Subscriber" ToRole="AlertTriggerGroup" />
-          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.Subscriber_System_fk2" FromRole="Subscriber" ToRole="Subscription" />
-        </EntityType>
         <EntityType Name="Subscription">
           <Key>
             <PropertyRef Name="Id" />
@@ -625,13 +617,13 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="AlertTypeId" Type="Int32" Nullable="false" />
-          <Property Name="SubscriberId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="PublishingSystemId" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="Subscription" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AlertType" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="Subscription" ToRole="AlertType" />
           <NavigationProperty Name="PublishingSystem" Relationship="CLSDbModel.Subscriber_System_fk3" FromRole="Subscription" ToRole="PublishingSystem" />
-          <NavigationProperty Name="Subscriber" Relationship="CLSDbModel.Subscriber_System_fk2" FromRole="Subscription" ToRole="Subscriber" />
+          <NavigationProperty Name="User" Relationship="CLSDbModel.FK_Subscription_User" FromRole="Subscription" ToRole="User" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
           <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1" />
@@ -654,30 +646,6 @@
             </Principal>
             <Dependent Role="AlertHistory">
               <PropertyRef Name="LogId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AlertHistory_Subscriber">
-          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="1" />
-          <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subscriber">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AlertHistory">
-              <PropertyRef Name="SubscriberId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AlertTriggerGroup_Subscriber">
-          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="0..1" />
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subscriber">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AlertTriggerGroup">
-              <PropertyRef Name="SubscriberId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -805,15 +773,53 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Subscriber_System_fk2">
-          <End Type="CLSDbModel.Subscriber" Role="Subscriber" Multiplicity="1" />
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordSalt" Type="Binary" Nullable="false" MaxLength="8000" FixedLength="false" />
+          <Property Name="HashedPassword" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_User" FromRole="User" ToRole="AlertHistory" />
+          <NavigationProperty Name="AlertTriggerGroups" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="User" ToRole="AlertTriggerGroup" />
+          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_User" FromRole="User" ToRole="Subscription" />
+        </EntityType>
+        <Association Name="FK_AlertHistory_User">
+          <End Type="CLSDbModel.User" Role="User" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertHistory">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerGroup_User">
+          <End Type="CLSDbModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerGroup">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscription_User">
+          <End Type="CLSDbModel.User" Role="User" Multiplicity="1" />
           <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Subscriber">
+            <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Subscription">
-              <PropertyRef Name="SubscriberId" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -829,7 +835,7 @@
                 <ScalarProperty Name="SiblingCount" ColumnName="SiblingCount" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
-                <ScalarProperty Name="SubscriberId" ColumnName="SubscriberId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LogId" ColumnName="LogId" />
                 <ScalarProperty Name="AlertHistoryGroupId" ColumnName="AlertHistoryGroupId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -839,7 +845,7 @@
           <EntitySetMapping Name="AlertTriggerGroups">
             <EntityTypeMapping TypeName="CLSDbModel.AlertTriggerGroup">
               <MappingFragment StoreEntitySet="AlertTriggerGroup">
-                <ScalarProperty Name="SubscriberId" ColumnName="SubscriberId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -945,23 +951,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Subscribers">
-            <EntityTypeMapping TypeName="CLSDbModel.Subscriber">
-              <MappingFragment StoreEntitySet="Subscriber">
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Subscriptions">
             <EntityTypeMapping TypeName="CLSDbModel.Subscription">
               <MappingFragment StoreEntitySet="Subscription">
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="PublishingSystemId" ColumnName="PublishingSystemId" />
-                <ScalarProperty Name="SubscriberId" ColumnName="SubscriberId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="AlertTypeId" ColumnName="AlertTypeId" />
                 <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CLSDbModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="HashedPassword" ColumnName="HashedPassword" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

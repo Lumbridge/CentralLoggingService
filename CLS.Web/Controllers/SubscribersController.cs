@@ -19,13 +19,13 @@ namespace CLS.Web.Controllers
         // GET: Subscribers
         public ActionResult Index()
         {
-            var model = _uow.Repository<Subscriber>().ToList();
+            var model = _uow.Repository<User>().ToList();
             return View(model);
         }
 
-        public JsonResult SaveSubscriber(Subscriber model)
+        public JsonResult SaveSubscriber(User model)
         {
-            _uow.Repository<Subscriber>().Put(model);
+            _uow.Repository<User>().Put(model);
 
             try
             {
@@ -41,21 +41,21 @@ namespace CLS.Web.Controllers
                 new
                 {
                     success = true,
-                    view = RenderPartialViewToString("_SubscriberTable", _uow.Repository<Subscriber>().ToList())
+                    view = RenderPartialViewToString("_SubscriberTable", _uow.Repository<User>().ToList())
                 }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DeleteSubscriber(int subscriberId)
         {
-            var subscriber = _uow.Repository<Subscriber>().Get(subscriberId);
-            var subscriptions = _uow.Repository<Subscription>().Where(x => x.SubscriberId == subscriberId);
+            var user = _uow.Repository<User>().Get(subscriberId);
+            var subscriptions = _uow.Repository<Subscription>().Where(x => x.UserId == subscriberId);
             foreach (var subscription in subscriptions)
             {
                 var alertTriggerGroup = _uow.Repository<AlertTriggerGroup>().Get(subscription.AlertTriggerGroupId);
                 _uow.Repository<Subscription>().CascadingDelete(subscription);
                 _uow.Repository<AlertTriggerGroup>().CascadingDelete(alertTriggerGroup);
             }
-            _uow.Repository<Subscriber>().CascadingDelete(subscriber);
+            _uow.Repository<User>().CascadingDelete(user);
             try
             {
                 _uow.Commit();
@@ -69,7 +69,7 @@ namespace CLS.Web.Controllers
             return Json(new
             {
                 success = true,
-                view = RenderPartialViewToString("_SubscriberTable", _uow.Repository<Subscriber>().ToList())
+                view = RenderPartialViewToString("_SubscriberTable", _uow.Repository<User>().ToList())
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -77,11 +77,11 @@ namespace CLS.Web.Controllers
         {
             if (id > 0)
             {
-                var model = _uow.Repository<Subscriber>().Get(id);
+                var model = _uow.Repository<User>().Get(id);
                 return PartialView("_CreateUpdateSubscriber", model);
             }
 
-            return PartialView("_CreateUpdateSubscriber", new Subscriber());
+            return PartialView("_CreateUpdateSubscriber", new User());
         }
     }
 }

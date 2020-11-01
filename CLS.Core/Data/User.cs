@@ -12,10 +12,10 @@ namespace CLS.Core.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Subscriber
+    public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subscriber()
+        public User()
         {
             this.AlertHistories = new HashSet<AlertHistory>();
             this.AlertTriggerGroups = new HashSet<AlertTriggerGroup>();
@@ -23,8 +23,11 @@ namespace CLS.Core.Data
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Username { get; set; }
+        public byte[] PasswordSalt { get; set; }
+        public string HashedPassword { get; set; }
         public string Email { get; set; }
+        public bool IsEmailVerified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertHistory> AlertHistories { get; set; }

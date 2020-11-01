@@ -17,13 +17,13 @@ namespace CLS.Core.Data
         public int Id { get; set; }
         public Nullable<int> AlertTriggerGroupId { get; set; }
         public int AlertTypeId { get; set; }
-        public int SubscriberId { get; set; }
+        public int UserId { get; set; }
         public Nullable<int> PublishingSystemId { get; set; }
         public bool IsActive { get; set; }
     
         public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }
         public virtual AlertType AlertType { get; set; }
         public virtual PublishingSystem PublishingSystem { get; set; }
-        public virtual Subscriber Subscriber { get; set; }
+        public virtual User User { get; set; }
     }
 }
