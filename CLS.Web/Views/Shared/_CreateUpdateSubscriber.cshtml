@@ -1,17 +1,48 @@
 ﻿
-@model CLS.Core.Data.Subscriber
+@model CLS.Web.Models.RegisterModel
 
-@using (Html.BeginForm("Index", "Subscribers", FormMethod.Post, new { id = "CreateUpdateSubscriberForm", @class = "ajaxform" }))
-{
-    <h4>Name</h4>
-    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+<div class="row">
+    <div class="col-lg-6">
+        @using (Html.BeginForm("Index", "Subscribers", FormMethod.Post, new { id = "CreateUpdateSubscriberForm", @class = "ajaxform" }))
+        {
+            <div class="form-group">
+                <label for="Email">Email Address</label>
+                @Html.TextBoxFor(x => x.Email, new { @class = "form-control", type = "email" })
+            </div>
 
-    <h4>Email</h4>
-    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", type = "email" })
-}
+            <div class="form-group">
+                <label for="ConfirmEmail">Confirm Email Address</label>
+                @Html.TextBox("ConfirmEmail", "", new { @class = "form-control", type = "email" })
+            </div>
 
-<div class="row mt-3">
-    <div class="col-lg-12">
-        <button id="saveSubscriberButton" type="button" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
+            <div class="form-group">
+                <label for="Password">Password</label>
+                @Html.TextBoxFor(x => x.Password, new { @class = "form-control", type = "password" })
+            </div>
+
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirm Password</label>
+                @Html.TextBox("ConfirmPassword", "", new { @class = "form-control", type = "password" })
+            </div>
+        }
+
+        <div class="col-lg-12">
+            <div id="serverValidationMessage" class="alert alert-danger d-none" role="alert">
+
+            </div>
+            <div id="PasswordMismatchError" class="alert alert-danger d-none" role="alert">
+                Passwords don't match.
+            </div>
+            <div id="EmailMismatchError" class="alert alert-danger d-none" role="alert">
+                Emails don't match
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-lg-12">
+                <button id="saveSubscriberButton" type="button" class="btn btn-primary">Submit</button>
+                <small id="emailHelp" class="form-text text-white-50">P.s. We'll never share your email with anyone.</small>
+            </div>
+        </div>
     </div>
 </div>

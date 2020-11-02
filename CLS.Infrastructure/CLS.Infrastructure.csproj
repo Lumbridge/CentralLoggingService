@@ -57,6 +57,7 @@
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Helpers\EncryptionHelper.cs" />
     <Compile Include="Helpers\ExceptionHelper.cs" />
+    <Compile Include="Helpers\RegexHelper.cs" />
     <Compile Include="Interfaces\IEntities.cs" />
     <Compile Include="Interfaces\IGenericViewModel.cs" />
     <Compile Include="Interfaces\IRepository.cs" />

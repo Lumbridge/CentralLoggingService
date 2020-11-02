@@ -146,11 +146,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
     <Compile Include="Controllers\PublishingSystemsController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SubscribersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DashboardModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +161,9 @@
     <Content Include="Content\ChartJS\Chart.min.css" />
     <Content Include="Content\Dashboard.css" />
     <Content Include="Content\DataTables\dataTables.bootstrap4.min.css" />
+    <Content Include="Scripts\Application\Global.js" />
     <Content Include="Scripts\Application\PublishingSystems.js" />
+    <Content Include="Scripts\Application\Register.js" />
     <Content Include="Scripts\ChartJS\Chart.min.js" />
     <Content Include="Scripts\DataTables\dataTables.bootstrap4.min.js" />
     <Content Include="Content\DataTables\jquery.dataTables.min.css" />
@@ -231,6 +236,8 @@
     <Content Include="Views\Shared\_LogMessageTable.cshtml" />
     <Content Include="Views\PublishingSystems\Index.cshtml" />
     <Content Include="Views\Shared\_PublishingSystemsTable.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\Shared\_LoginForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLS.Core\CLS.Core.csproj">

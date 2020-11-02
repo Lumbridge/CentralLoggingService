@@ -29,6 +29,11 @@ namespace CLS.Web.Controllers
             return View(model);
         }
 
+        public PartialViewResult GetLoginForm()
+        {
+            return PartialView("_LoginForm");
+        }
+
         public void SetChartData()
         {
             var labels = new List<string>();

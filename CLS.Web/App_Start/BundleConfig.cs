@@ -40,7 +40,8 @@ namespace CLS.Web
                 "~/Scripts/Libraries/bootbox.all.min.js",
                 "~/Scripts/Libraries/bootstrap-notify.min.js",
                 "~/Scripts/Libraries/moment.js",
-                "~/Scripts/ChartJS/Chart.min.js"));
+                "~/Scripts/ChartJS/Chart.min.js",
+                "~/Scripts/Application/Global.js"));
         }
     }
 }

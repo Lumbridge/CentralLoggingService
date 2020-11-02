@@ -136,8 +136,7 @@ namespace CLS.WindowsService.Classes
                         }
 
                         ConsoleHelper.LogColouredMessageToConsole(ConsoleColor.Green,
-                            $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for subscriber {alertTriggerGroup.User.Username} with " +
-                            $"email address {alertTriggerGroup.User.Email}.");
+                            $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for email {alertTriggerGroup.User.Email}.");
 
                         // 6. Add a record to the Alert History table for each of the log messages flagged by this alert
                         foreach (var log in logs)

@@ -5,8 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using CLS.Core.Data;
 using CLS.Core.StaticData;
+using CLS.Infrastructure.Helpers;
 using CLS.Infrastructure.Interfaces;
 using CLS.Sender.Classes;
+using CLS.Web.Models;
 
 namespace CLS.Web.Controllers
 {
@@ -23,9 +25,15 @@ namespace CLS.Web.Controllers
             return View(model);
         }
 
-        public JsonResult SaveSubscriber(User model)
+        public JsonResult SaveSubscriber(RegisterModel model)
         {
-            _uow.Repository<User>().Put(model);
+            var userModel = new User
+            {
+                Email = model.Email,
+                HashedPassword = EncryptionHelper.ComputeHash(model.Password)
+            };
+
+            _uow.Repository<User>().Put(userModel);
 
             try
             {

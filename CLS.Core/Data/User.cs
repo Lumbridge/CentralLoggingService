@@ -23,11 +23,13 @@ namespace CLS.Core.Data
         }
     
         public int Id { get; set; }
-        public string Username { get; set; }
-        public byte[] PasswordSalt { get; set; }
-        public string HashedPassword { get; set; }
         public string Email { get; set; }
+        public string HashedPassword { get; set; }
         public bool IsEmailVerified { get; set; }
+        public System.Guid EmailVerificationKey { get; set; }
+        public int FailedLoginAttempts { get; set; }
+        public Nullable<System.DateTime> LastLogin { get; set; }
+        public System.DateTime RegistrationDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertHistory> AlertHistories { get; set; }

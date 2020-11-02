@@ -1,0 +1,10 @@
+﻿@using CLS.Web.Models
+
+@{
+    ViewBag.Title = "Register Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Register Account</h2>
+
+@Html.Partial("_CreateUpdateSubscriber", new RegisterModel())

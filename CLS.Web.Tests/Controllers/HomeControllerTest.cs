@@ -28,7 +28,7 @@ namespace CLS.Web.Tests.Controllers
         public void ShouldVerifyLogin()
         {
             // Arrange
-            var hashedPassword = EncryptionHelper.GetHashPassword("password123");
+            var hashedPassword = EncryptionHelper.ComputeHash("password123");
             
             // Act
             var result = EncryptionHelper.IsValidPassword("password123", hashedPassword);
@@ -41,10 +41,24 @@ namespace CLS.Web.Tests.Controllers
         public void ShouldDenyLogin()
         {
             // Arrange
-            var hashedPassword = EncryptionHelper.GetHashPassword("password123");
+            var hashedPassword = EncryptionHelper.ComputeHash("password123");
 
             // Act
             var result = EncryptionHelper.IsValidPassword("Password123", hashedPassword);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void HashedPasswordsShouldBeDifferent()
+        {
+            // Arrange
+            var hashedPassword1 = EncryptionHelper.ComputeHash("password123");
+            var hashedPassword2 = EncryptionHelper.ComputeHash("password123");
+
+            // Act
+            var result = string.Equals(hashedPassword1, hashedPassword2);
 
             // Assert
             Assert.IsFalse(result);
