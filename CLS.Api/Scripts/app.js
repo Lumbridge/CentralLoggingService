@@ -48,8 +48,6 @@
             headers.Authorization = 'Bearer ' + token;
         }
 
-        console.log(token);
-
         $.ajax({
             type: 'GET',
             url: '/api/values',
