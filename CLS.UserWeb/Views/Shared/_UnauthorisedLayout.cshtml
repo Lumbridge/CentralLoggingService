@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+
+            <!-- navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light mb-3 border-bottom">
+                <div class="flex-row d-flex">
+                    <a class="navbar-brand mb-1" href="@Url.Action("Index", "Home")">CLS</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse" id="collapsingNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Home")">Home</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        @Html.Partial("_LoginPartial")
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- render main view -->
+            <div class="container body-content" id="main">
+                @RenderBody()
+            </div>
+        </div>
+        <!-- render footer -->
+        <footer id="footer" class="pt-4">
+            <!-- Footer Links -->
+            <div id="footerContainer" class="footer-body container-fluid text-center text-md-left">
+                <!-- Grid row -->
+                <div class="row">
+                    <div class="col-md-3 mt-md-0 mt-3 text-center">
+                        <img src="~/Images/logo.png" style="margin-bottom: 15px; width: 25%;" alt="Footer Logo" />
+                    </div>
+                    <!-- Grid column -->
+                    <div class="col-md-3 mt-md-0 mt-3">
+                        <!-- Content -->
+                        <h5 class="text-uppercase"><b>Central Logging Service</b></h5>
+                        <p>
+                            Welcome to the CLS Dashboard.
+                        </p>
+                    </div>
+                </div>
+                <!-- Grid row -->
+            </div>
+            <!-- Footer Links -->
+            <!-- Copyright -->
+            <div class="footer-footer text-center  py-3">
+                Central Logging Service © @DateTime.Now.Year Copyright:
+                <a href="https://github.com/lumbridge"> Github/Lumbridge</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

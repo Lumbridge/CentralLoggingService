@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Alerts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model  List<CLS.Core.Data.Subscription>
+
+<h2>Alerts</h2>
+
+<div class="row">
+    <div id="SubscriptionTableContainer" class="col-lg-12">
+        @Html.Partial("_SubscriptionTable", Model)
+    </div>
+</div>

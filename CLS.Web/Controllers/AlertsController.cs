@@ -172,8 +172,8 @@ namespace CLS.Web.Controllers
             ViewData["AlertTypes"] = _uow.Repository<AlertType>()
                 .Select(o => new SelectListItem { Text = o.Name, Value = o.Id.ToString() }).ToList();
 
-            ViewData["Subscribers"] = _uow.Repository<User>()
-                .Select(o => new SelectListItem {Text = o.Email, Value = o.Id.ToString()}).ToList();
+            //ViewData["Subscribers"] = _uow.Repository<CLSUser>()
+            //    .Select(o => new SelectListItem { Text = o.Email, Value = o.Id.ToString()}).ToList();
             
             ViewData["LogicalOperators"] = _uow.Repository<AlertTriggerNodeOperator>()
                 .Where(x => x.AlertTriggerNodeType.Name == "LogicalOperator")

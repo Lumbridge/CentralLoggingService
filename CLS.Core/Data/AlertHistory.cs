@@ -24,6 +24,6 @@ namespace CLS.Core.Data
     
         public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }
         public virtual Log Log { get; set; }
-        public virtual User User { get; set; }
+        public virtual CLSUser CLSUser { get; set; }
     }
 }

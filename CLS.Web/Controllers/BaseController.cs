@@ -25,19 +25,6 @@ namespace CLS.Web.Controllers
             _ls = new LogSender("CLS.Web", StaticData.EnvironmentType.DEV, StaticData.SystemType.Website);
         }
 
-        [AllowAnonymous]
-        public ActionResult Login(LoginModel model)
-        {
-            var user = _uow.Repository<User>().FirstOrDefault(x => x.Email == model.Email && EncryptionHelper.IsValidPassword(model.Password, x.HashedPassword));
-            
-            if (user != null) {
-                FormsAuthentication.SetAuthCookie(model.Email, model.RememberMe);
-                return Json(new {success = true, redirectUrl = Request.UrlReferrer.PathAndQuery}, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new { success = false, message = "Invalid login credentials." }, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();

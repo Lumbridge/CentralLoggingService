@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using CLS.Core.Data;
+﻿using CLS.Core.Data;
 using CLS.Infrastructure.Interfaces;
+using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CLS.Web.Controllers
 {
@@ -48,7 +46,5 @@ namespace CLS.Web.Controllers
                 view = RenderPartialViewToString("_PublishingSystemsTable", _uow.Repository<PublishingSystem>().ToList())
             }, JsonRequestBehavior.AllowGet);
         }
-
-        
     }
 }

@@ -174,7 +174,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\pepeflower.png" />
+    <Content Include="Images\logo.png" />
     <Content Include="Scripts\Application\AjaxUtils.js" />
     <Content Include="Scripts\Application\Alerts.js" />
     <Content Include="Scripts\Application\Home.js" />

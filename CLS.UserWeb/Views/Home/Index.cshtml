@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "CLS Dashboard";
+    var chartLabels = (string)ViewData["chartLabels"];
+    var chartValues = (string)ViewData["chartValues"];
+}
+
+@model CLS.UserWeb.Models.DashboardModel
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+
+        <h1 class=" display-4">
+            CLS Dashboard
+        </h1>
+
+        <hr />
+
+        <div class="card-deck">
+            <!-- debug card text-white-->
+            <a href="@Url.Action("Index", "Logs", new { logLevel = "Debug" })" class="card text-white bg-success mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Debug</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-bug fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.DebugMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentDebugMessage">@Model.MostRecentDebugMessage</time>
+                    </text>
+                </div>
+            </a>
+            <!-- info card text-white-->
+            <a href="@Url.Action("Index", "Logs", new { logLevel = "Info" })" class="card text-white bg-info mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Info</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-info-circle fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.InfoMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentInfoMessage">@Model.MostRecentInfoMessage</time>
+                    </text>
+                </div>
+            </a>
+            <!-- warning card text-white-->
+            <a href="@Url.Action("Index", "Logs", new { logLevel = "Warn" })" class="card text-white bg-warning mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Warning</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-exclamation-triangle fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.WarnMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentWarnMessage">@Model.MostRecentWarnMessage</time>
+                    </text>
+                </div>
+            </a>
+            <!-- error card text-white-->
+            <a href="@Url.Action("Index", "Logs", new { logLevel = "Error" })" class="card text-white bg-danger mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Error</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-exclamation-circle fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.ErrorMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentErrorMessage">@Model.MostRecentErrorMessage</time>
+                    </text>
+                </div>
+            </a>
+            <!-- fatal card text-white-->
+            <a href="@Url.Action("Index", "Logs", new { logLevel = "Fatal" })" class="card text-white bg-fatal mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Fatal</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-skull-crossbones fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.FatalMessageCount</h1>
+                    <br />
+                    <text class="text-center">
+                        Most recent message:
+                        <time class="timeago" datetime="@Model.MostRecentFatalMessage">@Model.MostRecentFatalMessage</time>
+                    </text>
+                </div>
+            </a>
+        </div>
+
+        <hr>
+
+        <div class="card-deck">
+            <!-- alerts card text-white-->
+            <a href="@Url.Action("Index", "Alerts")" class="card text-white bg-primary mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Alerts</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-bell fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.AlertCount</h1>
+                    <br />
+                    <text class="text-center">
+                        @Model.AlertCount Alerts Registered
+                    </text>
+                </div>
+            </a>
+            <!-- alert history card text-white-->
+            <a href="@Url.Action("Index", "AlertHistory")" class="card text-white bg-primary mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Alert History</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fas fa-history fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.AlertHistoryCount</h1>
+                    <br />
+                    <text class="text-center">
+                        @Model.AlertHistoryCount Alerts Raised
+                    </text>
+                </div>
+            </a>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="chart-container">
+                    <canvas data-labels='@chartLabels'
+                            data-values='@chartValues'
+                            id="messagesOverTimeChart"
+                            width="400"
+                            height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+    </div>
+    <!--/main col-->
+</div>

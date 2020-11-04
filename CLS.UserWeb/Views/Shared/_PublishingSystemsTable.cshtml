@@ -1,0 +1,35 @@
+﻿
+@model List<CLS.Core.Data.PublishingSystem>
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Environment Type</th>
+            <th>Application Type</th>
+            <th>Messages Logged</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.OrderByDescending(x => x.Name))
+        {
+            <tr data-id=@item.Id>
+                <td>@item.Name</td>
+                <td>@item.EnvironmentType.Name</td>
+                <td>@item.PublishingSystemType.Name</td>
+                <td><a href="@Url.Action("Index", "Logs", new { publishingSystemId = item.Id, environmentTypeId = item.EnvironmentTypeId })">@item.Logs.Count</a></td>
+                <td><button data-publishingSystemId="@item.Id" type="button" class="btn btn-outline-danger deletePublishingSystemButton"><i class="fas fa-trash"></i></button></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<button id="newSubscriberButton" type="button" class="btn btn-secondary">+ New Subscriber</button>
+
+<script>
+    $(function() {
+        $("table").DataTable();
+    });
+</script>

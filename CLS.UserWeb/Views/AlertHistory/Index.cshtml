@@ -1,0 +1,43 @@
+﻿@using CLS.Core.Data
+@model List<CLS.Core.Data.Log>
+
+@{
+    ViewBag.Title = "Alert History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Alert History</h2>
+
+@if (Model == null)
+{
+    var alertHistories = (List<AlertHistory>)ViewData["AlertHistories"];
+    <div class="row">
+        <div id="AlertHistoryTableContainer" class="col-lg-12">
+            @Html.Partial("_AlertHistoryTable", alertHistories)
+        </div>
+    </div>
+}
+else
+{
+    var historyRecord = (AlertHistory)ViewData["AlertHistoryRecord"];
+    var alertCriteria = historyRecord.AlertTriggerGroup?.ExpressionString ?? "Unknown";
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-info">
+                This alert was sent to you on
+                <b>@historyRecord.Timestamp.ToShortDateString()</b> at
+                <b>@historyRecord.Timestamp.ToShortTimeString()</b>,
+                <b>@Model.Count</b> log files met the criteria of the alert which was
+                <b>@alertCriteria</b>.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="AlertHistoryTableContainer" class="col-lg-12">
+            @Html.Partial("_LogMessageTable", Model)
+        </div>
+    </div>
+}

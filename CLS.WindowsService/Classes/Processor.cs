@@ -61,7 +61,7 @@ namespace CLS.WindowsService.Classes
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
                                 UserId = alertTriggerGroup.UserId.Value,
-                                User = alertTriggerGroup.User,
+                                CLSUser = alertTriggerGroup.CLSUser,
                                 Timestamp = DateTime.Now
                             });
                         }
@@ -77,14 +77,14 @@ namespace CLS.WindowsService.Classes
                         }
 
                         // 8. Send an alert to the subscriber for this trigger group
-                        EmailHelper.SendEmail(alertTriggerGroup.User.Email, "CLS Alert",
-                            $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
-                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
-                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
-                            $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
-                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
-                            $"Number of log messages that met criteria: {logCount}\n\n" +
-                            $"You can review the log messages at https://localhost:44356/AlertHistory/{alertHistoryGroupId}.");
+                        //EmailHelper.SendEmail(alertTriggerGroup.CLSUser.Email, "CLS Alert",
+                        //    $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
+                        //    $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
+                        //    $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
+                        //    $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
+                        //    $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
+                        //    $"Number of log messages that met criteria: {logCount}\n\n" +
+                        //    $"You can review the log messages at https://localhost:44356/AlertHistory/{alertHistoryGroupId}.");
                     }
                 }
 
@@ -135,8 +135,8 @@ namespace CLS.WindowsService.Classes
                             alertHistoryGroupId = alertHistories.OrderByDescending(x => x.AlertHistoryGroupId).First().AlertHistoryGroupId + 1;
                         }
 
-                        ConsoleHelper.LogColouredMessageToConsole(ConsoleColor.Green,
-                            $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for email {alertTriggerGroup.User.Email}.");
+                        //ConsoleHelper.LogColouredMessageToConsole(ConsoleColor.Green,
+                        //    $"Sending alert for alertTriggerGroup #{alertTriggerGroup.Id} for email {alertTriggerGroup.CLSUser.Email}.");
 
                         // 6. Add a record to the Alert History table for each of the log messages flagged by this alert
                         foreach (var log in logs)
@@ -150,7 +150,7 @@ namespace CLS.WindowsService.Classes
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
                                 UserId = alertTriggerGroup.UserId.Value,
-                                User = alertTriggerGroup.User,
+                                CLSUser = alertTriggerGroup.CLSUser,
                                 Timestamp = DateTime.Now
                             });
                         }
@@ -168,14 +168,14 @@ namespace CLS.WindowsService.Classes
                         }
 
                         // 8. Send an alert to the subscriber for this trigger group
-                        EmailHelper.SendEmail(alertTriggerGroup.User.Email, "CLS Alert",
-                            $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
-                            $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
-                            $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
-                            $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
-                            $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
-                            $"Number of log messages that met criteria: {logCount}\n\n" +
-                            $"You can review the log messages at https://localhost:44356/AlertHistory/{alertHistoryGroupId}.");
+                        //EmailHelper.SendEmail(alertTriggerGroup.CLSUser.Email, "CLS Alert",
+                        //    $"You are receiving this alert because you are subscribed via the CLS dashboard.\n\n" +
+                        //    $"System: {alertTriggerGroup.Subscriptions.First().PublishingSystemName}\n" +
+                        //    $"Environment Type: {alertTriggerGroup.Subscriptions.First().PublishingSystemEnvironmentTypeName}\n" +
+                        //    $"Timestamp of most recent log message that met the criteria: {logs.OrderByDescending(x => x.Timestamp).First().Timestamp}\n" +
+                        //    $"Criteria met: {alertTriggerGroup.ExpressionString}\n" +
+                        //    $"Number of log messages that met criteria: {logCount}\n\n" +
+                        //    $"You can review the log messages at https://localhost:44356/AlertHistory/{alertHistoryGroupId}.");
                     }
                     else
                     {

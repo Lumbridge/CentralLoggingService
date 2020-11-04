@@ -38,6 +38,6 @@ namespace CLS.Core.Data
         public virtual DbSet<PublishingSystemType> PublishingSystemTypes { get; set; }
         public virtual DbSet<Severity> Severities { get; set; }
         public virtual DbSet<Subscription> Subscriptions { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<CLSUser> CLSUsers { get; set; }
     }
 }
