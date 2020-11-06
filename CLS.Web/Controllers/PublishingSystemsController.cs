@@ -3,6 +3,7 @@ using CLS.Infrastructure.Interfaces;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using CLS.Core.StaticData;
 
 namespace CLS.Web.Controllers
 {
@@ -36,7 +37,7 @@ namespace CLS.Web.Controllers
             }
             catch (Exception ex)
             {
-                _ls.LogErrorToDb(ex);
+                _ls.Log(StaticData.SeverityType.Error, ex);
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 

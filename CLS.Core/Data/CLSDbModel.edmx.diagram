@@ -5,36 +5,38 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="acb97363a2b847cf85003845083fc802" Name="Diagram1">
-        <EntityTypeShape EntityType="CLSDbModel.AlertHistory" Width="1.5" PointX="5.25" PointY="6.375" />
-        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerGroup" Width="1.5" PointX="3" PointY="8.875" />
-        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerNode" Width="1.5" PointX="5.25" PointY="10.75" />
-        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerNodeOperator" Width="1.5" PointX="3" PointY="0.75" />
-        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerNodeType" Width="1.5" PointX="0.75" PointY="1.125" />
-        <EntityTypeShape EntityType="CLSDbModel.AlertType" Width="1.5" PointX="6" PointY="3" />
-        <EntityTypeShape EntityType="CLSDbModel.DashboardMetadata" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="CLSDbModel.EnvironmentType" Width="1.5" PointX="1.5" PointY="21" />
-        <EntityTypeShape EntityType="CLSDbModel.Log" Width="1.5" PointX="3" PointY="15.375" />
-        <EntityTypeShape EntityType="CLSDbModel.PublishingSystem" Width="1.5" PointX="0.75" PointY="16.875" />
-        <EntityTypeShape EntityType="CLSDbModel.PublishingSystemType" Width="1.5" PointX="1.5" PointY="23.5" />
-        <EntityTypeShape EntityType="CLSDbModel.Severity" Width="1.5" PointX="0.75" PointY="13.375" />
-        <EntityTypeShape EntityType="CLSDbModel.Subscription" Width="1.5" PointX="8.25" PointY="6.375" />
+        <EntityTypeShape EntityType="CLSDbModel.AlertHistory" Width="1.5" PointX="5.25" PointY="14.5" />
+        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerGroup" Width="1.5" PointX="3" PointY="21" />
+        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerNode" Width="1.5" PointX="5.25" PointY="20.75" />
+        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerNodeOperator" Width="1.5" PointX="3" PointY="16.875" />
+        <EntityTypeShape EntityType="CLSDbModel.AlertTriggerNodeType" Width="1.5" PointX="0.75" PointY="17.25" />
+        <EntityTypeShape EntityType="CLSDbModel.AlertType" Width="1.5" PointX="6" PointY="6.25" />
+        <EntityTypeShape EntityType="CLSDbModel.CLSUser" Width="1.5" PointX="0.75" PointY="9.375" />
+        <EntityTypeShape EntityType="CLSDbModel.DashboardMetadata" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CLSDbModel.EnvironmentType" Width="1.5" PointX="3.75" PointY="2" />
+        <EntityTypeShape EntityType="CLSDbModel.Log" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="CLSDbModel.PublishingSystem" Width="1.5" PointX="6" PointY="9.125" />
+        <EntityTypeShape EntityType="CLSDbModel.PublishingSystemType" Width="1.5" PointX="3.75" PointY="5.375" />
+        <EntityTypeShape EntityType="CLSDbModel.Severity" Width="1.5" PointX="0.75" PointY="6.125" />
+        <EntityTypeShape EntityType="CLSDbModel.Subscription" Width="1.5" PointX="8.25" PointY="14.625" />
         <AssociationConnector Association="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" />
         <AssociationConnector Association="CLSDbModel.FK_AlertHistory_Log" />
+        <AssociationConnector Association="CLSDbModel.FK_AlertHistory_User" />
+        <AssociationConnector Association="CLSDbModel.FK_AlertTriggerGroup_User" />
         <AssociationConnector Association="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" />
         <AssociationConnector Association="CLSDbModel.FK_Subscription_AlertTriggerGroup" />
         <AssociationConnector Association="CLSDbModel.FK_AlertTriggerNode_AlertTriggerNodeStaticOperator" />
         <AssociationConnector Association="CLSDbModel.FK_AlertTriggerNodeStaticOperator_AlertTriggerNodeStaticType" />
         <AssociationConnector Association="CLSDbModel.Subscriber_System_fk1" />
+        <AssociationConnector Association="CLSDbModel.FK_Log_CLSUser" />
+        <AssociationConnector Association="CLSDbModel.FK_PublishingSystem_CLSUser" />
+        <AssociationConnector Association="CLSDbModel.FK_Subscription_User" />
         <AssociationConnector Association="CLSDbModel.System_fk0" />
         <AssociationConnector Association="CLSDbModel.Log_fk0" />
         <AssociationConnector Association="CLSDbModel.Log_fk1" />
         <AssociationConnector Association="CLSDbModel.Subscriber_System_fk3" />
         <AssociationConnector Association="CLSDbModel.System_fk1" />
-        <EntityTypeShape EntityType="CLSDbModel.CLSUser" Width="1.5" PointX="0.75" PointY="7.75" />
-        <AssociationConnector Association="CLSDbModel.FK_AlertHistory_User" />
-        <AssociationConnector Association="CLSDbModel.FK_AlertTriggerGroup_User" />
-        <AssociationConnector Association="CLSDbModel.FK_Subscription_User" />
-        </Diagram>
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

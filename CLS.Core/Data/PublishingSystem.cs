@@ -22,10 +22,12 @@ namespace CLS.Core.Data
         }
     
         public int Id { get; set; }
+        public int CLSUserId { get; set; }
         public int EnvironmentTypeId { get; set; }
         public int PublishingSystemTypeId { get; set; }
         public string Name { get; set; }
     
+        public virtual CLSUser CLSUser { get; set; }
         public virtual EnvironmentType EnvironmentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Log> Logs { get; set; }

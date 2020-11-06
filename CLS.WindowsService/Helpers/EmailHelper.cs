@@ -35,7 +35,7 @@ namespace CLS.WindowsService.Helpers
             }
             catch (Exception ex)
             {
-                new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication).LogErrorToDb(ex);
+                new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication).Log(StaticData.SeverityType.Error, ex);
             }
         }
     }

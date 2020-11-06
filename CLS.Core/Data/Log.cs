@@ -21,6 +21,7 @@ namespace CLS.Core.Data
         }
     
         public int Id { get; set; }
+        public int CLSUserId { get; set; }
         public int SeverityId { get; set; }
         public int PublishingSystemId { get; set; }
         public System.DateTime Timestamp { get; set; }
@@ -30,6 +31,7 @@ namespace CLS.Core.Data
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertHistory> AlertHistories { get; set; }
+        public virtual CLSUser CLSUser { get; set; }
         public virtual Severity Severity { get; set; }
         public virtual PublishingSystem PublishingSystem { get; set; }
     }

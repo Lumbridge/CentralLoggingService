@@ -20,7 +20,7 @@ using Microsoft.Owin.Security.OAuth;
 namespace CLS.Api.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/Account")]
+    [RoutePrefix("Account")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";

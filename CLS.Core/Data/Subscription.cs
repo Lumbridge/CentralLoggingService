@@ -23,7 +23,7 @@ namespace CLS.Core.Data
     
         public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }
         public virtual AlertType AlertType { get; set; }
-        public virtual PublishingSystem PublishingSystem { get; set; }
         public virtual CLSUser CLSUser { get; set; }
+        public virtual PublishingSystem PublishingSystem { get; set; }
     }
 }
