@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using CLS.Core.StaticData;
 using Microsoft.AspNet.Identity;
 
 namespace CLS.UserWeb.Controllers
@@ -42,7 +43,7 @@ namespace CLS.UserWeb.Controllers
                     });
             }
 
-            var userId = _uow.Repository<CLSUser>().First(x => x.IdentityID == User.Identity.GetUserId()).Id;
+            var userId = User.Identity.GetUserId();
 
             if (nodeList.Any(x => x.AlertTriggerNodeOperator?.Value == "PublishingSystemName"))
             {
@@ -86,7 +87,7 @@ namespace CLS.UserWeb.Controllers
             }
             catch (Exception ex)
             {
-                _ls.LogErrorToDb(ex);
+                _ls.Log(StaticData.SeverityType.Error, ex);
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 
@@ -110,7 +111,7 @@ namespace CLS.UserWeb.Controllers
             }
             catch (Exception ex)
             {
-                _ls.LogErrorToDb(ex);
+                _ls.Log(StaticData.SeverityType.Error, ex);
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 

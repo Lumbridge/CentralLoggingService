@@ -31,7 +31,10 @@ namespace CLS.Core.Data
         public virtual DbSet<AlertTriggerNodeOperator> AlertTriggerNodeOperators { get; set; }
         public virtual DbSet<AlertTriggerNodeType> AlertTriggerNodeTypes { get; set; }
         public virtual DbSet<AlertType> AlertTypes { get; set; }
-        public virtual DbSet<CLSUser> CLSUsers { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<DashboardMetadata> DashboardMetadatas { get; set; }
         public virtual DbSet<EnvironmentType> EnvironmentTypes { get; set; }
         public virtual DbSet<Log> Logs { get; set; }

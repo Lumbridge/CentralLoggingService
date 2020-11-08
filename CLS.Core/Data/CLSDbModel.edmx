@@ -12,8 +12,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AlertHistoryGroupId" Type="int" Nullable="false" />
           <Property Name="LogId" Type="int" Nullable="false" />
-          <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="int" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="SiblingCount" Type="int" Nullable="false" />
         </EntityType>
@@ -22,7 +22,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="int" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="AlertTriggerNode">
           <Key>
@@ -30,7 +30,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AlertTriggerNodeOperatorId" Type="int" />
-          <Property Name="AlertTriggerGroupId" Type="int" />
+          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
           <Property Name="DynamicNodeValue" Type="varchar" MaxLength="255" />
           <Property Name="DynamicNodeDotNetDataType" Type="varchar" MaxLength="255" />
           <Property Name="PositionInGroup" Type="int" Nullable="false" />
@@ -60,12 +60,56 @@
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Code" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
-        <EntityType Name="CLSUser">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdentityID" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityType Name="DashboardMetadata">
           <Key>
@@ -90,7 +134,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CLSUserId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="SeverityId" Type="int" Nullable="false" />
           <Property Name="PublishingSystemId" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
@@ -103,7 +147,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CLSUserId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="EnvironmentTypeId" Type="int" Nullable="false" />
           <Property Name="PublishingSystemTypeId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
@@ -129,14 +173,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="int" />
+          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
           <Property Name="AlertTypeId" Type="int" Nullable="false" />
-          <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="PublishingSystemId" Type="int" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1" />
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
           <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -160,10 +203,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertHistory_User">
-          <End Role="CLSUser" Type="Self.CLSUser" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AlertHistory">
@@ -172,10 +215,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerGroup_User">
-          <End Role="CLSUser" Type="Self.CLSUser" Multiplicity="0..1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AlertTriggerGroup">
@@ -184,7 +227,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1">
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="AlertTriggerNode" Type="Self.AlertTriggerNode" Multiplicity="*" />
@@ -221,32 +264,88 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Log_CLSUser">
-          <End Role="CLSUser" Type="Self.CLSUser" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="Log" Type="Self.Log" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="CLSUserId" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PublishingSystem_CLSUser">
-          <End Role="CLSUser" Type="Self.CLSUser" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PublishingSystem">
-              <PropertyRef Name="CLSUserId" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1">
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
@@ -260,10 +359,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_User">
-          <End Role="CLSUser" Type="Self.CLSUser" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Subscription">
@@ -307,18 +406,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Subscriber_System_fk3">
-          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="0..1" />
-          <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PublishingSystem">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subscription">
-              <PropertyRef Name="PublishingSystemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="System_fk0">
           <End Role="EnvironmentType" Type="Self.EnvironmentType" Multiplicity="1" />
           <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="*" />
@@ -350,7 +437,11 @@
           <EntitySet Name="AlertTriggerNodeOperator" EntityType="Self.AlertTriggerNodeOperator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AlertTriggerNodeType" EntityType="Self.AlertTriggerNodeType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AlertType" EntityType="Self.AlertType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CLSUser" EntityType="Self.CLSUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DashboardMetadata" EntityType="Self.DashboardMetadata" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnvironmentType" EntityType="Self.EnvironmentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
@@ -367,11 +458,11 @@
             <End Role="AlertHistory" EntitySet="AlertHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertHistory_User" Association="Self.FK_AlertHistory_User">
-            <End Role="CLSUser" EntitySet="CLSUser" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AlertHistory" EntitySet="AlertHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerGroup_User" Association="Self.FK_AlertTriggerGroup_User">
-            <End Role="CLSUser" EntitySet="CLSUser" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerGroup" Association="Self.FK_AlertTriggerNode_AlertTriggerGroup">
@@ -386,12 +477,28 @@
             <End Role="AlertTriggerNodeType" EntitySet="AlertTriggerNodeType" />
             <End Role="AlertTriggerNodeOperator" EntitySet="AlertTriggerNodeOperator" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
           <AssociationSet Name="FK_Log_CLSUser" Association="Self.FK_Log_CLSUser">
-            <End Role="CLSUser" EntitySet="CLSUser" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
           <AssociationSet Name="FK_PublishingSystem_CLSUser" Association="Self.FK_PublishingSystem_CLSUser">
-            <End Role="CLSUser" EntitySet="CLSUser" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="PublishingSystem" EntitySet="PublishingSystem" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscription_AlertTriggerGroup" Association="Self.FK_Subscription_AlertTriggerGroup">
@@ -399,7 +506,7 @@
             <End Role="Subscription" EntitySet="Subscription" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscription_User" Association="Self.FK_Subscription_User">
-            <End Role="CLSUser" EntitySet="CLSUser" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Subscription" EntitySet="Subscription" />
           </AssociationSet>
           <AssociationSet Name="Log_fk0" Association="Self.Log_fk0">
@@ -412,10 +519,6 @@
           </AssociationSet>
           <AssociationSet Name="Subscriber_System_fk1" Association="Self.Subscriber_System_fk1">
             <End Role="AlertType" EntitySet="AlertType" />
-            <End Role="Subscription" EntitySet="Subscription" />
-          </AssociationSet>
-          <AssociationSet Name="Subscriber_System_fk3" Association="Self.Subscriber_System_fk3">
-            <End Role="PublishingSystem" EntitySet="PublishingSystem" />
             <End Role="Subscription" EntitySet="Subscription" />
           </AssociationSet>
           <AssociationSet Name="System_fk0" Association="Self.System_fk0">
@@ -438,7 +541,10 @@
           <EntitySet Name="AlertTriggerNodeOperators" EntityType="CLSDbModel.AlertTriggerNodeOperator" />
           <EntitySet Name="AlertTriggerNodeTypes" EntityType="CLSDbModel.AlertTriggerNodeType" />
           <EntitySet Name="AlertTypes" EntityType="CLSDbModel.AlertType" />
-          <EntitySet Name="CLSUsers" EntityType="CLSDbModel.CLSUser" />
+          <EntitySet Name="AspNetRoles" EntityType="CLSDbModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="CLSDbModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="CLSDbModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="CLSDbModel.AspNetUser" />
           <EntitySet Name="DashboardMetadatas" EntityType="CLSDbModel.DashboardMetadata" />
           <EntitySet Name="EnvironmentTypes" EntityType="CLSDbModel.EnvironmentType" />
           <EntitySet Name="Logs" EntityType="CLSDbModel.Log" />
@@ -455,11 +561,11 @@
             <End Role="AlertHistory" EntitySet="AlertHistories" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertHistory_User" Association="CLSDbModel.FK_AlertHistory_User">
-            <End Role="CLSUser" EntitySet="CLSUsers" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AlertHistory" EntitySet="AlertHistories" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerGroup_User" Association="CLSDbModel.FK_AlertTriggerGroup_User">
-            <End Role="CLSUser" EntitySet="CLSUsers" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerNode_AlertTriggerGroup" Association="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup">
@@ -482,16 +588,24 @@
             <End Role="AlertType" EntitySet="AlertTypes" />
             <End Role="Subscription" EntitySet="Subscriptions" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="CLSDbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="CLSDbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
           <AssociationSet Name="FK_Log_CLSUser" Association="CLSDbModel.FK_Log_CLSUser">
-            <End Role="CLSUser" EntitySet="CLSUsers" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Log" EntitySet="Logs" />
           </AssociationSet>
           <AssociationSet Name="FK_PublishingSystem_CLSUser" Association="CLSDbModel.FK_PublishingSystem_CLSUser">
-            <End Role="CLSUser" EntitySet="CLSUsers" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="PublishingSystem" EntitySet="PublishingSystems" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscription_User" Association="CLSDbModel.FK_Subscription_User">
-            <End Role="CLSUser" EntitySet="CLSUsers" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Subscription" EntitySet="Subscriptions" />
           </AssociationSet>
           <AssociationSet Name="System_fk0" Association="CLSDbModel.System_fk0">
@@ -506,13 +620,13 @@
             <End Role="PublishingSystem" EntitySet="PublishingSystems" />
             <End Role="Log" EntitySet="Logs" />
           </AssociationSet>
-          <AssociationSet Name="Subscriber_System_fk3" Association="CLSDbModel.Subscriber_System_fk3">
-            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
-            <End Role="Subscription" EntitySet="Subscriptions" />
-          </AssociationSet>
           <AssociationSet Name="System_fk1" Association="CLSDbModel.System_fk1">
             <End Role="PublishingSystemType" EntitySet="PublishingSystemTypes" />
             <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="CLSDbModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AlertHistory">
@@ -522,22 +636,22 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AlertHistoryGroupId" Type="Int32" Nullable="false" />
           <Property Name="LogId" Type="Int32" Nullable="false" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="SiblingCount" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertHistory" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="Log" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="AlertHistory" ToRole="Log" />
-          <NavigationProperty Name="CLSUser" Relationship="CLSDbModel.FK_AlertHistory_User" FromRole="AlertHistory" ToRole="CLSUser" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_AlertHistory_User" FromRole="AlertHistory" ToRole="AspNetUser" />
         </EntityType>
         <EntityType Name="AlertTriggerGroup">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertHistory" />
-          <NavigationProperty Name="CLSUser" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="AlertTriggerGroup" ToRole="CLSUser" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="AlertTriggerGroup" ToRole="AspNetUser" />
           <NavigationProperty Name="AlertTriggerNodes" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertTriggerNode" />
           <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="Subscription" />
         </EntityType>
@@ -547,7 +661,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AlertTriggerNodeOperatorId" Type="Int32" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
           <Property Name="DynamicNodeValue" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="DynamicNodeDotNetDataType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="PositionInGroup" Type="Int32" Nullable="false" />
@@ -583,17 +697,59 @@
           <Property Name="Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="AlertType" ToRole="Subscription" />
         </EntityType>
-        <EntityType Name="CLSUser">
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="CLSDbModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdentityID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_User" FromRole="CLSUser" ToRole="AlertHistory" />
-          <NavigationProperty Name="AlertTriggerGroups" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="CLSUser" ToRole="AlertTriggerGroup" />
-          <NavigationProperty Name="Logs" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="CLSUser" ToRole="Log" />
-          <NavigationProperty Name="PublishingSystems" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="CLSUser" ToRole="PublishingSystem" />
-          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_User" FromRole="CLSUser" ToRole="Subscription" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_User" FromRole="AspNetUser" ToRole="AlertHistory" />
+          <NavigationProperty Name="AlertTriggerGroups" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="AspNetUser" ToRole="AlertTriggerGroup" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="CLSDbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="CLSDbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="Logs" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="AspNetUser" ToRole="Log" />
+          <NavigationProperty Name="PublishingSystems" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="AspNetUser" ToRole="PublishingSystem" />
+          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_User" FromRole="AspNetUser" ToRole="Subscription" />
+          <NavigationProperty Name="AspNetRoles" Relationship="CLSDbModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
         </EntityType>
         <EntityType Name="DashboardMetadata">
           <Key>
@@ -619,7 +775,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CLSUserId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="SeverityId" Type="Int32" Nullable="false" />
           <Property Name="PublishingSystemId" Type="Int32" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
@@ -627,7 +783,7 @@
           <Property Name="Exception" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="StackTrace" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="Log" ToRole="AlertHistory" />
-          <NavigationProperty Name="CLSUser" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="Log" ToRole="CLSUser" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="Log" ToRole="AspNetUser" />
           <NavigationProperty Name="Severity" Relationship="CLSDbModel.Log_fk0" FromRole="Log" ToRole="Severity" />
           <NavigationProperty Name="PublishingSystem" Relationship="CLSDbModel.Log_fk1" FromRole="Log" ToRole="PublishingSystem" />
         </EntityType>
@@ -636,14 +792,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CLSUserId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="EnvironmentTypeId" Type="Int32" Nullable="false" />
           <Property Name="PublishingSystemTypeId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CLSUser" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="PublishingSystem" ToRole="CLSUser" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="PublishingSystem" ToRole="AspNetUser" />
           <NavigationProperty Name="EnvironmentType" Relationship="CLSDbModel.System_fk0" FromRole="PublishingSystem" ToRole="EnvironmentType" />
           <NavigationProperty Name="Logs" Relationship="CLSDbModel.Log_fk1" FromRole="PublishingSystem" ToRole="Log" />
-          <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.Subscriber_System_fk3" FromRole="PublishingSystem" ToRole="Subscription" />
           <NavigationProperty Name="PublishingSystemType" Relationship="CLSDbModel.System_fk1" FromRole="PublishingSystem" ToRole="PublishingSystemType" />
         </EntityType>
         <EntityType Name="PublishingSystemType">
@@ -669,18 +824,16 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
           <Property Name="AlertTypeId" Type="Int32" Nullable="false" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="PublishingSystemId" Type="Int32" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="Subscription" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AlertType" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="Subscription" ToRole="AlertType" />
-          <NavigationProperty Name="CLSUser" Relationship="CLSDbModel.FK_Subscription_User" FromRole="Subscription" ToRole="CLSUser" />
-          <NavigationProperty Name="PublishingSystem" Relationship="CLSDbModel.Subscriber_System_fk3" FromRole="Subscription" ToRole="PublishingSystem" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_Subscription_User" FromRole="Subscription" ToRole="AspNetUser" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
           <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -704,10 +857,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertHistory_User">
-          <End Type="CLSDbModel.CLSUser" Role="CLSUser" Multiplicity="1" />
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
           <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AlertHistory">
@@ -716,10 +869,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerGroup_User">
-          <End Type="CLSDbModel.CLSUser" Role="CLSUser" Multiplicity="0..1" />
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
           <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AlertTriggerGroup">
@@ -728,7 +881,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1">
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="CLSDbModel.AlertTriggerNode" Role="AlertTriggerNode" Multiplicity="*" />
@@ -742,7 +895,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1">
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
@@ -791,35 +944,63 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CLSDbModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CLSDbModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Log_CLSUser">
-          <End Type="CLSDbModel.CLSUser" Role="CLSUser" Multiplicity="1" />
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
           <End Type="CLSDbModel.Log" Role="Log" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Log">
-              <PropertyRef Name="CLSUserId" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PublishingSystem_CLSUser">
-          <End Type="CLSDbModel.CLSUser" Role="CLSUser" Multiplicity="1" />
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
           <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PublishingSystem">
-              <PropertyRef Name="CLSUserId" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_User">
-          <End Type="CLSDbModel.CLSUser" Role="CLSUser" Multiplicity="1" />
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
           <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CLSUser">
+            <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Subscription">
@@ -863,18 +1044,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Subscriber_System_fk3">
-          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="0..1" />
-          <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PublishingSystem">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subscription">
-              <PropertyRef Name="PublishingSystemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="System_fk1">
           <End Type="CLSDbModel.PublishingSystemType" Role="PublishingSystemType" Multiplicity="1" />
           <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="*" />
@@ -886,6 +1055,10 @@
               <PropertyRef Name="PublishingSystemTypeId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="CLSDbModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -954,10 +1127,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CLSUsers">
-            <EntityTypeMapping TypeName="CLSDbModel.CLSUser">
-              <MappingFragment StoreEntitySet="CLSUser">
-                <ScalarProperty Name="IdentityID" ColumnName="IdentityID" />
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="CLSDbModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="CLSDbModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="CLSDbModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="CLSDbModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -991,7 +1201,7 @@
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="PublishingSystemId" ColumnName="PublishingSystemId" />
                 <ScalarProperty Name="SeverityId" ColumnName="SeverityId" />
-                <ScalarProperty Name="CLSUserId" ColumnName="CLSUserId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1002,7 +1212,7 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PublishingSystemTypeId" ColumnName="PublishingSystemTypeId" />
                 <ScalarProperty Name="EnvironmentTypeId" ColumnName="EnvironmentTypeId" />
-                <ScalarProperty Name="CLSUserId" ColumnName="CLSUserId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1029,7 +1239,6 @@
             <EntityTypeMapping TypeName="CLSDbModel.Subscription">
               <MappingFragment StoreEntitySet="Subscription">
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="PublishingSystemId" ColumnName="PublishingSystemId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="AlertTypeId" ColumnName="AlertTypeId" />
                 <ScalarProperty Name="AlertTriggerGroupId" ColumnName="AlertTriggerGroupId" />
@@ -1037,6 +1246,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="CLSDbModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

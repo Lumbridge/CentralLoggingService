@@ -12,24 +12,18 @@ namespace CLS.Core.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class PublishingSystem
+    public partial class AspNetRole
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PublishingSystem()
+        public AspNetRole()
         {
-            this.Logs = new HashSet<Log>();
+            this.AspNetUsers = new HashSet<AspNetUser>();
         }
     
-        public int Id { get; set; }
-        public string UserId { get; set; }
-        public int EnvironmentTypeId { get; set; }
-        public int PublishingSystemTypeId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
-        public virtual EnvironmentType EnvironmentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Log> Logs { get; set; }
-        public virtual PublishingSystemType PublishingSystemType { get; set; }
+        public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
     }
 }

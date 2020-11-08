@@ -21,7 +21,7 @@ namespace CLS.Web.Controllers
             return View(model);
         }
 
-        public JsonResult SaveAlert(string expression, int subscriberId, int alertTypeId)
+        public JsonResult SaveAlert(string expression, string subscriberId, int alertTypeId)
         {
             var nodes = expression.Split(' ');
             var nodeList = new List<AlertTriggerNode>();

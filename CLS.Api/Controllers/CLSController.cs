@@ -1,8 +1,10 @@
 ﻿using CLS.Core.Data;
 using CLS.Infrastructure.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using CLS.Infrastructure.Data;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -16,42 +18,65 @@ namespace CLS.Api.Controllers
         {
         }
 
+        [HttpGet]
         public string Get()
         {
             var userName = RequestContext.Principal.Identity.Name;
             return $"Hello, {userName}.";
         }
 
-        public string Post(string logMessageJson)
+        [HttpPost]
+        public string Post([FromBody]Log logMessage)
         {
-            var clsUser = _uow.Repository<CLSUser>().FirstOrDefault(x => x.ApplicationUser.Email == RequestContext.Principal.Identity.Name);
+            var user = _uow.Repository<AspNetUser>().FirstOrDefault(x => x.Email == RequestContext.Principal.Identity.Name);
 
-            if (clsUser == null) {
+            if (user == null) {
                 return $"Unable to find a user with the credentials in the current context.";
             }
 
             try
             {
-                var logModel = JsonSerializer.Deserialize<Log>(logMessageJson);
-                logModel.CLSUser = clsUser;
-                logModel.CLSUserId = clsUser.Id;
-                _uow.Repository<Log>().Put(logModel);
+                logMessage.UserId = user.Id;
+                _uow.Repository<Log>().Put(logMessage);
+                _uow.Commit();
             }
             catch (Exception ex)
             {
                 return $"{ex.Message}";
             }
 
-            return "Successfully logged message";
+            return "Successfully logged message.";
+        }
+
+        [HttpGet]
+        [Route("Severity")]
+        public string GetSeverity(string severityTypeCode)
+        {
+            var user = _uow.Repository<AspNetUser>().FirstOrDefault(x => x.Email == RequestContext.Principal.Identity.Name);
+            if (user == null) {
+                return $"Unable to find a user with the credentials in the current context.";
+            }
+
+            // get static data objects from database
+            var severity = _uow.Repository<Severity>().First(x => x.Code == severityTypeCode);
+
+            // return the publishing system
+            return JsonConvert.SerializeObject(severity,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
         }
 
         [HttpGet]
         [Route("PublishingSystem")]
         public string GetPublishingSystem(string publishingSystemName, string environmentType, string systemType)
         {
-            var clsUser = _uow.Repository<CLSUser>().FirstOrDefault(x => x.ApplicationUser.Email == RequestContext.Principal.Identity.Name);
-            if (clsUser == null)
+            var user = _uow.Repository<AspNetUser>().FirstOrDefault(x => x.Email == RequestContext.Principal.Identity.Name);
+            if (user == null)
+            {
                 return $"Unable to find a user with the credentials in the current context.";
+            }
 
             // get static data objects from database
             var environmentTypeObj = _uow.Repository<EnvironmentType>().First(x => x.Name == environmentType);
@@ -65,19 +90,30 @@ namespace CLS.Api.Controllers
             // if the publishing system doesn't exist in the database then create it
             if (pSystem == null)
             {
-                _uow.Repository<PublishingSystem>().Put(new PublishingSystem
+                var model = new PublishingSystem
                 {
-                    EnvironmentType = environmentTypeObj, 
+                    EnvironmentType = environmentTypeObj,
                     PublishingSystemType = systemTypeObj,
                     Name = publishingSystemName,
-                    CLSUserId = clsUser.Id,
-                    CLSUser = clsUser
-                });
+                    AspNetUser = user,
+                    UserId = user.Id
+                };
+                _uow.Repository<PublishingSystem>().Put(model);
+                model.EnvironmentTypeId = environmentTypeObj.Id;
+                model.PublishingSystemTypeId = systemTypeObj.Id;
                 _uow.Commit();
+
+                pSystem = _uow.Repository<PublishingSystem>().FirstOrDefault(x =>
+                    x.Name == publishingSystemName && x.EnvironmentTypeId == environmentTypeObj.Id &&
+                    x.PublishingSystemTypeId == systemTypeObj.Id);
             }
 
             // return the publishing system
-            return JsonConvert.SerializeObject(pSystem);
+            return JsonConvert.SerializeObject(pSystem,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
         }
     }
 }

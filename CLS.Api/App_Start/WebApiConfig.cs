@@ -27,6 +27,10 @@ namespace CLS.Api
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            // JSON Serializer Project Settings
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+
             // Enforce HTTPS
             config.Filters.Add(new RequireHttpsAttribute());
         }

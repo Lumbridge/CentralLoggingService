@@ -4,7 +4,6 @@ using CLS.Infrastructure.Classes;
 using CLS.Infrastructure.Data;
 using CLS.Infrastructure.Helpers;
 using CLS.Sender.Classes;
-using CLS.WindowsService.Helpers;
 using System;
 using System.Configuration;
 using System.Linq;
@@ -60,8 +59,8 @@ namespace CLS.WindowsService.Classes
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
-                                UserId = alertTriggerGroup.UserId.Value,
-                                CLSUser = alertTriggerGroup.CLSUser,
+                                UserId = alertTriggerGroup.UserId,
+                                AspNetUser = alertTriggerGroup.AspNetUser,
                                 Timestamp = DateTime.Now
                             });
                         }
@@ -150,8 +149,8 @@ namespace CLS.WindowsService.Classes
                                 Log = log,
                                 LogId = log.Id,
                                 AlertTriggerGroupId = alertTriggerGroup.Id,
-                                UserId = alertTriggerGroup.UserId.Value,
-                                CLSUser = alertTriggerGroup.CLSUser,
+                                UserId = alertTriggerGroup.UserId,
+                                AspNetUser = alertTriggerGroup.AspNetUser,
                                 Timestamp = DateTime.Now
                             });
                         }

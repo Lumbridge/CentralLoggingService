@@ -21,7 +21,7 @@ namespace CLS.Web.Controllers
         // GET: Subscribers
         public ActionResult Index()
         {
-            var model = _uow.Repository<CLSUser>().ToList();
+            var model = _uow.Repository<AspNetUser>().ToList();
             return View(model);
         }
     }

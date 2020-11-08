@@ -62,7 +62,6 @@
     <Compile Include="CLSWindowsService.Designer.cs">
       <DependentUpon>CLSWindowsService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,11 +1,8 @@
-﻿using CLS.Core.StaticData;
-using CLS.Sender.Classes;
-using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 
-namespace CLS.WindowsService.Helpers
+namespace CLS.Infrastructure.Helpers
 {
     public static class EmailHelper
     {
@@ -29,14 +26,7 @@ namespace CLS.WindowsService.Helpers
                     ConfigurationManager.AppSettings["EmailSenderPassword"])
             };
 
-            try
-            {
-                client.Send(mail);
-            }
-            catch (Exception ex)
-            {
-                new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication).Log(StaticData.SeverityType.Error, ex);
-            }
+            client.Send(mail);
         }
     }
 }

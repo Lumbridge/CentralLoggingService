@@ -18,7 +18,7 @@ namespace CLS.UserWeb.Models
             return new ApplicationDbContext();
         }
 
-        public virtual DbSet<CLSUser> CLSUsers { get; set; }
+        //public virtual DbSet<CLSUser> CLSUsers { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -28,10 +28,10 @@ namespace CLS.UserWeb.Models
 
             // Add a configuration for our new table.  Choose one end of the relationship
             // and tell it how it's supposed to work
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(e => e.CLSUsers)        // ApplicationUser has many MyUser
-                .WithOptional(e => e.ApplicationUser) // allowed nulls in table
-                .HasForeignKey(e => e.IdentityID);  // MyUser includes this specified foreign key
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasMany(e => e.CLSUsers)        // ApplicationUser has many MyUser
+            //    .WithOptional(e => e.ApplicationUser) // allowed nulls in table
+            //    .HasForeignKey(e => e.IdentityID);  // MyUser includes this specified foreign key
             // for an ApplicationUser
         }
     }

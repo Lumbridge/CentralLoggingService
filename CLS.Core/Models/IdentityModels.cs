@@ -12,7 +12,7 @@ namespace CLS.Core.Models
     {
         public ApplicationUser()
         {
-            CLSUsers = new HashSet<CLSUser>();
+            //CLSUsers = new HashSet<CLSUser>();
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -23,6 +23,6 @@ namespace CLS.Core.Models
             return userIdentity;
         }
 
-        public virtual ICollection<CLSUser> CLSUsers { get; set; }
+        //public virtual ICollection<CLSUser> CLSUsers { get; set; }
     }
 }
