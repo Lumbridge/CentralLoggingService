@@ -1,148 +1,68 @@
 ﻿using CLS.Core.Data;
 using CLS.Core.StaticData;
 using CLS.Infrastructure.Classes;
+using CLS.Infrastructure.Data;
 using CLS.Infrastructure.Helpers;
 using CLS.Infrastructure.Interfaces;
-using CLS.Infrastructure.Data;
+using CLS.Sender.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using CLS.Sender.Models;
-using Newtonsoft.Json;
 
 namespace CLS.Sender.Classes
 {
     public class LogSender
     {
-        private string _accessToken { get; set; }
-        private DateTime _expiryDate { get; set; }
-        private string _publishingSystemName { get; set; }
-        private StaticData.EnvironmentType _environmentType { get; set; }
-        private StaticData.SystemType _systemType { get; set; }
+        private static OAuthResponse _OAuthResponse { get; set; }
+        private static OAuthResponse OAuthResponse
+        {
+            get
+            {
+                if (_OAuthResponse == null || _OAuthResponse != null && DateTime.Now.AddHours(1) >= _OAuthResponse.expires)
+                {
+                    _OAuthResponse = GetAccessToken().Result;
+                }
+                return _OAuthResponse;
+            }
+        }
         private static PublishingSystem _publishingSystem { get; set; }
 
-        public LogSender(string publishingSystemName, StaticData.EnvironmentType environmentType, StaticData.SystemType systemType)
+        // ============
+        // Constructors
+        // ============
+
+        /// <summary>
+        /// LogSender constructor.
+        /// </summary>
+        /// <param name="environmentType">The environment type of this publishing system. (DEV, SIT, UAT or LIVE).</param>
+        /// <param name="systemType">The type of this publishing system. (REST, SOAP, Website, WindowsService, ConsoleApplication, Other)</param>
+        /// <param name="publishingSystemName">The name of the publishing system.</param>
+        public LogSender(StaticData.EnvironmentType environmentType, StaticData.SystemType systemType, string publishingSystemName = "")
         {
-            _publishingSystemName = publishingSystemName;
-            _environmentType = environmentType;
-            _systemType = systemType;
-            _publishingSystem = GetPublishingSystem(publishingSystemName, environmentType, systemType).Result;
+            _publishingSystem = string.IsNullOrEmpty(publishingSystemName) 
+                ? GetPublishingSystem(Assembly.GetCallingAssembly().GetName().Name, environmentType, systemType).Result 
+                : GetPublishingSystem(publishingSystemName, environmentType, systemType).Result;
         }
 
-        public LogSender(StaticData.EnvironmentType environmentType, StaticData.SystemType systemType)
-        {
-            _publishingSystemName = Assembly.GetCallingAssembly().FullName;
-            _environmentType = environmentType;
-            _systemType = systemType;
-            _accessToken = GetAccessToken().Result.access_token;
-            _publishingSystem = GetPublishingSystem(_publishingSystemName, environmentType, systemType).Result;
-        }
+        // =======================
+        // Main exposed Log Method
+        // =======================
 
-        public static async Task<OAuthResponse> GetAccessToken()
-        {
-            // Posting
-            using (var client = new HttpClient())
-            {
-                // Setting Base address
-                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
-
-                // Setting content type
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // Initialisation
-                var allInputParams = new List<KeyValuePair<string, string>>
-                {
-                    new KeyValuePair<string, string>("grant_type", "password"),
-                    new KeyValuePair<string, string>("username", ConfigurationManager.AppSettings["WebserviceUsername"]),
-                    new KeyValuePair<string, string>("password", ConfigurationManager.AppSettings["WebservicePassword"])
-                };
-
-                // URL Request parameters
-                HttpContent requestParams = new FormUrlEncodedContent(allInputParams);
-
-                // HTTP POST
-                var response = await client.PostAsync("Token", requestParams).ConfigureAwait(false);
-
-                // Verification
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonConvert.DeserializeObject<OAuthResponse>(response.Content.ReadAsStringAsync().Result);
-                }
-            }
-
-            return null;
-        }
-        
-        public static async Task<string> Get(string authorizeToken)
-        {
-            // Initialization
-            var responseObj = string.Empty;
-
-            // HTTP GET
-            using (var client = new HttpClient())
-            {
-                // Initialisation
-                var authorization = authorizeToken;
-
-                // Setting Authorization
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorization);
-
-                // Setting Base address
-                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
-
-                // Setting content type
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // HTTP GET
-                var response = await client.GetAsync("CLS").ConfigureAwait(false);
-
-                // Verification
-                if (response.IsSuccessStatusCode)
-                {
-                    // Reading Response
-                }
-            }
-
-            return responseObj;
-        }
-        
-        public static async Task<string> Post(string authorizeToken, Log message)
-        {
-            // HTTP GET
-            using (var client = new HttpClient())
-            {
-                // Initialisation
-                var authorization = authorizeToken;
-
-                // Setting Authorization
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorization);
-
-                // Setting Base address
-                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
-
-                // Setting content type
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // HTTP GET
-                var response = await client.PostAsJsonAsync("CLS", message).ConfigureAwait(false);
-
-                // Verification
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-            }
-
-            return string.Empty;
-        }
-        
+        /// <summary>
+        /// Sends a log message to a chosen database or web service endpoint (specified in App_Data\CLSSettings.config).
+        /// </summary>
+        /// <param name="severity">The severity of the log message. (Debug, Info, Warn, Error or Fatal).</param>
+        /// <param name="exception">Optional: An exception object.</param>
+        /// <param name="info">Optional: Any information to store for this record.</param>
+        /// <returns>Text result, empty string if failure.</returns>
         public string Log(StaticData.SeverityType severity, Exception exception = null, string info = null)
         {
             var useWebservice = bool.Parse(ConfigurationManager.AppSettings["UseWebservice"]);
@@ -183,10 +103,19 @@ namespace CLS.Sender.Classes
             }
         }
 
-        public static async Task<string> LogToWebService(string severityCode, Exception exception = null, string info = null)
-        {
-            var oAuthResponse = GetAccessToken().Result;
+        // =============================================
+        // Methods for logging directly to a web service
+        // =============================================
 
+        /// <summary>
+        /// Logs a message via the web service specified in App_Data\CLSSettings.config.
+        /// </summary>
+        /// <param name="severityCode">The severity code of the log message. (Debug = D, Info = I, Warn = W, Error = E or Fatal = F).</param>
+        /// <param name="exception">Optional: An exception object.</param>
+        /// <param name="info">Optional: Any information to store for this record.</param>
+        /// <returns>Text result, empty string if failure.</returns>
+        private static async Task<string> LogToWebService(string severityCode, Exception exception = null, string info = null)
+        {
             var logObj = new Log
             {
                 Exception = exception?.GetExceptionMessages(),
@@ -197,44 +126,112 @@ namespace CLS.Sender.Classes
                 SeverityId = StaticData.Severities.First(x => x.Code == severityCode).Id
             };
 
-            return await Post(oAuthResponse.access_token, logObj);
+            return await Post(OAuthResponse.access_token, logObj);
         }
-
-        public string LogToDatabase(string severityCode, Exception exception = null, string info = null)
+        
+        /// <summary>
+        /// Attempts to gain authorisation from the CLS Web Service using the login credentials specified in AppData\CLSSettings.config.
+        /// </summary>
+        /// <returns>An OAuthResponse object.</returns>
+        private static async Task<OAuthResponse> GetAccessToken()
         {
-            var uow = new UnitOfWork(new DBEntities());
-
-            var model = new Log
+            // Posting
+            using (var client = new HttpClient())
             {
-                Exception = exception?.GetExceptionMessages(),
-                StackTrace = exception?.StackTrace,
-                Message = info,
-                PublishingSystem = _publishingSystem,
-                Timestamp = DateTime.Now,
-                Severity = GetSeverity(severityCode).Result
-            };
+                // Setting Base address
+                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
 
-            uow.Repository<Log>().Put(model);
+                // Setting content type
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            return TryCommit(uow) ? JsonConvert.SerializeObject(model) : string.Empty;
+                // Initialisation
+                var allInputParams = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", ConfigurationManager.AppSettings["WebserviceUsername"]),
+                    new KeyValuePair<string, string>("password", ConfigurationManager.AppSettings["WebservicePassword"])
+                };
+
+                // URL Request parameters
+                HttpContent requestParams = new FormUrlEncodedContent(allInputParams);
+
+                // HTTP POST
+                var response = await client.PostAsync("Token", requestParams).ConfigureAwait(false);
+
+                // Verification
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<OAuthResponse>(response.Content.ReadAsStringAsync().Result);
+                }
+
+                // Invalid login credentials check
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    var result = JsonConvert.DeserializeObject<OAuthResponse>(response.Content.ReadAsStringAsync().Result);
+                    throw new Exception("Error: " + result.error + ", Description: " + result.error_description);
+                }
+
+                return null;
+            }
         }
 
-        public static async Task<PublishingSystem> GetPublishingSystem(
-            string publishingSystemName, 
-            StaticData.EnvironmentType environmentType, 
+        /// <summary>
+        /// Logs a message via the web service specified in App_Data\CLSSettings.config via HTTP POST.
+        /// </summary>
+        /// <param name="authorizeToken">The OAuth 2.0 token received from the CLS Web Service.</param>
+        /// <param name="message">The Log Message to send to the Web Service.</param>
+        /// <returns>Text result, empty string if failure.</returns>
+        private static async Task<string> Post(string authorizeToken, Log message)
+        {
+            // HTTP GET
+            using (var client = new HttpClient())
+            {
+                // Initialisation
+                var authorization = authorizeToken;
+
+                // Setting Authorization
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorization);
+
+                // Setting Base address
+                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
+
+                // Setting content type
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // HTTP GET
+                var response = await client.PostAsJsonAsync("CLS", message).ConfigureAwait(false);
+
+                // Verification
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the publishing system info from the CLS Database, if it doesn't exist then it will be created.
+        /// </summary>
+        /// <param name="publishingSystemName">The name of the publishing system.</param>
+        /// <param name="environmentType">The environment type of this publishing system. (DEV, SIT, UAT or LIVE).</param>
+        /// <param name="systemType">The type of this publishing system. (REST, SOAP, Website, WindowsService, ConsoleApplication, Other)</param>
+        /// <returns>The publishing system object from the CLS Web Service/Database.</returns>
+        private static async Task<PublishingSystem> GetPublishingSystem(
+            string publishingSystemName,
+            StaticData.EnvironmentType environmentType,
             StaticData.SystemType systemType)
         {
             var useWebservice = bool.Parse(ConfigurationManager.AppSettings["UseWebservice"]);
 
             if (useWebservice)
             {
-                var oAuthResponse = GetAccessToken().Result;
-
                 // HTTP GET
                 using (var client = new HttpClient())
                 {
                     // Setting Authorization
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", oAuthResponse.access_token);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", OAuthResponse.access_token);
 
                     // Setting Base address
                     client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
@@ -255,19 +252,12 @@ namespace CLS.Sender.Classes
                     // Verification
                     if (response.IsSuccessStatusCode)
                     {
-                        try
+                        var jsonResult = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result).ToString();
+                        var model = JsonConvert.DeserializeObject<PublishingSystem>(jsonResult, new JsonSerializerSettings
                         {
-                            var jsonResult = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result).ToString();
-                            var model = JsonConvert.DeserializeObject<PublishingSystem>(jsonResult, new JsonSerializerSettings
-                            {
-                                NullValueHandling = NullValueHandling.Ignore
-                            });
-                            return model;
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
+                            NullValueHandling = NullValueHandling.Ignore
+                        });
+                        return model;
                     }
                 }
 
@@ -292,7 +282,8 @@ namespace CLS.Sender.Classes
                 {
                     pSystem = uow.Repository<PublishingSystem>().Put(new PublishingSystem
                     {
-                        EnvironmentType = environmentTypeObj, PublishingSystemType = systemTypeObj,
+                        EnvironmentType = environmentTypeObj,
+                        PublishingSystemType = systemTypeObj,
                         Name = publishingSystemName
                     });
                     TryCommit(uow);
@@ -303,60 +294,41 @@ namespace CLS.Sender.Classes
             }
         }
 
-        public static async Task<Severity> GetSeverity(
-            string severityTypeCode)
+        // ==========================================
+        // Methods for logging directly to a database
+        // ==========================================
+
+        /// <summary>
+        /// Logs a message via the web service specified in App_Data\Connections.config.
+        /// </summary>
+        /// <param name="severityCode">The severity code of the log message. (Debug = D, Info = I, Warn = W, Error = E or Fatal = F).</param>
+        /// <param name="exception">Optional: An exception object.</param>
+        /// <param name="info">Optional: Any information to store for this record.</param>
+        /// <returns>Text result, empty string if failure.</returns>
+        private string LogToDatabase(string severityCode, Exception exception = null, string info = null)
         {
-            var useWebservice = bool.Parse(ConfigurationManager.AppSettings["UseWebservice"]);
+            var uow = new UnitOfWork(new DBEntities());
 
-            if (useWebservice)
+            var model = new Log
             {
-                var oAuthResponse = GetAccessToken().Result;
+                Exception = exception?.GetExceptionMessages(),
+                StackTrace = exception?.StackTrace,
+                Message = info,
+                PublishingSystem = _publishingSystem,
+                Timestamp = DateTime.Now,
+                SeverityId = StaticData.Severities.First(x => x.Code == severityCode).Id
+            };
 
-                // HTTP GET
-                using (var client = new HttpClient())
-                {
-                    // Setting Authorization
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", oAuthResponse.access_token);
+            uow.Repository<Log>().Put(model);
 
-                    // Setting Base address
-                    client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
-
-                    // Setting content type
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    // Initialization
-
-                    var requestString = $"CLS/Severity?severityTypeCode={severityTypeCode}";
-
-                    // HTTP GET
-                    var response = await client.GetAsync(requestString).ConfigureAwait(false);
-
-                    // Verification
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonResult = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result).ToString();
-                        var model = JsonConvert.DeserializeObject<Severity>(jsonResult, new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore
-                        });
-                        return model;
-                    }
-                }
-
-                return null;
-            }
-            else
-            {
-                var uow = new UnitOfWork(new DBEntities());
-
-                // check if publishing system exists in database
-                var severity = uow.Repository<Severity>().FirstOrDefault(x => x.Code == severityTypeCode);
-
-                // return the publishing system
-                return severity;
-            }
+            return TryCommit(uow) ? "Successfully logged message." : string.Empty;
         }
-
+        
+        /// <summary>
+        /// Commit the unit of work changes to the database.
+        /// </summary>
+        /// <param name="uow">The unit of work context.</param>
+        /// <returns>True if success, false if failure.</returns>
         private static bool TryCommit(IUnitOfWork uow)
         {
             try
@@ -364,7 +336,7 @@ namespace CLS.Sender.Classes
                 uow.Commit();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }

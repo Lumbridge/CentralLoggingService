@@ -1,12 +1,9 @@
 ﻿using CLS.Core.Data;
 using CLS.Infrastructure.Interfaces;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using CLS.Infrastructure.Data;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace CLS.Api.Controllers
 {

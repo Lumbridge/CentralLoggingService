@@ -26,7 +26,7 @@ namespace CLS.UserWeb.Controllers
         public BaseController(IUnitOfWork uow)
         {
             _uow = uow;
-            _ls = new LogSender("CLS.Web", StaticData.EnvironmentType.DEV, StaticData.SystemType.Website);
+            _ls = new LogSender(StaticData.EnvironmentType.DEV, StaticData.SystemType.Website);
         }
 
         // renders a partial view to a html string

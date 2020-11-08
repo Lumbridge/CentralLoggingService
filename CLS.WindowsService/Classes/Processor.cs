@@ -72,7 +72,7 @@ namespace CLS.WindowsService.Classes
                         }
                         catch (Exception ex)
                         {
-                            new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV,
+                            new LogSender(StaticData.EnvironmentType.DEV,
                                 StaticData.SystemType.WindowsService).Log(StaticData.SeverityType.Error, ex);
                         }
 
@@ -164,7 +164,7 @@ namespace CLS.WindowsService.Classes
                         catch (Exception ex)
                         {
                             ConsoleHelper.LogMessageToConsole(exception: ex);
-                            new LogSender("CLS.WindowsService", StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).Log(StaticData.SeverityType.Error, ex);
+                            new LogSender(StaticData.EnvironmentType.DEV, StaticData.SystemType.WindowsService).Log(StaticData.SeverityType.Error, ex);
                         }
 
                         // 8. Send an alert to the subscriber for this trigger group

@@ -1,5 +1,4 @@
-﻿using CLS.Core.Data;
-using CLS.Core.StaticData;
+﻿using CLS.Core.StaticData;
 using CLS.Infrastructure.Helpers;
 using CLS.Sender.Classes;
 using System;
@@ -11,7 +10,7 @@ namespace CLS.SenderConsole
     {
         static void Main(string[] args)
         {
-            var ls = new LogSender("CLS.SenderConsole", StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication);
+            var ls = new LogSender(StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication);
 
             var logGeneratorThread = new Thread(RandomLogGenerator);
             logGeneratorThread.Start(new { ls });

@@ -22,7 +22,7 @@ namespace CLS.Web.Controllers
         public BaseController(IUnitOfWork uow)
         {
             _uow = uow;
-            _ls = new LogSender("CLS.Web", StaticData.EnvironmentType.DEV, StaticData.SystemType.Website);
+            _ls = new LogSender(StaticData.EnvironmentType.DEV, StaticData.SystemType.Website);
         }
 
         public ActionResult Logout()

@@ -39,43 +39,19 @@ namespace CLS.Web.Controllers
                         PositionInGroup = i
                     });
             }
-
-            if (nodeList.Any(x => x.AlertTriggerNodeOperator?.Value == "PublishingSystemName"))
+            
+            _uow.Repository<Subscription>().Put(new Subscription
             {
-                var publishingSystemNodes = nodeList.Where(x => x.AlertTriggerNodeOperator?.Value == "PublishingSystemName").ToList();
-                foreach (var publishingSystemNode in publishingSystemNodes)
-                {
-                    var nameValueNode = nodeList[nodeList.IndexOf(publishingSystemNode) + 2];
-                    _uow.Repository<Subscription>().Put(new Subscription
-                    {
-                        UserId = subscriberId,
-                        AlertTriggerGroup = new AlertTriggerGroup
-                        {
-                            UserId = subscriberId,
-                            AlertTriggerNodes = nodeList
-                        },
-                        AlertTypeId = alertTypeId,
-                        IsActive = true,
-                        PublishingSystemId = _uow.Repository<PublishingSystem>()
-                            .First(x => x.Name == nameValueNode.DynamicNodeValue).Id
-                    });
-                }
-            }
-            else
-            {
-                _uow.Repository<Subscription>().Put(new Subscription
+                UserId = subscriberId,
+                AlertTriggerGroup = new AlertTriggerGroup
                 {
                     UserId = subscriberId,
-                    AlertTriggerGroup = new AlertTriggerGroup
-                    {
-                        UserId = subscriberId,
-                        AlertTriggerNodes = nodeList
-                    },
-                    AlertTypeId = alertTypeId,
-                    IsActive = true
-                });
-            }
-
+                    AlertTriggerNodes = nodeList
+                },
+                AlertTypeId = alertTypeId,
+                IsActive = true
+            });
+            
             try
             {
                 _uow.Commit();
