@@ -10,6 +10,12 @@ namespace CLS.SenderConsole
     {
         static void Main(string[] args)
         {
+            ConsoleHelper.LogMessageToConsole("Started Log Sender.\n");
+
+            var delayStartTimeSeconds = 20;
+            ConsoleHelper.LogColouredMessageToConsole(ConsoleColor.Magenta, $"Delaying the sending of logs by {delayStartTimeSeconds * 1000}ms ({delayStartTimeSeconds} seconds)\n");
+            Thread.Sleep(delayStartTimeSeconds * 1000);
+
             var ls = new LogSender(StaticData.EnvironmentType.DEV, StaticData.SystemType.ConsoleApplication);
 
             var logGeneratorThread = new Thread(RandomLogGenerator);

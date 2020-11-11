@@ -105,12 +105,22 @@ namespace CLS.Api.Controllers
                     x.PublishingSystemTypeId == systemTypeObj.Id);
             }
 
-            // return the publishing system
-            return JsonConvert.SerializeObject(pSystem,
+            var publishingSystem = new PublishingSystem
+            {
+                Id = pSystem.Id,
+                EnvironmentTypeId = pSystem.EnvironmentTypeId,
+                PublishingSystemTypeId = pSystem.PublishingSystemTypeId,
+                Name = pSystem.Name
+            };
+
+            var result = JsonConvert.SerializeObject(publishingSystem,
                 new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
+
+            // return the publishing system
+            return result;
         }
     }
 }

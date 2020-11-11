@@ -21,6 +21,7 @@ namespace CLS.Core.Data
             this.AlertTriggerGroups = new HashSet<AlertTriggerGroup>();
             this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
             this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
+            this.DashboardMetadatas = new HashSet<DashboardMetadata>();
             this.Logs = new HashSet<Log>();
             this.PublishingSystems = new HashSet<PublishingSystem>();
             this.Subscriptions = new HashSet<Subscription>();
@@ -48,6 +49,8 @@ namespace CLS.Core.Data
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DashboardMetadata> DashboardMetadatas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Log> Logs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

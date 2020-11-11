@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace CLS.UserWeb.Controllers
 {
+    [Authorize]
     public class LogsController : BaseController
     {
         public LogsController(IUnitOfWork uow) : base(uow)
@@ -23,17 +24,23 @@ namespace CLS.UserWeb.Controllers
                 logLevel = "All";
             }
             ViewData["logLevel"] = logLevel;
-            var logs = new List<Log>();
-            logs = logLevel == "All"
-                ? _uow.Repository<Log>().OrderByDescending(x => x.Timestamp).ToList()
-                : _uow.Repository<Log>().Where(x => string.Equals(x.Severity.Name, logLevel, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Timestamp).ToList();
+            var logs = logLevel == "All"
+                ? _uow.Repository<Log>().Where(x => CurrentUser(User).Id == x.UserId)
+                    .OrderByDescending(x => x.Timestamp).ToList()
+                : _uow.Repository<Log>()
+                    .Where(x => CurrentUser(User).Id == x.UserId && string.Equals(x.Severity.Name, logLevel,
+                                    StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Timestamp)
+                    .ToList();
 
             if (publishingSystemId != 0)
             {
-                var publishingSystemName = _uow.Repository<PublishingSystem>().Get(publishingSystemId).Name;
-                ViewData["publishingSystemName"] = publishingSystemName;
-                logs = logs.Where(x => string.Equals(x.PublishingSystem.Name, publishingSystemName,
-                    StringComparison.InvariantCultureIgnoreCase)).ToList();
+                var publishingSystem = _uow.Repository<PublishingSystem>().FirstOrDefault(x=>x.Id == publishingSystemId && CurrentUser(User).Id == x.UserId);
+                if (publishingSystem != null)
+                {
+                    ViewData["publishingSystemName"] = publishingSystem.Name;
+                    logs = logs.Where(x => string.Equals(x.PublishingSystem.Name, publishingSystem.Name,
+                        StringComparison.InvariantCultureIgnoreCase)).ToList();
+                }
             }
 
             if (environmentTypeId != 0)

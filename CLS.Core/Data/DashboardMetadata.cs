@@ -15,9 +15,12 @@ namespace CLS.Core.Data
     public partial class DashboardMetadata
     {
         public int Id { get; set; }
+        public string UserId { get; set; }
         public string MetadataItemName { get; set; }
         public string MetadataItemValue { get; set; }
         public string MetadataItemDotNetType { get; set; }
         public System.DateTime TimeAdded { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

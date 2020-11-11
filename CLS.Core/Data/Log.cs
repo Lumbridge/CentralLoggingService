@@ -28,6 +28,7 @@ namespace CLS.Core.Data
         public string Message { get; set; }
         public string Exception { get; set; }
         public string StackTrace { get; set; }
+        public bool IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertHistory> AlertHistories { get; set; }

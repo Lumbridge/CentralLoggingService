@@ -2,8 +2,11 @@
 using CLS.Infrastructure.Interfaces;
 using CLS.Sender.Classes;
 using System.IO;
+using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using CLS.Core.Data;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -28,6 +31,8 @@ namespace CLS.UserWeb.Controllers
             _uow = uow;
             _ls = new LogSender(StaticData.EnvironmentType.DEV, StaticData.SystemType.Website);
         }
+
+        public AspNetUser CurrentUser(IPrincipal user) => _uow.Repository<AspNetUser>().FirstOrDefault(x => x.UserName == user.Identity.Name);
 
         // renders a partial view to a html string
         protected string RenderPartialViewToString(string viewName, object model)

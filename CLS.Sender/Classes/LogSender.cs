@@ -35,9 +35,12 @@ namespace CLS.Sender.Classes
         }
         private static PublishingSystem _publishingSystem { get; set; }
 
-        // ============
-        // Constructors
-        // ============
+        public static bool UseWebService = bool.Parse(ConfigurationManager.AppSettings["UseWebservice"]);
+        public static string Endpoint => ConfigurationManager.AppSettings["WebserviceEndpoint"];
+
+        // ===========
+        // Constructor
+        // ===========
 
         /// <summary>
         /// LogSender constructor.
@@ -65,36 +68,35 @@ namespace CLS.Sender.Classes
         /// <returns>Text result, empty string if failure.</returns>
         public string Log(StaticData.SeverityType severity, Exception exception = null, string info = null)
         {
-            var useWebservice = bool.Parse(ConfigurationManager.AppSettings["UseWebservice"]);
             switch (severity)
             {
                 case StaticData.SeverityType.Debug:
                 {
-                    return useWebservice 
+                    return UseWebService
                         ? LogToWebService("D", exception, info).Result
                         : LogToDatabase("D", exception, info);
                 }
                 case StaticData.SeverityType.Info:
                 {
-                    return useWebservice
+                    return UseWebService
                         ? LogToWebService("I", exception, info).Result
                         : LogToDatabase("I", exception, info);
                     }
                 case StaticData.SeverityType.Warn:
                 {
-                    return useWebservice
+                    return UseWebService
                         ? LogToWebService("W", exception, info).Result
                         : LogToDatabase("W", exception, info);
                     }
                 case StaticData.SeverityType.Error:
                 {
-                    return useWebservice
+                    return UseWebService
                         ? LogToWebService("E", exception, info).Result
                         : LogToDatabase("E", exception, info);
                     }
                 case StaticData.SeverityType.Fatal:
                 {
-                    return useWebservice
+                    return UseWebService
                         ? LogToWebService("F", exception, info).Result
                         : LogToDatabase("F", exception, info);
                     }
@@ -139,7 +141,7 @@ namespace CLS.Sender.Classes
             using (var client = new HttpClient())
             {
                 // Setting Base address
-                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
+                client.BaseAddress = new Uri(Endpoint);
 
                 // Setting content type
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -193,7 +195,7 @@ namespace CLS.Sender.Classes
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorization);
 
                 // Setting Base address
-                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
+                client.BaseAddress = new Uri(Endpoint);
 
                 // Setting content type
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -223,9 +225,7 @@ namespace CLS.Sender.Classes
             StaticData.EnvironmentType environmentType,
             StaticData.SystemType systemType)
         {
-            var useWebservice = bool.Parse(ConfigurationManager.AppSettings["UseWebservice"]);
-
-            if (useWebservice)
+            if (UseWebService)
             {
                 // HTTP GET
                 using (var client = new HttpClient())
@@ -234,7 +234,7 @@ namespace CLS.Sender.Classes
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", OAuthResponse.access_token);
 
                     // Setting Base address
-                    client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebserviceEndpoint"]);
+                    client.BaseAddress = new Uri(Endpoint);
 
                     // Setting content type
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

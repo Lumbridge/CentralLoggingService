@@ -1,12 +1,11 @@
-﻿using System;
+﻿using CLS.Core.Data;
+using CLS.Infrastructure.Interfaces;
+using CLS.UserWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using CLS.Core.Data;
-using CLS.Infrastructure.Interfaces;
-using CLS.UserWeb.Models;
 
 namespace CLS.UserWeb.Controllers
 {
@@ -21,9 +20,9 @@ namespace CLS.UserWeb.Controllers
         {
             var model = new DashboardModel
             {
-                PublishingSystemCount = _uow.Repository<PublishingSystem>().Count(),
-                AlertCount = _uow.Repository<Subscription>().Count(),
-                AlertHistoryCount = _uow.Repository<AlertHistory>().Count(),
+                PublishingSystemCount = _uow.Repository<PublishingSystem>().Count(x => CurrentUser(User).Id == x.UserId),
+                AlertCount = _uow.Repository<Subscription>().Count(x => CurrentUser(User).Id == x.UserId),
+                AlertHistoryCount = _uow.Repository<AlertHistory>().Count(x => CurrentUser(User).Id == x.UserId),
                 MetaData = GetDashboardMetadata()
             };
             SetChartData();
@@ -42,7 +41,7 @@ namespace CLS.UserWeb.Controllers
             ViewData["chartLabels"] = System.Web.Helpers.Json.Encode(labels.ToArray());
 
             day = DateTime.Today.AddDays(-6);
-            var messages = _uow.Repository<Log>().Where(x => x.Timestamp.Date >= day.Date).ToList();
+            var messages = _uow.Repository<Log>().Where(x => x.Timestamp.Date >= day.Date && CurrentUser(User).Id == x.UserId).ToList();
             var values = new List<int>();
             for (var i = 0; i < 7; i++)
             {
@@ -56,7 +55,7 @@ namespace CLS.UserWeb.Controllers
         {
             int minRefreshSeconds = 15;
             var metadata = new List<DashboardMetadata>();
-            var logRepo = _uow.Repository<Log>();
+            var logRepo = _uow.Repository<Log>().Where(x=>CurrentUser(User).Id == x.UserId);
             // ==============
             // message counts
             // ==============
@@ -127,7 +126,7 @@ namespace CLS.UserWeb.Controllers
             var metaRepo = _uow.Repository<DashboardMetadata>();
 
             // check if this metadata exists in the database
-            var metadata = metaRepo.FirstOrDefault(x => x.MetadataItemName == name);
+            var metadata = metaRepo.FirstOrDefault(x => x.MetadataItemName == name && CurrentUser(User).Id == x.UserId);
 
             // if the metadata exists then update it's value
             if (metadata != null)
@@ -144,7 +143,8 @@ namespace CLS.UserWeb.Controllers
                 MetadataItemName = name,
                 MetadataItemValue = value.ToString(),
                 MetadataItemDotNetType = value.GetType().ToString(),
-                TimeAdded = DateTime.Now
+                TimeAdded = DateTime.Now,
+                UserId = CurrentUser(User).Id
             });
 
             _uow.Commit();
@@ -154,7 +154,7 @@ namespace CLS.UserWeb.Controllers
 
         public DashboardMetadata GetMetadata(string name)
         {
-            return _uow.Repository<DashboardMetadata>().FirstOrDefault(x => x.MetadataItemName == name);
+            return _uow.Repository<DashboardMetadata>().FirstOrDefault(x => x.MetadataItemName == name && CurrentUser(User).Id == x.UserId);
         }
     }
 }

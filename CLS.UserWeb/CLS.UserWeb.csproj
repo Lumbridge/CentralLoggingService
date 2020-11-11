@@ -220,7 +220,6 @@
     <Content Include="Scripts\Application\Logs.js" />
     <Content Include="Scripts\Application\PublishingSystems.js" />
     <Content Include="Scripts\Application\Register.js" />
-    <Content Include="App_Data\Connections.config" />
     <Content Include="Scripts\Bootstrap\bootstrap.bundle.min.js.map" />
     <Content Include="Content\Bootstrap\bootstrap.min.css.map" />
     <Content Include="Content\webfonts\fa-brands-400.eot" />
@@ -297,6 +296,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="App_Data\CLSSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Connections.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Views\PublishingSystems\Index.cshtml" />
     <Content Include="Views\Shared\_PublishingSystemsTable.cshtml" />

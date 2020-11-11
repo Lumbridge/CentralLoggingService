@@ -25,6 +25,7 @@ namespace CLS.Core.Data
         public int EnvironmentTypeId { get; set; }
         public int PublishingSystemTypeId { get; set; }
         public string Name { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual EnvironmentType EnvironmentType { get; set; }

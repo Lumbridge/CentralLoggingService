@@ -111,6 +111,22 @@
                 false);
         });
 
+    $(document).on("change",
+        ".toggleActiveCheckbox",
+        function(event) {
+            var $target = $(event.target);
+            var subscriptionId = $target.data("id");
+            AjaxGet("~/Alerts/ToggleAlertActive?subscriptionId=" + subscriptionId,
+                function (data) {
+                    if (data.success) {
+                        $("#SubscriptionTableContainer").html(data.view);
+                    } else {
+                        alert("error");
+                    }
+                },
+                false);
+        });
+
     function UpdateExpressionPreview() {
         var expression = "";
         $(".node").each(function (index) {

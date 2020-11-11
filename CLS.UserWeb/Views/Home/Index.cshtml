@@ -96,6 +96,20 @@
         <hr>
 
         <div class="card-deck">
+            <!-- publishing systems card -->
+            <a href="@Url.Action("Index", "PublishingSystems")" class="card text-white bg-primary mb-3 text-decoration-none">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase">Publishing Systems</h6>
+                    <div class="d-inline mr-5">
+                        <i class="fab fa-connectdevelop fa-4x"></i>
+                    </div>
+                    <h1 class="card-text display-4 d-inline">@Model.PublishingSystemCount</h1>
+                    <br />
+                    <text class="text-center">
+                        @Model.PublishingSystemCount Publishing Systems Registered
+                    </text>
+                </div>
+            </a>
             <!-- alerts card text-white-->
             <a href="@Url.Action("Index", "Alerts")" class="card text-white bg-primary mb-3 text-decoration-none">
                 <div class="card-body">
@@ -104,7 +118,7 @@
                         <i class="fas fa-bell fa-4x"></i>
                     </div>
                     <h1 class="card-text display-4 d-inline">@Model.AlertCount</h1>
-                    <br />
+                    <br/>
                     <text class="text-center">
                         @Model.AlertCount Alerts Registered
                     </text>
@@ -118,7 +132,7 @@
                         <i class="fas fa-history fa-4x"></i>
                     </div>
                     <h1 class="card-text display-4 d-inline">@Model.AlertHistoryCount</h1>
-                    <br />
+                    <br/>
                     <text class="text-center">
                         @Model.AlertHistoryCount Alerts Raised
                     </text>

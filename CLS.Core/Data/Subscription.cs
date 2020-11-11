@@ -19,6 +19,8 @@ namespace CLS.Core.Data
         public int AlertTypeId { get; set; }
         public string UserId { get; set; }
         public bool IsActive { get; set; }
+        public System.DateTime DateTimeEnabled { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }
         public virtual AlertType AlertType { get; set; }

@@ -13,7 +13,7 @@
           <Property Name="AlertHistoryGroupId" Type="int" Nullable="false" />
           <Property Name="LogId" Type="int" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="SiblingCount" Type="int" Nullable="false" />
         </EntityType>
@@ -30,7 +30,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AlertTriggerNodeOperatorId" Type="int" />
-          <Property Name="AlertTriggerGroupId" Type="int" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="int" />
           <Property Name="DynamicNodeValue" Type="varchar" MaxLength="255" />
           <Property Name="DynamicNodeDotNetDataType" Type="varchar" MaxLength="255" />
           <Property Name="PositionInGroup" Type="int" Nullable="false" />
@@ -116,6 +116,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="MetadataItemName" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="MetadataItemValue" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="MetadataItemDotNetType" Type="varchar" MaxLength="255" Nullable="false" />
@@ -141,6 +142,7 @@
           <Property Name="Message" Type="varchar" MaxLength="4000" />
           <Property Name="Exception" Type="varchar" MaxLength="4000" />
           <Property Name="StackTrace" Type="varchar" MaxLength="4000" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PublishingSystem">
           <Key>
@@ -151,6 +153,7 @@
           <Property Name="EnvironmentTypeId" Type="int" Nullable="false" />
           <Property Name="PublishingSystemTypeId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PublishingSystemType">
           <Key>
@@ -177,9 +180,11 @@
           <Property Name="AlertTypeId" Type="int" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DateTimeEnabled" Type="datetime" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1" />
           <End Role="AlertHistory" Type="Self.AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -227,7 +232,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1">
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="AlertTriggerNode" Type="Self.AlertTriggerNode" Multiplicity="*" />
@@ -261,6 +266,18 @@
             </Principal>
             <Dependent Role="AlertTriggerNodeOperator">
               <PropertyRef Name="AlertTriggerNodeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DashboardMetadata_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="DashboardMetadata" Type="Self.DashboardMetadata" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DashboardMetadata">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -345,9 +362,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_AlertTriggerGroup">
-          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="1" />
           <End Role="Subscription" Type="Self.Subscription" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -477,6 +492,10 @@
             <End Role="AlertTriggerNodeType" EntitySet="AlertTriggerNodeType" />
             <End Role="AlertTriggerNodeOperator" EntitySet="AlertTriggerNodeOperator" />
           </AssociationSet>
+          <AssociationSet Name="FK_DashboardMetadata_AspNetUsers" Association="Self.FK_DashboardMetadata_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="DashboardMetadata" EntitySet="DashboardMetadata" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -596,6 +615,10 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
           </AssociationSet>
+          <AssociationSet Name="FK_DashboardMetadata_AspNetUsers" Association="CLSDbModel.FK_DashboardMetadata_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="DashboardMetadata" EntitySet="DashboardMetadatas" />
+          </AssociationSet>
           <AssociationSet Name="FK_Log_CLSUser" Association="CLSDbModel.FK_Log_CLSUser">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Log" EntitySet="Logs" />
@@ -637,7 +660,7 @@
           <Property Name="AlertHistoryGroupId" Type="Int32" Nullable="false" />
           <Property Name="LogId" Type="Int32" Nullable="false" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="SiblingCount" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertHistory" ToRole="AlertTriggerGroup" />
@@ -661,7 +684,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AlertTriggerNodeOperatorId" Type="Int32" />
-          <Property Name="AlertTriggerGroupId" Type="Int32" Nullable="false" />
+          <Property Name="AlertTriggerGroupId" Type="Int32" />
           <Property Name="DynamicNodeValue" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="DynamicNodeDotNetDataType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="PositionInGroup" Type="Int32" Nullable="false" />
@@ -746,6 +769,7 @@
           <NavigationProperty Name="AlertTriggerGroups" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="AspNetUser" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="CLSDbModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="CLSDbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="DashboardMetadatas" Relationship="CLSDbModel.FK_DashboardMetadata_AspNetUsers" FromRole="AspNetUser" ToRole="DashboardMetadata" />
           <NavigationProperty Name="Logs" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="AspNetUser" ToRole="Log" />
           <NavigationProperty Name="PublishingSystems" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="AspNetUser" ToRole="PublishingSystem" />
           <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_User" FromRole="AspNetUser" ToRole="Subscription" />
@@ -756,10 +780,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="MetadataItemName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="MetadataItemValue" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="MetadataItemDotNetType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="TimeAdded" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_DashboardMetadata_AspNetUsers" FromRole="DashboardMetadata" ToRole="AspNetUser" />
         </EntityType>
         <EntityType Name="EnvironmentType">
           <Key>
@@ -782,6 +808,7 @@
           <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="Exception" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="StackTrace" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="Log" ToRole="AlertHistory" />
           <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="Log" ToRole="AspNetUser" />
           <NavigationProperty Name="Severity" Relationship="CLSDbModel.Log_fk0" FromRole="Log" ToRole="Severity" />
@@ -796,6 +823,7 @@
           <Property Name="EnvironmentTypeId" Type="Int32" Nullable="false" />
           <Property Name="PublishingSystemTypeId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="PublishingSystem" ToRole="AspNetUser" />
           <NavigationProperty Name="EnvironmentType" Relationship="CLSDbModel.System_fk0" FromRole="PublishingSystem" ToRole="EnvironmentType" />
           <NavigationProperty Name="Logs" Relationship="CLSDbModel.Log_fk1" FromRole="PublishingSystem" ToRole="Log" />
@@ -828,12 +856,14 @@
           <Property Name="AlertTypeId" Type="Int32" Nullable="false" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateTimeEnabled" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="Subscription" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AlertType" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="Subscription" ToRole="AlertType" />
           <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_Subscription_User" FromRole="Subscription" ToRole="AspNetUser" />
         </EntityType>
         <Association Name="FK_AlertHistory_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1" />
           <End Type="CLSDbModel.AlertHistory" Role="AlertHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -881,7 +911,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AlertTriggerNode_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1">
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="CLSDbModel.AlertTriggerNode" Role="AlertTriggerNode" Multiplicity="*" />
@@ -895,9 +925,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Subscription_AlertTriggerGroup">
-          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="1" />
           <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AlertTriggerGroup">
@@ -968,6 +996,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DashboardMetadata_AspNetUsers">
+          <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="CLSDbModel.DashboardMetadata" Role="DashboardMetadata" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DashboardMetadata">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1179,6 +1219,7 @@
                 <ScalarProperty Name="MetadataItemDotNetType" ColumnName="MetadataItemDotNetType" />
                 <ScalarProperty Name="MetadataItemValue" ColumnName="MetadataItemValue" />
                 <ScalarProperty Name="MetadataItemName" ColumnName="MetadataItemName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1195,6 +1236,7 @@
           <EntitySetMapping Name="Logs">
             <EntityTypeMapping TypeName="CLSDbModel.Log">
               <MappingFragment StoreEntitySet="Log">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
                 <ScalarProperty Name="Exception" ColumnName="Exception" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
@@ -1209,6 +1251,7 @@
           <EntitySetMapping Name="PublishingSystems">
             <EntityTypeMapping TypeName="CLSDbModel.PublishingSystem">
               <MappingFragment StoreEntitySet="PublishingSystem">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PublishingSystemTypeId" ColumnName="PublishingSystemTypeId" />
                 <ScalarProperty Name="EnvironmentTypeId" ColumnName="EnvironmentTypeId" />
@@ -1238,6 +1281,8 @@
           <EntitySetMapping Name="Subscriptions">
             <EntityTypeMapping TypeName="CLSDbModel.Subscription">
               <MappingFragment StoreEntitySet="Subscription">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DateTimeEnabled" ColumnName="DateTimeEnabled" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="AlertTypeId" ColumnName="AlertTypeId" />

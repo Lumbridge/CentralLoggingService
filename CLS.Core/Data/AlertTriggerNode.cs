@@ -16,7 +16,7 @@ namespace CLS.Core.Data
     {
         public int Id { get; set; }
         public Nullable<int> AlertTriggerNodeOperatorId { get; set; }
-        public int AlertTriggerGroupId { get; set; }
+        public Nullable<int> AlertTriggerGroupId { get; set; }
         public string DynamicNodeValue { get; set; }
         public string DynamicNodeDotNetDataType { get; set; }
         public int PositionInGroup { get; set; }

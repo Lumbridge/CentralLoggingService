@@ -1,23 +1,26 @@
 ﻿
+@using System.Globalization
 @model List<CLS.Core.Data.Subscription>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered table-striped">
         <thead>
             <tr>
-                <th>Publishing System</th>
-                <th>Environment</th>
                 <th>Alert Trigger Expression</th>
+                <th>Active Since</th>
+                <th>Is Active</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
+                var activeSince = item.IsActive ? item.DateTimeEnabled.ToString(CultureInfo.InvariantCulture) : "Currently Inactive";
+                var checkedVal = item.IsActive ? "checked" : "";
                 <tr data-id=@item.Id>
-                    <td>@item.PublishingSystemName</td>
-                    <td>@item.PublishingSystemEnvironmentTypeName</td>
                     <td>@item.AlertTriggerGroup.ExpressionString</td>
+                    <td>@activeSince</td>
+                    <td><input class="toggleActiveCheckbox" data-id="@item.Id" type="checkbox" @checkedVal></td>
                     <td><button data-subscriptionId="@item.Id" type="button" class="btn btn-outline-danger deleteAlertButton"><i class="fas fa-trash"></i></button></td>
                 </tr>
             }
@@ -27,7 +30,7 @@
 <button id="newAlertButton" type="button" class="btn btn-secondary">+ New Alert</button>
 
 <script>
-    $(function() {
+    $(function () {
         $("table").DataTable();
     });
 </script>

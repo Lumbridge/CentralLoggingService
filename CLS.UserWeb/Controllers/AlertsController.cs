@@ -1,11 +1,10 @@
 ﻿using CLS.Core.Data;
+using CLS.Core.StaticData;
 using CLS.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using CLS.Core.StaticData;
-using Microsoft.AspNet.Identity;
 
 namespace CLS.UserWeb.Controllers
 {
@@ -16,10 +15,10 @@ namespace CLS.UserWeb.Controllers
         {
         }
 
-        // GET: Alerts
         public ActionResult Index()
         {
-            var model = _uow.Repository<Subscription>().ToList();
+            var model = _uow.Repository<Subscription>().Where(x => CurrentUser(User).Id == x.UserId && !x.IsDeleted)
+                .ToList();
             return View(model);
         }
 
@@ -32,7 +31,6 @@ namespace CLS.UserWeb.Controllers
             {
                 var node = nodes[i];
                 var staticOperator = operatorList.FirstOrDefault(x => x.DotNetProperty == node || x.Value == node);
-
                 nodeList.Add(staticOperator == null
                     ? new AlertTriggerNode { DynamicNodeValue = node, PositionInGroup = i }
                     : new AlertTriggerNode
@@ -43,8 +41,7 @@ namespace CLS.UserWeb.Controllers
                     });
             }
 
-            var userId = User.Identity.GetUserId();
-            
+            var userId = CurrentUser(User).Id;
             _uow.Repository<Subscription>().Put(new Subscription
             {
                 UserId = userId,
@@ -54,7 +51,8 @@ namespace CLS.UserWeb.Controllers
                     AlertTriggerNodes = nodeList
                 },
                 AlertTypeId = alertTypeId,
-                IsActive = true
+                IsActive = true,
+                DateTimeEnabled = DateTime.Now
             });
 
             try
@@ -71,16 +69,26 @@ namespace CLS.UserWeb.Controllers
                 new
                 {
                     success = true,
-                    view = RenderPartialViewToString("_SubscriptionTable", _uow.Repository<Subscription>().ToList())
+                    view = RenderPartialViewToString("_SubscriptionTable",
+                        _uow.Repository<Subscription>().Where(x => CurrentUser(User).Id == x.UserId && !x.IsDeleted).ToList())
                 }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DeleteAlert(int subscriptionId)
         {
-            var subscription = _uow.Repository<Subscription>().Get(subscriptionId);
-            var alertTriggerGroup = _uow.Repository<AlertTriggerGroup>().Get(subscription.AlertTriggerGroupId);
-            _uow.Repository<Subscription>().CascadingDelete(subscription);
-            _uow.Repository<AlertTriggerGroup>().CascadingDelete(alertTriggerGroup);
+            var subscription = _uow.Repository<Subscription>()
+                .FirstOrDefault(x => x.Id == subscriptionId && CurrentUser(User).Id == x.UserId && !x.IsDeleted);
+            if (subscription == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    view = RenderPartialViewToString("_SubscriptionTable",
+                        _uow.Repository<Subscription>().Where(x => CurrentUser(User).Id == x.UserId && !x.IsDeleted).ToList())
+                }, JsonRequestBehavior.AllowGet);
+            }
+            subscription.IsDeleted = true;
+            subscription.IsActive = false;
             try
             {
                 _uow.Commit();
@@ -94,8 +102,42 @@ namespace CLS.UserWeb.Controllers
             return Json(new
             {
                 success = true,
-                view = RenderPartialViewToString("_SubscriptionTable", _uow.Repository<Subscription>().ToList())
+                view = RenderPartialViewToString("_SubscriptionTable",
+                    _uow.Repository<Subscription>().Where(x => CurrentUser(User).Id == x.UserId && !x.IsDeleted).ToList())
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ToggleAlertActive(int subscriptionId)
+        {
+            var subscriptionRepo = _uow.Repository<Subscription>();
+            var subscription = subscriptionRepo
+                .FirstOrDefault(x => CurrentUser(User).Id == x.UserId && x.Id == subscriptionId);
+            if (subscription != null)
+            {
+                var isActive = subscription.IsActive;
+                subscription.IsActive = !isActive;
+                if(subscription.IsActive)
+                    subscription.DateTimeEnabled = DateTime.Now;
+                subscriptionRepo.Put(subscription);
+                try
+                {
+                    _uow.Commit();
+                    return Json(new
+                    {
+                        success = true,
+                        view = RenderPartialViewToString("_SubscriptionTable",
+                            _uow.Repository<Subscription>().Where(x => CurrentUser(User).Id == x.UserId && !x.IsDeleted)
+                                .ToList())
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    _ls.Log(StaticData.SeverityType.Error, ex);
+                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return Json(new {success = false}, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDynamicSelectList(string variableName)
@@ -132,7 +174,7 @@ namespace CLS.UserWeb.Controllers
         public JsonResult GetSubscriptionRow()
         {
             PopulateSelectListViewData();
-            return Json(new { success = true, view = RenderPartialViewToString("_SubscriptionRow", new Subscription()) },
+            return Json(new {success = true, view = RenderPartialViewToString("_SubscriptionRow", new Subscription())},
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -142,7 +184,8 @@ namespace CLS.UserWeb.Controllers
 
             if (id > 0)
             {
-                var model = _uow.Repository<Subscription>().Get(id);
+                var model = _uow.Repository<Subscription>()
+                    .FirstOrDefault(x => x.Id == id && CurrentUser(User).Id == x.UserId);
                 return PartialView("_CreateUpdateSubscription", model);
             }
 
