@@ -2,6 +2,7 @@
 using CLS.Infrastructure.Interfaces;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
@@ -87,17 +88,22 @@ namespace CLS.Api.Controllers
             // if the publishing system doesn't exist in the database then create it
             if (pSystem == null)
             {
-                var model = new PublishingSystem
+                var publishingSystemModel = new PublishingSystem
                 {
-                    EnvironmentType = environmentTypeObj,
-                    PublishingSystemType = systemTypeObj,
-                    Name = publishingSystemName,
-                    AspNetUser = user,
-                    UserId = user.Id
+                    EnvironmentTypeId = environmentTypeObj.Id,
+                    PublishingSystemTypeId = systemTypeObj.Id,
+                    Name = publishingSystemName
                 };
-                _uow.Repository<PublishingSystem>().Put(model);
-                model.EnvironmentTypeId = environmentTypeObj.Id;
-                model.PublishingSystemTypeId = systemTypeObj.Id;
+
+                var publishingSystemOwnerModel = new PublishingSystemOwner
+                {
+                    UserId = user.Id,
+                    PublishingSystem = publishingSystemModel
+                };
+
+                _uow.Repository<PublishingSystemOwner>().Put(publishingSystemOwnerModel);
+                //_uow.Repository<PublishingSystem>().Put(publishingSystemModel);
+
                 _uow.Commit();
 
                 pSystem = _uow.Repository<PublishingSystem>().FirstOrDefault(x =>

@@ -9,6 +9,7 @@
             <th>Environment Type</th>
             <th>Application Type</th>
             <th>Messages Logged</th>
+            <th>System Owners</th>
             <th></th>
         </tr>
         </thead>
@@ -20,13 +21,13 @@
                 <td>@item.EnvironmentType.Name</td>
                 <td>@item.PublishingSystemType.Name</td>
                 <td><a href="@Url.Action("Index", "Logs", new { publishingSystemId = item.Id, environmentTypeId = item.EnvironmentTypeId })">@item.Logs.Count</a></td>
+                <td><a href="@Url.Action("PublishingSystemOwners", "PublishingSystems", new { publishingSystemId = item.Id })">@item.PublishingSystemOwners.Count</a></td>
                 <td><button data-publishingSystemId="@item.Id" type="button" class="btn btn-outline-danger deletePublishingSystemButton"><i class="fas fa-trash"></i></button></td>
             </tr>
         }
         </tbody>
     </table>
 </div>
-<button id="newSubscriberButton" type="button" class="btn btn-secondary">+ New Subscriber</button>
 
 <script>
     $(function() {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(CLS.UserWeb.Startup))]
+[assembly: OwinStartupAttribute(typeof(CLS.Web.Startup))]
 
-namespace CLS.UserWeb
+namespace CLS.Web
 {
     public partial class Startup
     {

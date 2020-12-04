@@ -1,6 +1,5 @@
 ﻿using System;
 using CLS.Core.Models;
-using CLS.UserWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -10,8 +9,9 @@ using System.Web;
 using System.Web.Mvc;
 using CLS.Core.Data;
 using CLS.Infrastructure.Interfaces;
+using CLS.Web.Models;
 
-namespace CLS.UserWeb.Controllers
+namespace CLS.Web.Controllers
 {
     [Authorize]
     public class AccountController : BaseController

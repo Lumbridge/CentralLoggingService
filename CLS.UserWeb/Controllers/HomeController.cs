@@ -1,13 +1,13 @@
 ﻿using CLS.Core.Data;
 using CLS.Infrastructure.Interfaces;
-using CLS.UserWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using CLS.Web.Models;
 
-namespace CLS.UserWeb.Controllers
+namespace CLS.Web.Controllers
 {
     [Authorize]
     public class HomeController : BaseController
@@ -20,8 +20,8 @@ namespace CLS.UserWeb.Controllers
         {
             var model = new DashboardModel
             {
-                PublishingSystemCount = _uow.Repository<PublishingSystem>().Count(x => CurrentUser(User).Id == x.UserId),
-                AlertCount = _uow.Repository<Subscription>().Count(x => CurrentUser(User).Id == x.UserId),
+                PublishingSystemCount = _uow.Repository<PublishingSystemOwner>().Count(x => x.UserId == CurrentUser(User).Id),
+                AlertCount = _uow.Repository<Subscription>().Count(x => CurrentUser(User).Id == x.UserId && !x.IsDeleted),
                 AlertHistoryCount = _uow.Repository<AlertHistory>().Count(x => CurrentUser(User).Id == x.UserId),
                 MetaData = GetDashboardMetadata()
             };
@@ -137,17 +137,26 @@ namespace CLS.UserWeb.Controllers
                 return metadata;
             }
 
-            // if the metadata doesn't exist then add it
-            metadata = metaRepo.Put(new DashboardMetadata
+            metadata = new DashboardMetadata
             {
                 MetadataItemName = name,
                 MetadataItemValue = value.ToString(),
                 MetadataItemDotNetType = value.GetType().ToString(),
                 TimeAdded = DateTime.Now,
                 UserId = CurrentUser(User).Id
-            });
+            };
 
-            _uow.Commit();
+            // if the metadata doesn't exist then add it
+            metaRepo.Put(metadata);
+
+            try
+            {
+                _uow.Commit();
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             return metadata;
         }

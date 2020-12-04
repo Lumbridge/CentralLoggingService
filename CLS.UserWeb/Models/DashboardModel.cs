@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CLS.UserWeb.Models
+namespace CLS.Web.Models
 {
     public class DashboardModel
     {

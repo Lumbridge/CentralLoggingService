@@ -3,7 +3,7 @@ using CLS.Core.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 
-namespace CLS.UserWeb.Models
+namespace CLS.Web.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

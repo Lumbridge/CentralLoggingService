@@ -12,26 +12,21 @@ namespace CLS.Core.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Subscription
+    public partial class PublishingSystemOwner
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Subscription()
+        public PublishingSystemOwner()
         {
-            this.AlertTriggerGroups = new HashSet<AlertTriggerGroup>();
+            this.PublishingSystems = new HashSet<PublishingSystem>();
         }
     
-        public int Id { get; set; }
-        public int AlertTriggerGroupId { get; set; }
-        public int AlertTypeId { get; set; }
+        public int PublishingSystemOwnersId { get; set; }
         public string UserId { get; set; }
-        public bool IsActive { get; set; }
-        public System.DateTime DateTimeEnabled { get; set; }
-        public bool IsDeleted { get; set; }
+        public Nullable<int> PublishingSystemId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AlertTriggerGroup> AlertTriggerGroups { get; set; }
-        public virtual AlertTriggerGroup AlertTriggerGroup { get; set; }
-        public virtual AlertType AlertType { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PublishingSystem> PublishingSystems { get; set; }
+        public virtual PublishingSystem PublishingSystem { get; set; }
     }
 }

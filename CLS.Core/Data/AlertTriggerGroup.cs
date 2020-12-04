@@ -24,9 +24,11 @@ namespace CLS.Core.Data
     
         public int Id { get; set; }
         public string UserId { get; set; }
+        public Nullable<int> SubscriptionId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertHistory> AlertHistories { get; set; }
+        public virtual Subscription Subscription { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertTriggerNode> AlertTriggerNodes { get; set; }

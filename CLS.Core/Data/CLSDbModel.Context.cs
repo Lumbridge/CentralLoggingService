@@ -39,6 +39,7 @@ namespace CLS.Core.Data
         public virtual DbSet<EnvironmentType> EnvironmentTypes { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
         public virtual DbSet<PublishingSystem> PublishingSystems { get; set; }
+        public virtual DbSet<PublishingSystemOwner> PublishingSystemOwners { get; set; }
         public virtual DbSet<PublishingSystemType> PublishingSystemTypes { get; set; }
         public virtual DbSet<Severity> Severities { get; set; }
         public virtual DbSet<Subscription> Subscriptions { get; set; }

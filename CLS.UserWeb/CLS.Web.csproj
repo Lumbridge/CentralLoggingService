@@ -12,8 +12,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CLS.UserWeb</RootNamespace>
-    <AssemblyName>CLS.UserWeb</AssemblyName>
+    <RootNamespace>CLS.Web</RootNamespace>
+    <AssemblyName>CLS.Web</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -206,6 +206,7 @@
     <Content Include="Content\DataTables\dataTables.bootstrap4.min.css" />
     <Content Include="Content\DataTables\jquery.dataTables.min.css" />
     <Content Include="Content\FontAwesome\all.min.css" />
+    <Content Include="Content\JQueryToast\jquery.toast.min.css" />
     <Content Include="Content\webfonts\fa-brands-400.svg" />
     <Content Include="Content\webfonts\fa-regular-400.svg" />
     <Content Include="Content\webfonts\fa-solid-900.svg" />
@@ -238,6 +239,7 @@
     <Content Include="Scripts\ChartJS\Chart.min.js" />
     <Content Include="Scripts\DataTables\dataTables.bootstrap4.min.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\JQueryToast\jquery.toast.min.js" />
     <Content Include="Scripts\JQueryValidate\additional-methods.min.js" />
     <Content Include="Scripts\JQueryValidate\jquery.validate.min.js" />
     <Content Include="Scripts\JQuery\jquery-3.5.1.min.js" />
@@ -306,6 +308,9 @@
     <Content Include="Views\PublishingSystems\Index.cshtml" />
     <Content Include="Views\Shared\_PublishingSystemsTable.cshtml" />
     <Content Include="Views\Shared\_UnauthorisedLayout.cshtml" />
+    <Content Include="Views\PublishingSystems\PublishingSystemOwners.cshtml" />
+    <Content Include="Views\Shared\_PublishingSystemOwnersTable.cshtml" />
+    <Content Include="Views\Shared\_CreateUpdatePublishingSystemOwner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLS.Core\CLS.Core.csproj">

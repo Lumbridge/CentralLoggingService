@@ -88,7 +88,7 @@
                         $("#SubscriptionTableContainer").html(data.view);
                         bootbox.hideAll();
                     } else {
-                        alert("error");
+                        DisplayError(data.message);
                     }
                 },
                 false);
@@ -105,7 +105,7 @@
                         $("#SubscriptionTableContainer").html(data.view);
                         $("tr[data-id=" + subscriptionId + "]").remove();
                     } else {
-                        alert("error");
+                        DisplayError(data.message);
                     }
                 },
                 false);
@@ -121,7 +121,7 @@
                     if (data.success) {
                         $("#SubscriptionTableContainer").html(data.view);
                     } else {
-                        alert("error");
+                        DisplayError(data.message);
                     }
                 },
                 false);

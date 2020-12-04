@@ -23,6 +23,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="SubscriptionId" Type="int" />
         </EntityType>
         <EntityType Name="AlertTriggerNode">
           <Key>
@@ -149,11 +150,19 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PublishingSystemOwnersId" Type="int" />
           <Property Name="EnvironmentTypeId" Type="int" Nullable="false" />
           <Property Name="PublishingSystemTypeId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PublishingSystemOwners">
+          <Key>
+            <PropertyRef Name="PublishingSystemOwnersId" />
+          </Key>
+          <Property Name="PublishingSystemOwnersId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PublishingSystemId" Type="int" />
         </EntityType>
         <EntityType Name="PublishingSystemType">
           <Key>
@@ -216,6 +225,18 @@
             </Principal>
             <Dependent Role="AlertHistory">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerGroup_Subscription">
+          <End Role="Subscription" Type="Self.Subscription" Multiplicity="0..1" />
+          <End Role="AlertTriggerGroup" Type="Self.AlertTriggerGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscription">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerGroup">
+              <PropertyRef Name="SubscriptionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -349,15 +370,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PublishingSystem_CLSUser">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+        <Association Name="FK_PublishingSystem_PublishingSystemOwners">
+          <End Role="PublishingSystemOwners" Type="Self.PublishingSystemOwners" Multiplicity="0..1" />
           <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystemOwners">
+              <PropertyRef Name="PublishingSystemOwnersId" />
+            </Principal>
+            <Dependent Role="PublishingSystem">
+              <PropertyRef Name="PublishingSystemOwnersId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PublishingSystemOwners_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="PublishingSystemOwners" Type="Self.PublishingSystemOwners" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="PublishingSystem">
+            <Dependent Role="PublishingSystemOwners">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PublishingSystemOwners_PublishingSystem1">
+          <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="0..1" />
+          <End Role="PublishingSystemOwners" Type="Self.PublishingSystemOwners" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PublishingSystemOwners">
+              <PropertyRef Name="PublishingSystemId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -461,6 +506,7 @@
           <EntitySet Name="EnvironmentType" EntityType="Self.EnvironmentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublishingSystem" EntityType="Self.PublishingSystem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PublishingSystemOwners" EntityType="Self.PublishingSystemOwners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublishingSystemType" EntityType="Self.PublishingSystemType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Severity" EntityType="Self.Severity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subscription" EntityType="Self.Subscription" Schema="dbo" store:Type="Tables" />
@@ -475,6 +521,10 @@
           <AssociationSet Name="FK_AlertHistory_User" Association="Self.FK_AlertHistory_User">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AlertHistory" EntitySet="AlertHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerGroup_Subscription" Association="Self.FK_AlertTriggerGroup_Subscription">
+            <End Role="Subscription" EntitySet="Subscription" />
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerGroup_User" Association="Self.FK_AlertTriggerGroup_User">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -516,9 +566,17 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
-          <AssociationSet Name="FK_PublishingSystem_CLSUser" Association="Self.FK_PublishingSystem_CLSUser">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          <AssociationSet Name="FK_PublishingSystem_PublishingSystemOwners" Association="Self.FK_PublishingSystem_PublishingSystemOwners">
+            <End Role="PublishingSystemOwners" EntitySet="PublishingSystemOwners" />
             <End Role="PublishingSystem" EntitySet="PublishingSystem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PublishingSystemOwners_AspNetUsers" Association="Self.FK_PublishingSystemOwners_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PublishingSystemOwners" EntitySet="PublishingSystemOwners" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PublishingSystemOwners_PublishingSystem1" Association="Self.FK_PublishingSystemOwners_PublishingSystem1">
+            <End Role="PublishingSystem" EntitySet="PublishingSystem" />
+            <End Role="PublishingSystemOwners" EntitySet="PublishingSystemOwners" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscription_AlertTriggerGroup" Association="Self.FK_Subscription_AlertTriggerGroup">
             <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroup" />
@@ -568,6 +626,7 @@
           <EntitySet Name="EnvironmentTypes" EntityType="CLSDbModel.EnvironmentType" />
           <EntitySet Name="Logs" EntityType="CLSDbModel.Log" />
           <EntitySet Name="PublishingSystems" EntityType="CLSDbModel.PublishingSystem" />
+          <EntitySet Name="PublishingSystemOwners" EntityType="CLSDbModel.PublishingSystemOwner" />
           <EntitySet Name="PublishingSystemTypes" EntityType="CLSDbModel.PublishingSystemType" />
           <EntitySet Name="Severities" EntityType="CLSDbModel.Severity" />
           <EntitySet Name="Subscriptions" EntityType="CLSDbModel.Subscription" />
@@ -582,6 +641,10 @@
           <AssociationSet Name="FK_AlertHistory_User" Association="CLSDbModel.FK_AlertHistory_User">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AlertHistory" EntitySet="AlertHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlertTriggerGroup_Subscription" Association="CLSDbModel.FK_AlertTriggerGroup_Subscription">
+            <End Role="Subscription" EntitySet="Subscriptions" />
+            <End Role="AlertTriggerGroup" EntitySet="AlertTriggerGroups" />
           </AssociationSet>
           <AssociationSet Name="FK_AlertTriggerGroup_User" Association="CLSDbModel.FK_AlertTriggerGroup_User">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -623,9 +686,9 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Log" EntitySet="Logs" />
           </AssociationSet>
-          <AssociationSet Name="FK_PublishingSystem_CLSUser" Association="CLSDbModel.FK_PublishingSystem_CLSUser">
+          <AssociationSet Name="FK_PublishingSystemOwners_AspNetUsers" Association="CLSDbModel.FK_PublishingSystemOwners_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
-            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+            <End Role="PublishingSystemOwner" EntitySet="PublishingSystemOwners" />
           </AssociationSet>
           <AssociationSet Name="FK_Subscription_User" Association="CLSDbModel.FK_Subscription_User">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -642,6 +705,14 @@
           <AssociationSet Name="Log_fk1" Association="CLSDbModel.Log_fk1">
             <End Role="PublishingSystem" EntitySet="PublishingSystems" />
             <End Role="Log" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PublishingSystem_PublishingSystemOwners" Association="CLSDbModel.FK_PublishingSystem_PublishingSystemOwners">
+            <End Role="PublishingSystemOwner" EntitySet="PublishingSystemOwners" />
+            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PublishingSystemOwners_PublishingSystem1" Association="CLSDbModel.FK_PublishingSystemOwners_PublishingSystem1">
+            <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+            <End Role="PublishingSystemOwner" EntitySet="PublishingSystemOwners" />
           </AssociationSet>
           <AssociationSet Name="System_fk1" Association="CLSDbModel.System_fk1">
             <End Role="PublishingSystemType" EntitySet="PublishingSystemTypes" />
@@ -673,7 +744,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="SubscriptionId" Type="Int32" />
           <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertHistory" />
+          <NavigationProperty Name="Subscription" Relationship="CLSDbModel.FK_AlertTriggerGroup_Subscription" FromRole="AlertTriggerGroup" ToRole="Subscription" />
           <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_AlertTriggerGroup_User" FromRole="AlertTriggerGroup" ToRole="AspNetUser" />
           <NavigationProperty Name="AlertTriggerNodes" Relationship="CLSDbModel.FK_AlertTriggerNode_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="AlertTriggerNode" />
           <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="AlertTriggerGroup" ToRole="Subscription" />
@@ -771,7 +844,7 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="CLSDbModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="DashboardMetadatas" Relationship="CLSDbModel.FK_DashboardMetadata_AspNetUsers" FromRole="AspNetUser" ToRole="DashboardMetadata" />
           <NavigationProperty Name="Logs" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="AspNetUser" ToRole="Log" />
-          <NavigationProperty Name="PublishingSystems" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="AspNetUser" ToRole="PublishingSystem" />
+          <NavigationProperty Name="PublishingSystemOwners" Relationship="CLSDbModel.FK_PublishingSystemOwners_AspNetUsers" FromRole="AspNetUser" ToRole="PublishingSystemOwner" />
           <NavigationProperty Name="Subscriptions" Relationship="CLSDbModel.FK_Subscription_User" FromRole="AspNetUser" ToRole="Subscription" />
           <NavigationProperty Name="AspNetRoles" Relationship="CLSDbModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
         </EntityType>
@@ -819,15 +892,27 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PublishingSystemOwnersId" Type="Int32" />
           <Property Name="EnvironmentTypeId" Type="Int32" Nullable="false" />
           <Property Name="PublishingSystemTypeId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_PublishingSystem_CLSUser" FromRole="PublishingSystem" ToRole="AspNetUser" />
           <NavigationProperty Name="EnvironmentType" Relationship="CLSDbModel.System_fk0" FromRole="PublishingSystem" ToRole="EnvironmentType" />
           <NavigationProperty Name="Logs" Relationship="CLSDbModel.Log_fk1" FromRole="PublishingSystem" ToRole="Log" />
+          <NavigationProperty Name="PublishingSystemOwner" Relationship="CLSDbModel.FK_PublishingSystem_PublishingSystemOwners" FromRole="PublishingSystem" ToRole="PublishingSystemOwner" />
+          <NavigationProperty Name="PublishingSystemOwners" Relationship="CLSDbModel.FK_PublishingSystemOwners_PublishingSystem1" FromRole="PublishingSystem" ToRole="PublishingSystemOwner" />
           <NavigationProperty Name="PublishingSystemType" Relationship="CLSDbModel.System_fk1" FromRole="PublishingSystem" ToRole="PublishingSystemType" />
+        </EntityType>
+        <EntityType Name="PublishingSystemOwner">
+          <Key>
+            <PropertyRef Name="PublishingSystemOwnersId" />
+          </Key>
+          <Property Name="PublishingSystemOwnersId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PublishingSystemId" Type="Int32" />
+          <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_PublishingSystemOwners_AspNetUsers" FromRole="PublishingSystemOwner" ToRole="AspNetUser" />
+          <NavigationProperty Name="PublishingSystems" Relationship="CLSDbModel.FK_PublishingSystem_PublishingSystemOwners" FromRole="PublishingSystemOwner" ToRole="PublishingSystem" />
+          <NavigationProperty Name="PublishingSystem" Relationship="CLSDbModel.FK_PublishingSystemOwners_PublishingSystem1" FromRole="PublishingSystemOwner" ToRole="PublishingSystem" />
         </EntityType>
         <EntityType Name="PublishingSystemType">
           <Key>
@@ -858,6 +943,7 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateTimeEnabled" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AlertTriggerGroups" Relationship="CLSDbModel.FK_AlertTriggerGroup_Subscription" FromRole="Subscription" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AlertTriggerGroup" Relationship="CLSDbModel.FK_Subscription_AlertTriggerGroup" FromRole="Subscription" ToRole="AlertTriggerGroup" />
           <NavigationProperty Name="AlertType" Relationship="CLSDbModel.Subscriber_System_fk1" FromRole="Subscription" ToRole="AlertType" />
           <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_Subscription_User" FromRole="Subscription" ToRole="AspNetUser" />
@@ -895,6 +981,18 @@
             </Principal>
             <Dependent Role="AlertHistory">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlertTriggerGroup_Subscription">
+          <End Type="CLSDbModel.Subscription" Role="Subscription" Multiplicity="0..1" />
+          <End Type="CLSDbModel.AlertTriggerGroup" Role="AlertTriggerGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscription">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertTriggerGroup">
+              <PropertyRef Name="SubscriptionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1024,14 +1122,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PublishingSystem_CLSUser">
+        <Association Name="FK_PublishingSystemOwners_AspNetUsers">
           <End Type="CLSDbModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="*" />
+          <End Type="CLSDbModel.PublishingSystemOwner" Role="PublishingSystemOwner" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="PublishingSystem">
+            <Dependent Role="PublishingSystemOwner">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -1084,6 +1182,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PublishingSystem_PublishingSystemOwners">
+          <End Type="CLSDbModel.PublishingSystemOwner" Role="PublishingSystemOwner" Multiplicity="0..1" />
+          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystemOwner">
+              <PropertyRef Name="PublishingSystemOwnersId" />
+            </Principal>
+            <Dependent Role="PublishingSystem">
+              <PropertyRef Name="PublishingSystemOwnersId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PublishingSystemOwners_PublishingSystem1">
+          <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="0..1" />
+          <End Type="CLSDbModel.PublishingSystemOwner" Role="PublishingSystemOwner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PublishingSystem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PublishingSystemOwner">
+              <PropertyRef Name="PublishingSystemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="System_fk1">
           <End Type="CLSDbModel.PublishingSystemType" Role="PublishingSystemType" Multiplicity="1" />
           <End Type="CLSDbModel.PublishingSystem" Role="PublishingSystem" Multiplicity="*" />
@@ -1122,6 +1244,7 @@
           <EntitySetMapping Name="AlertTriggerGroups">
             <EntityTypeMapping TypeName="CLSDbModel.AlertTriggerGroup">
               <MappingFragment StoreEntitySet="AlertTriggerGroup">
+                <ScalarProperty Name="SubscriptionId" ColumnName="SubscriptionId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -1255,8 +1378,17 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PublishingSystemTypeId" ColumnName="PublishingSystemTypeId" />
                 <ScalarProperty Name="EnvironmentTypeId" ColumnName="EnvironmentTypeId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PublishingSystemOwnersId" ColumnName="PublishingSystemOwnersId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PublishingSystemOwners">
+            <EntityTypeMapping TypeName="CLSDbModel.PublishingSystemOwner">
+              <MappingFragment StoreEntitySet="PublishingSystemOwners">
+                <ScalarProperty Name="PublishingSystemId" ColumnName="PublishingSystemId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PublishingSystemOwnersId" ColumnName="PublishingSystemOwnersId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

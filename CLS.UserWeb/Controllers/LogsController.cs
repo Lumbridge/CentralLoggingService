@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace CLS.UserWeb.Controllers
+namespace CLS.Web.Controllers
 {
     [Authorize]
     public class LogsController : BaseController
@@ -25,16 +25,16 @@ namespace CLS.UserWeb.Controllers
             }
             ViewData["logLevel"] = logLevel;
             var logs = logLevel == "All"
-                ? _uow.Repository<Log>().Where(x => CurrentUser(User).Id == x.UserId)
+                ? _uow.Repository<Log>().Where(x => x.PublishingSystem.UserOwnsSystem(CurrentUser(User).Id))
                     .OrderByDescending(x => x.Timestamp).ToList()
                 : _uow.Repository<Log>()
-                    .Where(x => CurrentUser(User).Id == x.UserId && string.Equals(x.Severity.Name, logLevel,
+                    .Where(x => x.PublishingSystem.UserOwnsSystem(CurrentUser(User).Id) && string.Equals(x.Severity.Name, logLevel,
                                     StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(x => x.Timestamp)
                     .ToList();
 
             if (publishingSystemId != 0)
             {
-                var publishingSystem = _uow.Repository<PublishingSystem>().FirstOrDefault(x=>x.Id == publishingSystemId && CurrentUser(User).Id == x.UserId);
+                var publishingSystem = _uow.Repository<PublishingSystem>().FirstOrDefault(x => x.Id == publishingSystemId && x.UserOwnsSystem(CurrentUser(User).Id));
                 if (publishingSystem != null)
                 {
                     ViewData["publishingSystemName"] = publishingSystem.Name;

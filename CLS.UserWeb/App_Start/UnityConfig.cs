@@ -4,7 +4,7 @@ using CLS.Infrastructure.Interfaces;
 using System;
 using Unity;
 
-namespace CLS.UserWeb
+namespace CLS.Web
 {
     /// <summary>
     /// Specifies the Unity configuration for the main container.

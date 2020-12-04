@@ -1,12 +1,12 @@
 ﻿using CLS.Infrastructure.Interfaces;
-using CLS.UserWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CLS.Web.Models;
 
-namespace CLS.UserWeb.Controllers
+namespace CLS.Web.Controllers
 {
     [Authorize]
     public class ManageController : BaseController

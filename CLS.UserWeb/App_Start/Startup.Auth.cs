@@ -1,13 +1,13 @@
 ﻿using CLS.Core.Models;
-using CLS.UserWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using System;
+using CLS.Web.Models;
 
-namespace CLS.UserWeb
+namespace CLS.Web
 {
     public partial class Startup
     {

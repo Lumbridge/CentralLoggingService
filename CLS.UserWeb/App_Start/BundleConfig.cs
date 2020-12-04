@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace CLS.UserWeb
+namespace CLS.Web
 {
     public class BundleConfig
     {
@@ -29,6 +29,7 @@ namespace CLS.UserWeb
                 "~/Content/Bootstrap/bootstrap.min.css",
                 "~/Content/Site.css",
                 "~/Content/Dashboard.css",
+                "~/Content/JQueryToast/jquery.toast.min.css",
                 "~/Content/ChartJS/Chart.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/application").Include(
@@ -41,6 +42,7 @@ namespace CLS.UserWeb
                 "~/Scripts/Libraries/bootstrap-notify.min.js",
                 "~/Scripts/Libraries/moment.js",
                 "~/Scripts/ChartJS/Chart.min.js",
+                "~/Scripts/JQueryToast/jquery.toast.min.js",
                 "~/Scripts/Application/Global.js"));
         }
     }

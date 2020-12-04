@@ -1,5 +1,4 @@
-﻿using CLS.UserWeb.Models;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -8,8 +7,9 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CLS.Core.Models;
+using CLS.Web.Models;
 
-namespace CLS.UserWeb
+namespace CLS.Web
 {
     public class EmailService : IIdentityMessageService
     {

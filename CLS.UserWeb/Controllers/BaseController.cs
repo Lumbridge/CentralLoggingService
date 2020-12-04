@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace CLS.UserWeb.Controllers
+namespace CLS.Web.Controllers
 {
     public class BaseController : Controller
     {

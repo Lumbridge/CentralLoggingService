@@ -16,10 +16,10 @@ namespace CLS.WindowsService.Classes
     {
         public static void ProcessTriggers()
         {
-            var uow = new UnitOfWork(new DBEntities());
-
             while (true)
             {
+                var uow = new UnitOfWork(new DBEntities());
+
                 // 1. Get all alert trigger groups 
                 var alertTriggerGroups = uow.Repository<AlertTriggerGroup>().Where(x => x.Subscriptions.First().IsActive && !x.Subscriptions.First().IsDeleted).ToList();
 
@@ -32,7 +32,8 @@ namespace CLS.WindowsService.Classes
 
                     // 4. filter down the logs to ones which haven't been alerted for this subscriber before
                     logs = logs
-                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.UserId == alertTriggerGroup.UserId))
+                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.UserId == alertTriggerGroup.UserId) &&
+                                    x.Timestamp >= alertTriggerGroup.Subscription.DateTimeEnabled)
                         .ToList()
                         .AsQueryable()
                         .Where(alertTriggerGroup.ExpressionString);
@@ -93,14 +94,15 @@ namespace CLS.WindowsService.Classes
 
         public static void ProcessTriggersDebug()
         {
-            var uow = new UnitOfWork(new DBEntities());
-
-            ConsoleHelper.LogMessageToConsole("Started Trigger Processor.\n");
-
             while (true)
             {
+                var uow = new UnitOfWork(new DBEntities());
+
+                ConsoleHelper.LogMessageToConsole("Started Trigger Processor.\n");
+
                 // 1. Get all alert trigger groups 
-                var alertTriggerGroups = uow.Repository<AlertTriggerGroup>().Where(x => x.Subscriptions.First().IsActive && !x.Subscriptions.First().IsDeleted).ToList();
+                var alertTriggerGroups = uow.Repository<AlertTriggerGroup>()
+                    .Where(x => x.Subscription.IsActive && !x.Subscription.IsDeleted).ToList();
 
                 ConsoleHelper.LogMessageToConsole($"Found {alertTriggerGroups.Count} trigger groups in database.");
 
@@ -117,7 +119,8 @@ namespace CLS.WindowsService.Classes
 
                     // 4. filter down the logs to ones which haven't been alerted for this subscriber before
                     logs = logs
-                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.UserId == alertTriggerGroup.UserId))
+                        .Where(x => !alertHistories.Any(y => y.LogId == x.Id && y.UserId == alertTriggerGroup.UserId) &&
+                                    x.Timestamp >= alertTriggerGroup.Subscription.DateTimeEnabled)
                         .ToList()
                         .AsQueryable()
                         .Where(alertTriggerGroup.ExpressionString);

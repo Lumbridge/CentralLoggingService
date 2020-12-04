@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace CLS.UserWeb.Controllers
+namespace CLS.Web.Controllers
 {
     [Authorize]
     public class AlertsController : BaseController
@@ -62,7 +62,7 @@ namespace CLS.UserWeb.Controllers
             catch (Exception ex)
             {
                 _ls.Log(StaticData.SeverityType.Error, ex);
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Failed to save alert." }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(
@@ -96,7 +96,7 @@ namespace CLS.UserWeb.Controllers
             catch (Exception ex)
             {
                 _ls.Log(StaticData.SeverityType.Error, ex);
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Failed to delete alert." }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new
@@ -133,7 +133,7 @@ namespace CLS.UserWeb.Controllers
                 catch (Exception ex)
                 {
                     _ls.Log(StaticData.SeverityType.Error, ex);
-                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, message = "Failed to toggle active status of subscription." }, JsonRequestBehavior.AllowGet);
                 }
             }
 

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace CLS.UserWeb
+namespace CLS.Web
 {
     public class FilterConfig
     {

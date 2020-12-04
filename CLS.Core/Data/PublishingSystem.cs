@@ -18,19 +18,22 @@ namespace CLS.Core.Data
         public PublishingSystem()
         {
             this.Logs = new HashSet<Log>();
+            this.PublishingSystemOwners = new HashSet<PublishingSystemOwner>();
         }
     
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public Nullable<int> PublishingSystemOwnersId { get; set; }
         public int EnvironmentTypeId { get; set; }
         public int PublishingSystemTypeId { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; set; }
     
-        public virtual AspNetUser AspNetUser { get; set; }
         public virtual EnvironmentType EnvironmentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Log> Logs { get; set; }
+        public virtual PublishingSystemOwner PublishingSystemOwner { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PublishingSystemOwner> PublishingSystemOwners { get; set; }
         public virtual PublishingSystemType PublishingSystemType { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace CLS.Core.Data
             this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
             this.DashboardMetadatas = new HashSet<DashboardMetadata>();
             this.Logs = new HashSet<Log>();
-            this.PublishingSystems = new HashSet<PublishingSystem>();
+            this.PublishingSystemOwners = new HashSet<PublishingSystemOwner>();
             this.Subscriptions = new HashSet<Subscription>();
             this.AspNetRoles = new HashSet<AspNetRole>();
         }
@@ -54,7 +54,7 @@ namespace CLS.Core.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Log> Logs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PublishingSystem> PublishingSystems { get; set; }
+        public virtual ICollection<PublishingSystemOwner> PublishingSystemOwners { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Subscription> Subscriptions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
