@@ -142,6 +142,15 @@
     <Compile Include="Data\Log.cs">
       <DependentUpon>CLSDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\LogIndexException.cs">
+      <DependentUpon>CLSDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\LogIndexMessage.cs">
+      <DependentUpon>CLSDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\LogIndexStackTrace.cs">
+      <DependentUpon>CLSDbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\Partials\AlertTriggerGroup.cs" />
     <Compile Include="Data\Partials\PublishingSystem.cs" />
     <Compile Include="Data\PublishingSystem.cs">
@@ -160,6 +169,7 @@
       <DependentUpon>CLSDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\WebServiceLogModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticData\StaticData.cs" />
   </ItemGroup>

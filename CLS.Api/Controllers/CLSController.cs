@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using CLS.Core.Models;
+using CLS.Infrastructure.Helpers;
 
 namespace CLS.Api.Controllers
 {
@@ -20,11 +22,11 @@ namespace CLS.Api.Controllers
         public string Get()
         {
             var userName = RequestContext.Principal.Identity.Name;
-            return $"Hello, {userName}.";
+            return $"You are authenticated as {userName}.";
         }
 
         [HttpPost]
-        public string Post([FromBody]Log logMessage)
+        public string Post([FromBody]WebServiceLogModel logMessage)
         {
             var user = _uow.Repository<AspNetUser>().FirstOrDefault(x => x.Email == RequestContext.Principal.Identity.Name);
 
@@ -34,8 +36,49 @@ namespace CLS.Api.Controllers
 
             try
             {
-                logMessage.UserId = user.Id;
-                _uow.Repository<Log>().Put(logMessage);
+                var exceptionHash = HashHelper.Hash(logMessage.Exception);
+                var stackTraceHash = HashHelper.Hash(logMessage.StackTrace);
+                var messageHash = HashHelper.Hash(logMessage.Message);
+
+                var exceptionIndex =
+                    _uow.Repository<LogIndexException>().FirstOrDefault(x => x.ExceptionHash == exceptionHash) ??
+                    _uow.Repository<LogIndexException>().Put(new LogIndexException
+                    {
+                        Exception = logMessage.Exception,
+                        ExceptionHash = exceptionHash
+                    });
+
+                var stackTraceIndex =
+                    _uow.Repository<LogIndexStackTrace>().FirstOrDefault(x => x.StackTraceHash == stackTraceHash) ??
+                    _uow.Repository<LogIndexStackTrace>().Put(new LogIndexStackTrace
+                    {
+                        StackTrace = logMessage.StackTrace,
+                        StackTraceHash = stackTraceHash
+                    });
+
+                var messageIndex =
+                    _uow.Repository<LogIndexMessage>().FirstOrDefault(x => x.MessageHash == messageHash) ?? 
+                    _uow.Repository<LogIndexMessage>().Put(new LogIndexMessage
+                        {
+                            Message = logMessage.Message,
+                            MessageHash = messageHash
+                        });
+                
+                _uow.Commit();
+
+                var model = new Log
+                {
+                    ExceptionId = exceptionIndex.Id,
+                    StackTraceId = stackTraceIndex.Id,
+                    MessageId = messageIndex.Id,
+                    PublishingSystemId = logMessage.PublishingSystemId,
+                    Timestamp = DateTime.Now,
+                    SeverityId = logMessage.SeverityId,
+                    UserId = user.Id
+                };
+
+                _uow.Repository<Log>().Put(model);
+
                 _uow.Commit();
             }
             catch (Exception ex)
@@ -102,7 +145,6 @@ namespace CLS.Api.Controllers
                 };
 
                 _uow.Repository<PublishingSystemOwner>().Put(publishingSystemOwnerModel);
-                //_uow.Repository<PublishingSystem>().Put(publishingSystemModel);
 
                 _uow.Commit();
 

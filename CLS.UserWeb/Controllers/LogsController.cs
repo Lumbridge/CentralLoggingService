@@ -19,11 +19,13 @@ namespace CLS.Web.Controllers
         {
             var validLevels = _uow.Repository<Severity>().Select(x => x.Name.ToLowerInvariant()).ToList();
             validLevels.Add("All");
-            if (!validLevels.Contains(logLevel.ToLowerInvariant()))
-            {
+
+            if (!validLevels.Contains(logLevel.ToLowerInvariant())) {
                 logLevel = "All";
             }
+
             ViewData["logLevel"] = logLevel;
+
             var logs = logLevel == "All"
                 ? _uow.Repository<Log>().Where(x => x.PublishingSystem.UserOwnsSystem(CurrentUser(User).Id))
                     .OrderByDescending(x => x.Timestamp).ToList()

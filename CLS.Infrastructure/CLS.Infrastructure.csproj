@@ -64,6 +64,7 @@
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\ExceptionHelper.cs" />
+    <Compile Include="Helpers\HashHelper.cs" />
     <Compile Include="Interfaces\IEntities.cs" />
     <Compile Include="Interfaces\IGenericViewModel.cs" />
     <Compile Include="Interfaces\IRepository.cs" />

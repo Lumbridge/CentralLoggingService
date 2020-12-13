@@ -24,33 +24,33 @@
                 var truncLen = 40;
                 var maxTooltipLength = 200;
 
-                var messageLength = item.Message?.Length;
-                var exceptionLength = item.Exception?.Length;
-                var stackTraceLength = item.StackTrace?.Length;
+                var messageLength = item.LogIndexMessage.Message?.Length;
+                var exceptionLength = item.LogIndexException.Exception?.Length;
+                var stackTraceLength = item.LogIndexStackTrace.StackTrace?.Length;
 
-                var messageString = Html.Raw($"{item.Message}");
-                var exceptionString = Html.Raw($"{item.Exception}");
-                var stackTraceString = Html.Raw($"{item.StackTrace}");
+                var messageString = Html.Raw($"{item.LogIndexMessage.Message}");
+                var exceptionString = Html.Raw($"{item.LogIndexException.Exception}");
+                var stackTraceString = Html.Raw($"{item.LogIndexStackTrace.StackTrace}");
 
                 if (messageLength > truncLen)
                 {
                     messageString = Html.Raw(messageLength <= maxTooltipLength
-                    ? $"{item.Message.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.Message)}'>[...]</span>"
-                    : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.Message)}'>{item.Message.Substring(0, truncLen)}</span>");
+                    ? $"{item.LogIndexMessage.Message.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.LogIndexMessage.Message)}'>[...]</span>"
+                    : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.LogIndexMessage.Message)}'>{item.LogIndexMessage.Message.Substring(0, truncLen)}</span>");
                 }
 
                 if (exceptionLength > truncLen)
                 {
                     exceptionString = Html.Raw(exceptionLength <= maxTooltipLength
-                    ? $"{item.Exception.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.Exception)}'>[...]</span>"
-                    : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.Exception)}'>{item.Exception.Substring(0, truncLen)}</span>");
+                    ? $"{item.LogIndexException.Exception.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.LogIndexException.Exception)}'>[...]</span>"
+                    : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.LogIndexException.Exception)}'>{item.LogIndexException.Exception.Substring(0, truncLen)}</span>");
                 }
 
                 if (stackTraceLength > truncLen)
                 {
                     stackTraceString = Html.Raw(stackTraceLength <= maxTooltipLength
-                    ? $"{item.StackTrace.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.StackTrace)}'>[...]</span>"
-                    : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.StackTrace)}'>{item.StackTrace.Substring(0, truncLen)}</span>");
+                    ? $"{item.LogIndexStackTrace.StackTrace.Substring(0, truncLen)} <span class='truncateTooltip' data-toggle='tooltip' title='{HttpUtility.HtmlEncode(item.LogIndexStackTrace.StackTrace)}'>[...]</span>"
+                    : $"<span class='modalLink' title='{HttpUtility.HtmlEncode(item.LogIndexStackTrace.StackTrace)}'>{item.LogIndexStackTrace.StackTrace.Substring(0, truncLen)}</span>");
                 }
 
                 <tr data-id=@item.Id>

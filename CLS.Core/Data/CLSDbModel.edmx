@@ -140,10 +140,34 @@
           <Property Name="SeverityId" Type="int" Nullable="false" />
           <Property Name="PublishingSystemId" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
-          <Property Name="Message" Type="varchar" MaxLength="4000" />
-          <Property Name="Exception" Type="varchar" MaxLength="4000" />
-          <Property Name="StackTrace" Type="varchar" MaxLength="4000" />
+          <Property Name="MessageId" Type="int" Nullable="false" />
+          <Property Name="ExceptionId" Type="int" Nullable="false" />
+          <Property Name="StackTraceId" Type="int" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LogIndexException">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Exception" Type="varchar(max)" />
+          <Property Name="ExceptionHash" Type="varchar" MaxLength="40" />
+        </EntityType>
+        <EntityType Name="LogIndexMessage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="varchar(max)" />
+          <Property Name="MessageHash" Type="varchar" MaxLength="40" />
+        </EntityType>
+        <EntityType Name="LogIndexStackTrace">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StackTrace" Type="varchar(max)" />
+          <Property Name="StackTraceHash" Type="varchar" MaxLength="40" />
         </EntityType>
         <EntityType Name="PublishingSystem">
           <Key>
@@ -370,6 +394,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Log_LogIndexException">
+          <End Role="LogIndexException" Type="Self.LogIndexException" Multiplicity="1" />
+          <End Role="Log" Type="Self.Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogIndexException">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="ExceptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Log_LogIndexMessage">
+          <End Role="LogIndexMessage" Type="Self.LogIndexMessage" Multiplicity="1" />
+          <End Role="Log" Type="Self.Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogIndexMessage">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="MessageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Log_LogIndexStackTrace">
+          <End Role="LogIndexStackTrace" Type="Self.LogIndexStackTrace" Multiplicity="1" />
+          <End Role="Log" Type="Self.Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogIndexStackTrace">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="StackTraceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PublishingSystem_PublishingSystemOwners">
           <End Role="PublishingSystemOwners" Type="Self.PublishingSystemOwners" Multiplicity="0..1" />
           <End Role="PublishingSystem" Type="Self.PublishingSystem" Multiplicity="*" />
@@ -505,6 +565,9 @@
           <EntitySet Name="DashboardMetadata" EntityType="Self.DashboardMetadata" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnvironmentType" EntityType="Self.EnvironmentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LogIndexException" EntityType="Self.LogIndexException" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LogIndexMessage" EntityType="Self.LogIndexMessage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LogIndexStackTrace" EntityType="Self.LogIndexStackTrace" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublishingSystem" EntityType="Self.PublishingSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublishingSystemOwners" EntityType="Self.PublishingSystemOwners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublishingSystemType" EntityType="Self.PublishingSystemType" Schema="dbo" store:Type="Tables" />
@@ -566,6 +629,18 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Log" EntitySet="Log" />
           </AssociationSet>
+          <AssociationSet Name="FK_Log_LogIndexException" Association="Self.FK_Log_LogIndexException">
+            <End Role="LogIndexException" EntitySet="LogIndexException" />
+            <End Role="Log" EntitySet="Log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Log_LogIndexMessage" Association="Self.FK_Log_LogIndexMessage">
+            <End Role="LogIndexMessage" EntitySet="LogIndexMessage" />
+            <End Role="Log" EntitySet="Log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Log_LogIndexStackTrace" Association="Self.FK_Log_LogIndexStackTrace">
+            <End Role="LogIndexStackTrace" EntitySet="LogIndexStackTrace" />
+            <End Role="Log" EntitySet="Log" />
+          </AssociationSet>
           <AssociationSet Name="FK_PublishingSystem_PublishingSystemOwners" Association="Self.FK_PublishingSystem_PublishingSystemOwners">
             <End Role="PublishingSystemOwners" EntitySet="PublishingSystemOwners" />
             <End Role="PublishingSystem" EntitySet="PublishingSystem" />
@@ -625,6 +700,9 @@
           <EntitySet Name="DashboardMetadatas" EntityType="CLSDbModel.DashboardMetadata" />
           <EntitySet Name="EnvironmentTypes" EntityType="CLSDbModel.EnvironmentType" />
           <EntitySet Name="Logs" EntityType="CLSDbModel.Log" />
+          <EntitySet Name="LogIndexExceptions" EntityType="CLSDbModel.LogIndexException" />
+          <EntitySet Name="LogIndexMessages" EntityType="CLSDbModel.LogIndexMessage" />
+          <EntitySet Name="LogIndexStackTraces" EntityType="CLSDbModel.LogIndexStackTrace" />
           <EntitySet Name="PublishingSystems" EntityType="CLSDbModel.PublishingSystem" />
           <EntitySet Name="PublishingSystemOwners" EntityType="CLSDbModel.PublishingSystemOwner" />
           <EntitySet Name="PublishingSystemTypes" EntityType="CLSDbModel.PublishingSystemType" />
@@ -697,6 +775,18 @@
           <AssociationSet Name="System_fk0" Association="CLSDbModel.System_fk0">
             <End Role="EnvironmentType" EntitySet="EnvironmentTypes" />
             <End Role="PublishingSystem" EntitySet="PublishingSystems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Log_LogIndexException" Association="CLSDbModel.FK_Log_LogIndexException">
+            <End Role="LogIndexException" EntitySet="LogIndexExceptions" />
+            <End Role="Log" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Log_LogIndexMessage" Association="CLSDbModel.FK_Log_LogIndexMessage">
+            <End Role="LogIndexMessage" EntitySet="LogIndexMessages" />
+            <End Role="Log" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Log_LogIndexStackTrace" Association="CLSDbModel.FK_Log_LogIndexStackTrace">
+            <End Role="LogIndexStackTrace" EntitySet="LogIndexStackTraces" />
+            <End Role="Log" EntitySet="Logs" />
           </AssociationSet>
           <AssociationSet Name="Log_fk0" Association="CLSDbModel.Log_fk0">
             <End Role="Severity" EntitySet="Severities" />
@@ -878,14 +968,44 @@
           <Property Name="SeverityId" Type="Int32" Nullable="false" />
           <Property Name="PublishingSystemId" Type="Int32" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
-          <Property Name="Exception" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
-          <Property Name="StackTrace" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="MessageId" Type="Int32" Nullable="false" />
+          <Property Name="ExceptionId" Type="Int32" Nullable="false" />
+          <Property Name="StackTraceId" Type="Int32" Nullable="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AlertHistories" Relationship="CLSDbModel.FK_AlertHistory_Log" FromRole="Log" ToRole="AlertHistory" />
           <NavigationProperty Name="AspNetUser" Relationship="CLSDbModel.FK_Log_CLSUser" FromRole="Log" ToRole="AspNetUser" />
+          <NavigationProperty Name="LogIndexException" Relationship="CLSDbModel.FK_Log_LogIndexException" FromRole="Log" ToRole="LogIndexException" />
+          <NavigationProperty Name="LogIndexMessage" Relationship="CLSDbModel.FK_Log_LogIndexMessage" FromRole="Log" ToRole="LogIndexMessage" />
+          <NavigationProperty Name="LogIndexStackTrace" Relationship="CLSDbModel.FK_Log_LogIndexStackTrace" FromRole="Log" ToRole="LogIndexStackTrace" />
           <NavigationProperty Name="Severity" Relationship="CLSDbModel.Log_fk0" FromRole="Log" ToRole="Severity" />
           <NavigationProperty Name="PublishingSystem" Relationship="CLSDbModel.Log_fk1" FromRole="Log" ToRole="PublishingSystem" />
+        </EntityType>
+        <EntityType Name="LogIndexException">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ExceptionHash" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Logs" Relationship="CLSDbModel.FK_Log_LogIndexException" FromRole="LogIndexException" ToRole="Log" />
+        </EntityType>
+        <EntityType Name="LogIndexMessage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MessageHash" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Logs" Relationship="CLSDbModel.FK_Log_LogIndexMessage" FromRole="LogIndexMessage" ToRole="Log" />
+        </EntityType>
+        <EntityType Name="LogIndexStackTrace">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StackTraceHash" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Logs" Relationship="CLSDbModel.FK_Log_LogIndexStackTrace" FromRole="LogIndexStackTrace" ToRole="Log" />
         </EntityType>
         <EntityType Name="PublishingSystem">
           <Key>
@@ -1158,6 +1278,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Log_LogIndexException">
+          <End Type="CLSDbModel.LogIndexException" Role="LogIndexException" Multiplicity="1" />
+          <End Type="CLSDbModel.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogIndexException">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="ExceptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Log_LogIndexMessage">
+          <End Type="CLSDbModel.LogIndexMessage" Role="LogIndexMessage" Multiplicity="1" />
+          <End Type="CLSDbModel.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogIndexMessage">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="MessageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Log_LogIndexStackTrace">
+          <End Type="CLSDbModel.LogIndexStackTrace" Role="LogIndexStackTrace" Multiplicity="1" />
+          <End Type="CLSDbModel.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LogIndexStackTrace">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="StackTraceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Log_fk0">
           <End Type="CLSDbModel.Severity" Role="Severity" Multiplicity="1" />
           <End Type="CLSDbModel.Log" Role="Log" Multiplicity="*" />
@@ -1360,13 +1516,40 @@
             <EntityTypeMapping TypeName="CLSDbModel.Log">
               <MappingFragment StoreEntitySet="Log">
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
-                <ScalarProperty Name="Exception" ColumnName="Exception" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="StackTraceId" ColumnName="StackTraceId" />
+                <ScalarProperty Name="ExceptionId" ColumnName="ExceptionId" />
+                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="PublishingSystemId" ColumnName="PublishingSystemId" />
                 <ScalarProperty Name="SeverityId" ColumnName="SeverityId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogIndexExceptions">
+            <EntityTypeMapping TypeName="CLSDbModel.LogIndexException">
+              <MappingFragment StoreEntitySet="LogIndexException">
+                <ScalarProperty Name="ExceptionHash" ColumnName="ExceptionHash" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogIndexMessages">
+            <EntityTypeMapping TypeName="CLSDbModel.LogIndexMessage">
+              <MappingFragment StoreEntitySet="LogIndexMessage">
+                <ScalarProperty Name="MessageHash" ColumnName="MessageHash" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogIndexStackTraces">
+            <EntityTypeMapping TypeName="CLSDbModel.LogIndexStackTrace">
+              <MappingFragment StoreEntitySet="LogIndexStackTrace">
+                <ScalarProperty Name="StackTraceHash" ColumnName="StackTraceHash" />
+                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

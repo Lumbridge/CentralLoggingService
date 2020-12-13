@@ -15,28 +15,28 @@ namespace CLS.WindowsService.Tests
         [TestInitialize]
         public void StartUp()
         {
-            TestLogs = new List<Log>
-            {
-                new Log
-                {
-                    SeverityId = 4,
-                    Severity = new Severity {Id = 4, Code = "E", Name = "Error"},
-                    PublishingSystemId = 1,
-                    PublishingSystem = new PublishingSystem
-                    {
-                        Id = 1,
-                        EnvironmentType = new EnvironmentType {Id = 1, Code = "D", Name = "DEV"},
-                        EnvironmentTypeId = 1,
-                        PublishingSystemTypeId = 1002,
-                        PublishingSystemType = new PublishingSystemType {Code = "C", Id = 1002, Name = "ConsoleApplication"},
-                        Name = "CLS.SenderConsole"
-                    },
-                    Timestamp = new DateTime(2020, 6, 9, 10, 30, 00),
-                    Message = "This is a test.",
-                    Exception = null,
-                    StackTrace = null
-                }
-            };
+            //TestLogs = new List<Log>
+            //{
+            //    new Log
+            //    {
+            //        SeverityId = 4,
+            //        Severity = new Severity {Id = 4, Code = "E", Name = "Error"},
+            //        PublishingSystemId = 1,
+            //        PublishingSystem = new PublishingSystem
+            //        {
+            //            Id = 1,
+            //            EnvironmentType = new EnvironmentType {Id = 1, Code = "D", Name = "DEV"},
+            //            EnvironmentTypeId = 1,
+            //            PublishingSystemTypeId = 1002,
+            //            PublishingSystemType = new PublishingSystemType {Code = "C", Id = 1002, Name = "ConsoleApplication"},
+            //            Name = "CLS.SenderConsole"
+            //        },
+            //        Timestamp = new DateTime(2020, 6, 9, 10, 30, 00),
+            //        Message = "This is a test.",
+            //        Exception = null,
+            //        StackTrace = null
+            //    }
+            //};
         }
 
         [TestMethod]

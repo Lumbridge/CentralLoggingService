@@ -16,6 +16,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Reflection;
 using System.Threading.Tasks;
+using CLS.Core.Models;
 
 namespace CLS.Sender.Classes
 {
@@ -118,7 +119,7 @@ namespace CLS.Sender.Classes
         /// <returns>Text result, empty string if failure.</returns>
         private static async Task<string> LogToWebService(string severityCode, Exception exception = null, string info = null)
         {
-            var logObj = new Log
+            var logObj = new WebServiceLogModel
             {
                 Exception = exception?.GetExceptionMessages(),
                 StackTrace = exception?.StackTrace,
@@ -183,7 +184,7 @@ namespace CLS.Sender.Classes
         /// <param name="authorizeToken">The OAuth 2.0 token received from the CLS Web Service.</param>
         /// <param name="message">The Log Message to send to the Web Service.</param>
         /// <returns>Text result, empty string if failure.</returns>
-        private static async Task<string> Post(string authorizeToken, Log message)
+        private static async Task<string> Post(string authorizeToken, WebServiceLogModel message)
         {
             // HTTP GET
             using (var client = new HttpClient())
@@ -309,11 +310,41 @@ namespace CLS.Sender.Classes
         {
             var uow = new UnitOfWork(new DBEntities());
 
+            var exceptionHash = HashHelper.Hash(exception?.GetExceptionMessages());
+            var stackTraceHash = HashHelper.Hash(exception?.StackTrace);
+            var messageHash = HashHelper.Hash(info);
+
+            var exceptionIndex =
+                uow.Repository<LogIndexException>().FirstOrDefault(x => x.ExceptionHash == exceptionHash) ??
+                uow.Repository<LogIndexException>().Put(new LogIndexException
+                {
+                    Exception = exception?.GetExceptionMessages(),
+                    ExceptionHash = exceptionHash
+                });
+
+            var stackTraceIndex =
+                uow.Repository<LogIndexStackTrace>().FirstOrDefault(x => x.StackTraceHash == stackTraceHash) ??
+                uow.Repository<LogIndexStackTrace>().Put(new LogIndexStackTrace
+                {
+                    StackTrace = exception?.StackTrace,
+                    StackTraceHash = stackTraceHash
+                });
+
+            var messageIndex =
+                uow.Repository<LogIndexMessage>().FirstOrDefault(x => x.MessageHash == messageHash) ??
+                uow.Repository<LogIndexMessage>().Put(new LogIndexMessage
+                {
+                    Message = info,
+                    MessageHash = messageHash
+                });
+
+            uow.Commit(); 
+
             var model = new Log
             {
-                Exception = exception?.GetExceptionMessages(),
-                StackTrace = exception?.StackTrace,
-                Message = info,
+                ExceptionId = exceptionIndex.Id,
+                StackTraceId = stackTraceIndex.Id,
+                MessageId = messageIndex.Id,
                 PublishingSystem = _publishingSystem,
                 Timestamp = DateTime.Now,
                 SeverityId = StaticData.Severities.First(x => x.Code == severityCode).Id

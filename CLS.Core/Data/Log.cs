@@ -25,14 +25,17 @@ namespace CLS.Core.Data
         public int SeverityId { get; set; }
         public int PublishingSystemId { get; set; }
         public System.DateTime Timestamp { get; set; }
-        public string Message { get; set; }
-        public string Exception { get; set; }
-        public string StackTrace { get; set; }
+        public int MessageId { get; set; }
+        public int ExceptionId { get; set; }
+        public int StackTraceId { get; set; }
         public bool IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlertHistory> AlertHistories { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual LogIndexException LogIndexException { get; set; }
+        public virtual LogIndexMessage LogIndexMessage { get; set; }
+        public virtual LogIndexStackTrace LogIndexStackTrace { get; set; }
         public virtual Severity Severity { get; set; }
         public virtual PublishingSystem PublishingSystem { get; set; }
     }

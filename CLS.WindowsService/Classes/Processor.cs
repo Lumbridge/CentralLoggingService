@@ -91,7 +91,7 @@ namespace CLS.WindowsService.Classes
                 Thread.Sleep(sleepTime);
             }
         }
-
+        
         public static void ProcessTriggersDebug()
         {
             while (true)
@@ -104,7 +104,7 @@ namespace CLS.WindowsService.Classes
                 var alertTriggerGroups = uow.Repository<AlertTriggerGroup>()
                     .Where(x => x.Subscription.IsActive && !x.Subscription.IsDeleted).ToList();
 
-                ConsoleHelper.LogMessageToConsole($"Found {alertTriggerGroups.Count} trigger groups in database.");
+                ConsoleHelper.LogMessageToConsole($"Found {alertTriggerGroups.Count} active trigger groups in database.");
 
                 // 2. Build chained expressions from node group nodes
                 foreach (var alertTriggerGroup in alertTriggerGroups)
