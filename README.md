@@ -45,8 +45,8 @@ You'll notice that on the email you receive there is a link at the bottom which 
 - Email account to send alerts (project is configured for gmail initially, you can create a new gmail account for use with this application to get up and running fast, then set the gmail account to be compatible with "[less-safe apps](https://myaccount.google.com/lesssecureapps)" or alternatively use an email from microsoft, yahoo or your own domain).
 
 ## Software Stack
-- Web Frontend - .NET Framework MVC, JavaScript, JQuery, CSS (To be re-written in Angular 2 & CSS w/ SASS).
-- Rest of the Solution is .NET Framework 4.7.2 (To be re-written in .NET Core for interoperability).
+- Web Frontend - .NET Framework MVC, JavaScript, JQuery, CSS.
+- Rest of the Solution is .NET Framework 4.7.2.
 
 ## Getting up and running fast for development
 1. Create a (preferably) empty SQL Server database,
